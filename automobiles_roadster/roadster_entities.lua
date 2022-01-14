@@ -164,12 +164,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    physical = true,
         collide_with_objects = true,
 	    collisionbox = {-1.1, -0.51, -1.1, 1.1, 2, 1.1},
-	    selectionbox = {-1.1, 0.0, -1.1, 1.1, 2, 1.1},
+	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
         stepheight = 0.5,
 	    visual = "mesh",
 	    mesh = "automobiles_roadster.b3d",
         textures = {
             "automobiles_black.png", --bancos
+            "automobiles_wood.png", --assoalho
             "automobiles_painting.png", --pintura
             "automobiles_black.png", --chassis
             "automobiles_metal2.png", --carcaça farol
@@ -180,13 +181,12 @@ minetest.register_entity("automobiles_roadster:roadster", {
             "automobiles_roadster_fuel.png", --combustivel
             "automobiles_metal2.png", --parabrisa fixo
             "automobiles_alpha.png", --vidro do parabrisa fixo
-            "automobiles_black.png", --paralamas
-            "automobiles_painting.png", --portas
-            "automobiles_black.png", --portas interno
             "automobiles_metal2.png", --parabrisa movel
             "automobiles_alpha.png", --vidro do parabrisa movel
+            "automobiles_painting.png", --portas
+            "automobiles_black.png", --portas interno
+            "automobiles_black.png", --paralamas
             "automobiles_metal2.png", --carenagem do radiador
-            "automobiles_wood.png", --assoalho
             "automobiles_painting.png", --tanque de combustivel
             },
     },
@@ -256,13 +256,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    self.front_suspension = front_suspension
 
 	    local lf_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    lf_wheel:set_attach(self.front_suspension,'',{x=-10.8,y=0,z=0},{x=0,y=0,z=0})
+	    lf_wheel:set_attach(self.front_suspension,'',{x=-roadster.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         lf_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
 	    self.lf_wheel = lf_wheel
 
 	    local rf_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    rf_wheel:set_attach(self.front_suspension,'',{x=10.8,y=0,z=0},{x=0,y=0,z=0})
+	    rf_wheel:set_attach(self.front_suspension,'',{x=roadster.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         rf_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
 	    self.rf_wheel = rf_wheel
@@ -272,13 +272,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    self.rear_suspension = rear_suspension
 
 	    local lr_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    lr_wheel:set_attach(self.rear_suspension,'',{x=-10.8,y=0,z=0},{x=0,y=0,z=0})
+	    lr_wheel:set_attach(self.rear_suspension,'',{x=-roadster.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         lr_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
 	    self.lr_wheel = lr_wheel
 
 	    local rr_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    rr_wheel:set_attach(self.rear_suspension,'',{x=10.8,y=0,z=0},{x=0,y=0,z=0})
+	    rr_wheel:set_attach(self.rear_suspension,'',{x=roadster.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         rr_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
 	    self.rr_wheel = rr_wheel
@@ -292,11 +292,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    self.steering = steering
 
 	    local driver_seat=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        driver_seat:set_attach(self.object,'',{x=-4.25,y=7.5,z=9.5},{x=0,y=0,z=0})
+        driver_seat:set_attach(self.object,'',{x=-4.25,y=7.12,z=9.5},{x=0,y=0,z=0})
 	    self.driver_seat = driver_seat
 
 	    local passenger_seat=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        passenger_seat:set_attach(self.object,'',{x=4.25,y=7.5,z=9.5},{x=0,y=0,z=0})
+        passenger_seat:set_attach(self.object,'',{x=4.25,y=7.12,z=9.5},{x=0,y=0,z=0})
 	    self.passenger_seat = passenger_seat
 
 		self.object:set_armor_groups({immortal=1})
@@ -403,8 +403,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
         --whell turn
         self.steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=self._steering_angle*2})
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=10.8,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=-10.8,y=0,z=0},{x=0,y=-self._steering_angle+angle_factor,z=0})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=roadster.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=-roadster.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle+angle_factor,z=0})
 
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)

@@ -46,7 +46,7 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
 	        end
         else
             --slow maneuver
-	        if longit_speed < 1.0 and ctrl.up then
+	        if longit_speed < roadster.max_speed and ctrl.up then
                 --get acceleration factor
                 acc = automobiles.check_road_is_ok(self.object, max_acc_factor)
                 --minetest.chat_send_all('engineacc: '.. engineacc)
