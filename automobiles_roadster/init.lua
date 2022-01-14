@@ -12,9 +12,10 @@ roadster.max_fuel = 10
 roadster.front_wheel_xpos = 10.26
 roadster.rear_wheel_xpos = 10.26
 
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "automobiles_custom_physics.lua")
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "automobiles_control.lua")
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "automobiles_fuel_management.lua")
+dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "custom_physics.lua")
+dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "control.lua")
+dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "fuel_management.lua")
+dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "ground_detection.lua")
 dofile(minetest.get_modpath("automobiles_roadster") .. DIR_DELIM .. "roadster_utilities.lua")
 dofile(minetest.get_modpath("automobiles_roadster") .. DIR_DELIM .. "roadster_entities.lua")
 

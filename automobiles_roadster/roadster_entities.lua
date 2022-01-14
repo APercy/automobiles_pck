@@ -212,6 +212,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _last_time_collision_snd = 0,
     _last_time_drift_snd = 0,
     _last_time_command = 0,
+    _roll = math.rad(0),
+    _pitch = math.rad(90),
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -252,7 +254,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    self.top1 = top1
 
         local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:front_suspension')
-	    front_suspension:set_attach(self.object,'',{x=0,y=0,z=25.5},{x=0,y=0,z=0})
+	    front_suspension:set_attach(self.object,'',{x=0,y=0,z=24.22},{x=0,y=0,z=0})
 	    self.front_suspension = front_suspension
 
 	    local lf_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
@@ -411,6 +413,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
 			newyaw = yaw + dtime*(1 - 1 / (math.abs(longit_speed) + 1)) *
                 self._steering_angle / 30 * turn_rate * automobiles.sign(longit_speed)
 		end
+
+        automobiles.ground_get_distances(self, 0.5, 20.52, 24.22)
 
         --[[if player and is_attached then
             player:set_look_horizontal(newyaw)
