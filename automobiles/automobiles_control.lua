@@ -27,6 +27,7 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
 
 	local player = minetest.get_player_by_name(self.driver_name)
     local retval_accel = accel;
+    local stop = false
     
 	-- player control
 	if player then
@@ -64,24 +65,26 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
 
         --break
         if ctrl.down then
-            if math.abs(longit_speed) > 0 then
+            --[[if math.abs(longit_speed) > 0 then
                 acc = -5 / (longit_speed / 2) -- lets set a brake efficience based on speed
-            end
+            end]]--
         
             --total stop
             --wheel break
-            if longit_speed >= 0.1 then
-                acc = -1
+            if longit_speed > 0 then
+                acc = -5
+                if (longit_speed + acc) < 0 then
+                    acc = longit_speed * -1
+                end
             end
-            if longit_speed <= -0.1 then
-                acc = 1
+            if longit_speed < 0 then
+                acc = 5
+                if (longit_speed + acc) > 0 then
+                    acc = longit_speed * -1
+                end
             end
-
-            if math.abs(longit_speed) <= 0.1 then
-                -- do not like it here, but worked better
-                acc = 0
-                --self.object:set_acceleration(zero)
-                self.object:set_velocity(vector.new())
+            if abs(longit_speed) < 0.2 then
+                stop = true
             end
         end
 
@@ -136,7 +139,7 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
     
 	end
 
-    return retval_accel
+    return retval_accel, stop
 end
 
 

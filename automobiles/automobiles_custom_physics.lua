@@ -2,13 +2,15 @@ local min = math.min
 local abs = math.abs
 
 function automobiles.physics(self)
+    local friction = 0.99
 	local vel=self.object:get_velocity()
 		-- dumb friction
-	--[[if self.isonground and not self.isinliquid then
-		self.object:set_velocity({x= vel.x> 0.2 and vel.x*mobkit.friction or 0,
+	if self.isonground and not self.isinliquid then
+        --minetest.chat_send_all('okay')
+		self.object:set_velocity({x=vel.x*friction,
 								y=vel.y,
-								z=vel.z > 0.2 and vel.z*mobkit.friction or 0})
-	end]]--
+								z=vel.z*friction})
+	end
 	
 	-- bounciness
 	if self.springiness and self.springiness > 0 then

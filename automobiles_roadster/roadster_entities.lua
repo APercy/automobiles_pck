@@ -348,8 +348,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
             end
         end
 
+        local curr_pos = self.object:get_pos()
 		if is_attached then --and self.driver_name == self.owner then
-            local curr_pos = self.object:get_pos()
             local impact = automobiles.get_hipotenuse_value(velocity, self.lastvelocity)
             if impact > 1 then
                 --self.damage = self.damage + impact --sum the impact value directly to damage meter
@@ -432,6 +432,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
         -- end correction
         accel.y = -automobiles.gravity
 
+	    self.object:set_pos(curr_pos)
+        self.object:set_velocity(velocity)
         self.object:set_acceleration(accel)
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=0}) end
