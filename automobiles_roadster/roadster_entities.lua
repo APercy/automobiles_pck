@@ -284,7 +284,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    self.rr_wheel = rr_wheel
 
 	    local steering_axis=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        steering_axis:set_attach(self.object,'',{x=-4.25,y=12,z=15},{x=70,y=0,z=0})
+        steering_axis:set_attach(self.object,'',{x=-4.25,y=12,z=14},{x=70,y=0,z=0})
 	    self.steering_axis = steering_axis
 
 	    local steering=minetest.add_entity(self.steering_axis:get_pos(),'automobiles_roadster:steering')
@@ -387,7 +387,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             --control
             local steering_angle_max = 30
             local steering_speed = 40
-			accel = automobiles.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
+			accel, stop = automobiles.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
         else
             if self.sound_handle ~= nil then
 	            minetest.sound_stop(self.sound_handle)
@@ -432,9 +432,16 @@ minetest.register_entity("automobiles_roadster:roadster", {
         -- end correction
         accel.y = -automobiles.gravity
 
-	    self.object:set_pos(curr_pos)
-        self.object:set_velocity(velocity)
-        self.object:set_acceleration(accel)
+        if stop ~= true then
+	        self.object:set_pos(curr_pos)
+            self.object:set_velocity(velocity)
+            self.object:set_acceleration(accel)
+        else
+            if stop == true then
+                self.object:set_acceleration({x=0,y=0,z=0})
+                self.object:set_velocity({x=0,y=0,z=0})
+            end
+        end
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=0}) end
 
