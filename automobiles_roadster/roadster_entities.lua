@@ -163,7 +163,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-1.1, -0.51, -1.1, 1.1, 2, 1.1},
+	    collisionbox = {-1.1, -0.5, -1.1, 1.1, 2, 1.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
         stepheight = 0.5,
 	    visual = "mesh",
