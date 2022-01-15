@@ -420,7 +420,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             player:set_look_horizontal(newyaw)
         end]]--
 
-		local newpitch = self._pitch --velocity.y * math.rad(6)
+		local newpitch = velocity.y * math.rad(6)
 
         --[[
         accell correction
