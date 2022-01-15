@@ -202,7 +202,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
-    _color = "#2b2b2b",
+    _color = "#0063b0",
     _steering_angle = 0,
     _engine_running = false,
     _last_checkpoint = "",

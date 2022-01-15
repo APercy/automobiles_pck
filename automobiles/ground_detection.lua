@@ -20,34 +20,36 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
     local x, f_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, hip) --the x is only a mock
+    local front_axis = {x=f_x, y=f_y, z=f_z}
 
-    local left_front = {x=0, y=f_y, z=0}
+    local front_obstacle_level = automobiles.get_obstacle(front_axis)
+    --TODO ajustar inclinação aqui primeiro
+
+    --[[local left_front = {x=0, y=f_y, z=0}
     left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
 
     local right_front = {x=0, y=f_y, z=0}
-    right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)
+    right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)]]--
     
     local r_x, r_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
     local r_y = 0
     x, r_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, 0) --the x is only a mock
+    local rear_axis = {x=r_x, y=r_y, z=r_z}
 
-    local left_rear = {x=0, y=r_y, z=0}
+    local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
+    --TODO ajustar aqui depois
+
+
+
+    --[[local left_rear = {x=0, y=r_y, z=0}
     left_rear.x, left_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw+math.rad(90), mid_axis)
 
     local right_rear = {x=0, y=r_y, z=0}
-    right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)    
+    right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)]]--
 
     --minetest.chat_send_all("x ".. f_x .. " --- z " .. f_z .. " || " ..  math.deg(yaw))
     --minetest.chat_send_all("front x ".. right_front.x .. " - z " .. right_front.z .. " Yaw: " .. math.deg(yaw-math.rad(90)) .. " ||| x " .. left_front.x .. " - z " .. left_front.z .. " Yaw: " .. math.deg(yaw+math.rad(90)))
     --minetest.chat_send_all("rear x ".. right_rear.x .." x " .. left_rear.x .. " --- z " .. right_rear.z .. " z " .. left_rear.z .. " Y: " .. right_rear.y)
-
-    local node_bellow = automobiles.get_node_below(left_front, 0.5)
-    if node_bellow then
-        --minetest.chat_send_all("bellow: " .. node_bellow.name)
-        local node = automobiles.get_node_below(left_front, -0.5)
-        --minetest.chat_send_all("level: " .. node.name)
-        --minetest.chat_send_all(dump(mobkit.nodeatpos(left_front).node_box))
-    end
 
 end
 
@@ -59,49 +61,57 @@ function automobiles.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
     return x, z
 end
 
-function automobiles.get_wheel_distance_from_ground(pos, radius)
-    local touch_pos = pos
-    --[[touch_pos.y = touch_pos.y - radius
-    local max_search_pos = touch_pos
-    max_search_pos.y = max_search_pos.y - 0.9
-    for pointed_thing in minetest.raycast(touch_pos, max_search_pos, true, false) do
-        automobiles.handle_ray(pointed_thing)
-    end]]--
+function automobiles.get_obstacle(ref_pos)
+    local retval = ref_pos
+    local i_pos = ref_pos
+    --minetest.chat_send_all("wheel pos: " .. dump(i_pos.y))
     
-end
+    local e_pos = ref_pos
+    e_pos.y = e_pos.y - 0.20
 
-function automobiles.handle_ray(pointed_thing)
-    if pointed_thing.type == "node" then
-        if pointed_thing.node_box then
-            minetest.chat_send_all(minetest.debug(pointed_thing.node_box))
+	local cast = minetest.raycast(i_pos, e_pos, true, false)
+	local thing = cast:next()
+	while thing do
+		if thing.type == "node" then
+            local pos = thing.intersection_point
+            retval = pos
+            --local node_name = minetest.get_node(thing.under).name
+            --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
         end
-        --[[if pointed_thing.ref ~= user and (not objs or objs and not objs[pointed_thing.ref])
-        and (not calls or not calls.on_hit or check_bools(calls.on_hit, itemstack, user, pointed_thing.ref)) then
-            local vel = user:get_player_velocity()
-            local spd = math.sqrt((vel.x * vel.x) + (vel.z * vel.z))
-
-            if vel.y <= -1 then
-                for group, _ in pairs(def.damage_groups) do
-                    def.damage_groups[group] = def.damage_groups[group] * def.crit_mp
-                end
-            end
-
-            pointed_thing.ref:punch(user, 1.0, {full_punch_interval = 1.0, damage_groups = def.damage_groups})
-
-            if pointed_thing.ref:is_player() then
-                pointed_thing.ref:add_player_velocity(vector.multiply(user:get_look_dir(), def.kb_mp * spd))
-            else
-                pointed_thing.ref:add_velocity(vector.multiply(user:get_look_dir(), def.kb_mp * spd))
-            end
-        end
-
-        if objs then
-            depth = depth + 1
-            objs[pointed_thing.ref] = pointed_thing.ref
-
-            return depth, objs
-        end]]--
+        thing = cast:next()
     end
+
+    e_pos = ref_pos
+    e_pos.y = e_pos.y - 0.25
+
+	cast = minetest.raycast(i_pos, e_pos, true, false)
+	thing = cast:next()
+	while thing do
+		if thing.type == "node" then
+            local pos = thing.intersection_point
+            retval = pos
+            --local node_name = minetest.get_node(thing.under).name
+            --minetest.chat_send_all("ray 2 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+        end
+        thing = cast:next()
+    end
+
+    e_pos = ref_pos
+    e_pos.y = e_pos.y - 0.35
+
+	cast = minetest.raycast(i_pos, e_pos, true, false)
+	thing = cast:next()
+	while thing do
+		if thing.type == "node" then
+            local pos = thing.intersection_point
+            retval = pos
+            --local node_name = minetest.get_node(thing.under).name
+            --minetest.chat_send_all("ray 3 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+        end
+        thing = cast:next()
+    end
+
+    return retval    
 end
 
 function automobiles.get_node_below(pos, dist)
@@ -111,4 +121,5 @@ function automobiles.get_node_below(pos, dist)
     local node_below = minetest.get_node(pos_below)
     return node_below
 end
+
 
