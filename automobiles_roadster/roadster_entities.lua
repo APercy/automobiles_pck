@@ -414,13 +414,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 self._steering_angle / 30 * turn_rate * automobiles.sign(longit_speed)
 		end
 
-        automobiles.ground_get_distances(self, 0.5, 20.52, 24.22)
+        --automobiles.ground_get_distances(self, 0.5, 20.52, 24.22)
 
         --[[if player and is_attached then
             player:set_look_horizontal(newyaw)
         end]]--
 
-		local newpitch = velocity.y * math.rad(6)
+		local newpitch = self._pitch --velocity.y * math.rad(6)
 
         --[[
         accell correction
