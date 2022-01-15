@@ -7,73 +7,53 @@ proximo experimento sera mis complexo: pegar o yaw do carro, colocar o entreeixo
 --lets assume that the rear axis is at object center, so we will use the distance only for front wheels
 function automobiles.ground_get_distances(self, radius, axis_length, axis_distance)
 
-
-    --[[local lf = self.lf_wheel:get_pos() -- left front
-    --automobiles.get_wheel_distance_from_ground(lf, radius)
-
-    local rf = self.rf_wheel:get_pos() -- right front
-    --automobiles.get_wheel_distance_from_ground(rf, radius)
-    
-    --minetest.chat_send_all("x ".. lf.x .." x " .. rf.x .. "\ny " .. lf.y .. " y " .. rf.y .. "\nz " .. lf.z .. " z " .. rf.z)
-
-    local lr = self.lr_wheel:get_pos() -- left rear
-    automobiles.get_wheel_distance_from_ground(lr, radius)
-    
-    local rr = self.rr_wheel:get_pos() -- right rear
-    automobiles.get_wheel_distance_from_ground(rr, radius)]]--
-
-    --[[
-    --minetest.raycast(pos1, pos2, objects, liquids)
-
-    for pointed_thing in minetest.raycast(p_pos, e_pos, true, false) do
-        automobiles.handle_ray(reference,pointed_thing)
-    end]]--
-
-    --segunda tentativa fracassada:
-    --[[local node = automobiles.get_node_below(self.object)
-    if node then
-        minetest.chat_send_all(node.name)
-    end]]--
-
     local mid_axis = (axis_length / 2)/10
-    local hip = axis_distance / 10
+    local hip = (axis_distance / 10) -- + ((axis_distance / 10)/3)
 
     local yaw = self.object:get_yaw()
+    local deg_yaw = math.deg(yaw)
+    local yaw_turns = math.floor(deg_yaw / 360)
+    deg_yaw = deg_yaw - (yaw_turns * 360)
+    yaw = math.rad(deg_yaw)
+    
     local pos = self.object:get_pos()
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
     local x, f_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, hip) --the x is only a mock
 
     local left_front = {x=0, y=f_y, z=0}
-    left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-90, mid_axis)
+    left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
 
     local right_front = {x=0, y=f_y, z=0}
-    right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+90, mid_axis)
+    right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)
     
     local r_x, r_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
     local r_y = 0
     x, r_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, 0) --the x is only a mock
 
     local left_rear = {x=0, y=r_y, z=0}
-    left_rear.x, left_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-90, mid_axis)
+    left_rear.x, left_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw+math.rad(90), mid_axis)
 
     local right_rear = {x=0, y=r_y, z=0}
-    right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw+90, mid_axis)    
+    right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)    
 
-
-    --minetest.chat_send_all("front x ".. right_front.x .." x " .. left_front.x .. " --- z " .. right_front.z .. " z " .. left_front.z .. " Y: " .. right_front.y)
+    --minetest.chat_send_all("x ".. f_x .. " --- z " .. f_z .. " || " ..  math.deg(yaw))
+    --minetest.chat_send_all("front x ".. right_front.x .. " - z " .. right_front.z .. " Yaw: " .. math.deg(yaw-math.rad(90)) .. " ||| x " .. left_front.x .. " - z " .. left_front.z .. " Yaw: " .. math.deg(yaw+math.rad(90)))
     --minetest.chat_send_all("rear x ".. right_rear.x .." x " .. left_rear.x .. " --- z " .. right_rear.z .. " z " .. left_rear.z .. " Y: " .. right_rear.y)
 
     local node_bellow = automobiles.get_node_below(left_front, 0.5)
     if node_bellow then
         --minetest.chat_send_all("bellow: " .. node_bellow.name)
-        local node = minetest.get_node(left_front)
+        local node = automobiles.get_node_below(left_front, -0.5)
         --minetest.chat_send_all("level: " .. node.name)
+        --minetest.chat_send_all(dump(mobkit.nodeatpos(left_front).node_box))
     end
 
 end
 
 function automobiles.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
+    --cara, o minetest é bizarro, ele considera o eixo no sentido ANTI-HORÁRIO... Então pra equação funcionar, subtrair o angulo de 360 antes
+    yaw = math.rad(360) - yaw
     local z = (math.cos(yaw)*distance) + orig_z
     local x = (math.sin(yaw)*distance) + orig_x
     return x, z
