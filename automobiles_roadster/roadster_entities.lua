@@ -163,7 +163,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-0.5, -0.5, -0.5, 0.5, 2, 0.5},
+	    collisionbox = {-0.5, -0.5, -0.5, 0.5, 1, 0.5},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
         stepheight = 0.5,
 	    visual = "mesh",
@@ -181,10 +181,10 @@ minetest.register_entity("automobiles_roadster:roadster", {
             "automobiles_roadster_fuel.png", --combustivel
             "automobiles_metal2.png", --parabrisa fixo
             "automobiles_alpha.png", --vidro do parabrisa fixo
-            "automobiles_metal2.png", --parabrisa movel
-            "automobiles_alpha.png", --vidro do parabrisa movel
             "automobiles_painting.png", --portas
             "automobiles_black.png", --portas interno
+            "automobiles_metal2.png", --parabrisa movel
+            "automobiles_alpha.png", --vidro do parabrisa movel
             "automobiles_black.png", --paralamas
             "automobiles_metal2.png", --carenagem do radiador
             "automobiles_painting.png", --tanque de combustivel
@@ -215,6 +215,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _roll = math.rad(0),
     _pitch = math.rad(90),
     _longit_speed = 0,
+    _show_rag = true,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -227,6 +228,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             stored_last_checkpoint = self._last_checkpoint,
             stored_total_laps = self._total_laps,
             stored_race_id = self._race_id,
+            stored_rag = self._show_rag,
         })
     end,
 
@@ -243,6 +245,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             self._last_checkpoint = data.stored_last_checkpoint
             self._total_laps = data.stored_total_laps
             self._race_id = data.stored_race_id
+            self._show_rag = data.stored_rag
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)
@@ -253,6 +256,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
         local top1=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:top1')
 	    top1:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.top1 = top1
+
+        local top2=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:top2')
+	    top2:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.top2 = top2
+        self.top2:set_properties({is_visible=false})
 
         local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:front_suspension')
 	    front_suspension:set_attach(self.object,'',{x=0,y=0,z=24.22},{x=0,y=0,z=0})
@@ -335,6 +343,16 @@ minetest.register_entity("automobiles_roadster:roadster", {
             later_speed*roadster.LATER_DRAG_FACTOR*-1*automobiles.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
+
+        if self._show_rag == true then
+            self.object:set_bone_position("parabrisa", {x=0, y=15.8317, z=15.0394}, {x=0, y=0, z=0})
+            self.top2:set_properties({is_visible=true})
+            self.top1:set_properties({is_visible=false})
+        else
+            self.object:set_bone_position("parabrisa", {x=0, y=15.8317, z=15.0394}, {x=math.rad(-145), y=0, z=0})
+            self.top2:set_properties({is_visible=false})
+            self.top1:set_properties({is_visible=true})
+        end
 
         local player = nil
         local is_attached = false
@@ -584,6 +602,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
         end
 
 		if name == self.driver_name then
+            roadster.driver_formspec(name)
+            --[[
             --detach all
             automobiles.dettach_driver(self, clicker)
             -- sound
@@ -599,7 +619,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             end
 
             self.object:set_acceleration(vector.multiply(automobiles.vector_up, -automobiles.gravity))
-        
+            ]]--
 		else
             if name == self.owner then
                 --is the owner, okay, lets attach
