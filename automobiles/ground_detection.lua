@@ -9,6 +9,7 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
 
     local mid_axis = (axis_length / 2)/10
     local hip = (axis_distance / 10) -- + ((axis_distance / 10)/3)
+    local pitch = self._pitch --+90 for the calculations
 
     local yaw = self.object:get_yaw()
     local deg_yaw = math.deg(yaw)
@@ -19,10 +20,9 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
     local pos = self.object:get_pos()
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    local x, f_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, hip) --the x is only a mock
-    local front_axis = {x=f_x, y=f_y, z=f_z}
-
-    local front_obstacle_level = automobiles.get_obstacle(front_axis)
+    --local f_y, x = automobiles.get_xz_from_hipotenuse(pos.y, pos.x, 0, hip) --the x is only a mock
+    local front_axis = {x=f_x, y=pos.y, z=f_z}
+    local front_obstacle_level = automobiles.get_obstacle(front_axis, 0.45)
 
     --[[local left_front = {x=0, y=f_y, z=0}
     left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
@@ -30,12 +30,12 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
     local right_front = {x=0, y=f_y, z=0}
     right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)]]--
     
-    local r_x, r_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
-    local r_y = 0
-    x, r_y = automobiles.get_xz_from_hipotenuse(pos.x, pos.y, self._pitch, 0) --the x is only a mock
+    --[[local r_x, r_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
+    local r_y = pos.y
+    --r_y, x = automobiles.get_xz_from_hipotenuse(pos.y, pos.x, 0, 0) --the x is only a mock
     local rear_axis = {x=r_x, y=r_y, z=r_z}
 
-    local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
+    local rear_obstacle_level = automobiles.get_obstacle(rear_axis, 0.2, 0.25)]]--
 
     --[[local left_rear = {x=0, y=r_y, z=0}
     left_rear.x, left_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw+math.rad(90), mid_axis)
@@ -45,10 +45,11 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
 
     --lets try to get the pitch
     local deltaX = axis_distance;
-    local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-    local pitch = math.atan2(deltaY, deltaX);
-    --minetest.chat_send_all(math.deg(pitch).." -- r: "..rear_obstacle_level.y.." -- f: "..front_obstacle_level.y)
-    self._pitch = math.rad(0) --pitch
+    local deltaY = pos.y - front_obstacle_level.y;
+    minetest.chat_send_all("deutaY "..deltaY)
+    pitch = math.atan2(deltaY, deltaX);
+    minetest.chat_send_all(" pitch ".. math.deg(pitch).." -- r: "..pos.y.." -- f: "..front_obstacle_level.y)
+    self._pitch = pitch
 
 end
 
@@ -60,59 +61,87 @@ function automobiles.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
     return x, z
 end
 
-function automobiles.get_obstacle(ref_pos)
-    local retval = ref_pos
-    local i_pos = ref_pos
-    --minetest.chat_send_all("wheel pos: " .. dump(i_pos.y))
+function automobiles.get_obstacle(ref_pos, y_max)
+    --lets clone the table
+    local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
+    minetest.chat_send_all("aa y: " .. dump(retval.y))
+    local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
+    minetest.chat_send_all("bb y: " .. dump(retval.y))
     
-    local e_pos = ref_pos
-    e_pos.y = e_pos.y - 0.20
+    local e_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
+    e_pos.y = e_pos.y - y_max
 
+    --//upper position
+    minetest.chat_send_all("ref y: " .. dump(ref_pos.y) .. " ret Y: ".. dump(retval.y))
 	local cast = minetest.raycast(i_pos, e_pos, true, false)
 	local thing = cast:next()
 	while thing do
 		if thing.type == "node" then
             local pos = thing.intersection_point
-            retval = pos
-            local node_name = minetest.get_node(thing.under).name
-            minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
+            if pos then
+                retval.y = e_pos.y - 1
+                --minetest.chat_send_all("ray intercection: " .. dump(pos.y))
+                local node_name = minetest.get_node(thing.under).name
+                minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                break
+            end
         end
         thing = cast:next()
     end
 
-    --[[e_pos = ref_pos
-    e_pos.y = e_pos.y - 0.25
-
+    e_pos.y = e_pos.y + (y_max/2)
 	cast = minetest.raycast(i_pos, e_pos, true, false)
 	thing = cast:next()
 	while thing do
 		if thing.type == "node" then
             local pos = thing.intersection_point
-            retval = pos
-            local node_name = minetest.get_node(thing.under).name
-            minetest.chat_send_all("ray 2 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+            if pos then
+                retval.y = retval.y - 4
+                local node_name = minetest.get_node(thing.under).name
+                minetest.chat_send_all("ray 2 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                break
+            end
         end
         thing = cast:next()
     end
-
-    e_pos = ref_pos
-    e_pos.y = e_pos.y - 0.35
+    
+    --lower position
+    e_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
+    e_pos.y = e_pos.y - y_max - 0.20
 
 	cast = minetest.raycast(i_pos, e_pos, true, false)
 	thing = cast:next()
-    --if thing == nil then retval = e_pos end
+    if thing == nil then retval.y = retval.y + 2 end
 	while thing do
 		if thing.type == "node" then
             local pos = thing.intersection_point
-            if pos.y < e_pos.y then
-                retval = pos
+            if pos then
+                --retval = pos
                 local node_name = minetest.get_node(thing.under).name
                 minetest.chat_send_all("ray 3 intercection: " .. dump(pos.y) .. " -- " .. node_name)
             end
         end
         thing = cast:next()
-    end]]--
+    end
 
+    e_pos.y = e_pos.y - 0.55
+
+	cast = minetest.raycast(i_pos, e_pos, true, false)
+	thing = cast:next()
+    if thing == nil then retval.y = retval.y + 10 end
+	while thing do
+		if thing.type == "node" then
+            local pos = thing.intersection_point
+            if pos then
+                --retval = pos
+                local node_name = minetest.get_node(thing.under).name
+                minetest.chat_send_all("ray 4 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+            end
+        end
+        thing = cast:next()
+    end
+    
+    --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
 end
 
