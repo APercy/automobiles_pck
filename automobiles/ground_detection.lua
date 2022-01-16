@@ -46,9 +46,9 @@ function automobiles.ground_get_distances(self, radius, axis_length, axis_distan
     --lets try to get the pitch
     local deltaX = axis_distance;
     local deltaY = pos.y - front_obstacle_level.y;
-    minetest.chat_send_all("deutaY "..deltaY)
+    --minetest.chat_send_all("deutaY "..deltaY)
     pitch = math.atan2(deltaY, deltaX);
-    minetest.chat_send_all(" pitch ".. math.deg(pitch).." -- r: "..pos.y.." -- f: "..front_obstacle_level.y)
+    --minetest.chat_send_all(" pitch ".. math.deg(pitch).." -- r: "..pos.y.." -- f: "..front_obstacle_level.y)
     self._pitch = pitch
 
 end
@@ -64,15 +64,15 @@ end
 function automobiles.get_obstacle(ref_pos, y_max)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
-    minetest.chat_send_all("aa y: " .. dump(retval.y))
+    --minetest.chat_send_all("aa y: " .. dump(retval.y))
     local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
-    minetest.chat_send_all("bb y: " .. dump(retval.y))
+    --minetest.chat_send_all("bb y: " .. dump(retval.y))
     
     local e_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     e_pos.y = e_pos.y - y_max
 
     --//upper position
-    minetest.chat_send_all("ref y: " .. dump(ref_pos.y) .. " ret Y: ".. dump(retval.y))
+    --minetest.chat_send_all("ref y: " .. dump(ref_pos.y) .. " ret Y: ".. dump(retval.y))
 	local cast = minetest.raycast(i_pos, e_pos, true, false)
 	local thing = cast:next()
 	while thing do
@@ -82,7 +82,7 @@ function automobiles.get_obstacle(ref_pos, y_max)
                 retval.y = e_pos.y - 1
                 --minetest.chat_send_all("ray intercection: " .. dump(pos.y))
                 local node_name = minetest.get_node(thing.under).name
-                minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
                 break
             end
         end
@@ -98,7 +98,7 @@ function automobiles.get_obstacle(ref_pos, y_max)
             if pos then
                 retval.y = retval.y - 4
                 local node_name = minetest.get_node(thing.under).name
-                minetest.chat_send_all("ray 2 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                --minetest.chat_send_all("ray 2 intercection: " .. dump(pos.y) .. " -- " .. node_name)
                 break
             end
         end
@@ -118,7 +118,7 @@ function automobiles.get_obstacle(ref_pos, y_max)
             if pos then
                 --retval = pos
                 local node_name = minetest.get_node(thing.under).name
-                minetest.chat_send_all("ray 3 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                --minetest.chat_send_all("ray 3 intercection: " .. dump(pos.y) .. " -- " .. node_name)
             end
         end
         thing = cast:next()
@@ -135,7 +135,7 @@ function automobiles.get_obstacle(ref_pos, y_max)
             if pos then
                 --retval = pos
                 local node_name = minetest.get_node(thing.under).name
-                minetest.chat_send_all("ray 4 intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                --minetest.chat_send_all("ray 4 intercection: " .. dump(pos.y) .. " -- " .. node_name)
             end
         end
         thing = cast:next()

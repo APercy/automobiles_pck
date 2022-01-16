@@ -163,7 +163,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-1.1, -0.5, -1.1, 1.1, 2, 1.1},
+	    collisionbox = {-0.5, -0.5, -0.5, 0.5, 2, 0.5},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
         stepheight = 0.5,
 	    visual = "mesh",
@@ -214,6 +214,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _last_time_command = 0,
     _roll = math.rad(0),
     _pitch = math.rad(90),
+    _longit_speed = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -414,13 +415,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 self._steering_angle / 30 * turn_rate * automobiles.sign(longit_speed)
 		end
 
-        --automobiles.ground_get_distances(self, 0.5, 20.52, 24.22)
+        automobiles.ground_get_distances(self, 0.5, 20.52, 24.22)
 
         --[[if player and is_attached then
             player:set_look_horizontal(newyaw)
         end]]--
 
-		local newpitch = velocity.y * math.rad(6)
+		local newpitch = self._pitch --velocity.y * math.rad(6)
 
         --[[
         accell correction
@@ -448,9 +449,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
         end
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=0}) end
+        roadster.engine_set_sound_and_animation(self, longit_speed)
 
         --saves last velocity for collision detection (abrupt stop)
         self.lastvelocity = self.object:get_velocity()
+        self._longit_speed = longit_speed
 
         -- calculate energy consumption --
         ----------------------------------
@@ -583,6 +586,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
 		if name == self.driver_name then
             --detach all
             automobiles.dettach_driver(self, clicker)
+            -- sound
+            if self.sound_handle then
+                minetest.sound_stop(self.sound_handle)
+                self.sound_handle = nil
+            end
 
             local passenger = nil
             if self._passenger then
@@ -596,6 +604,9 @@ minetest.register_entity("automobiles_roadster:roadster", {
             if name == self.owner then
                 --is the owner, okay, lets attach
                 automobiles.attach_driver(self, clicker)
+                -- sound
+                self.sound_handle = minetest.sound_play({name = "roadster_engine"},
+                        {object = self.object, gain = 0.5, pitch = 0.5, max_hear_distance = 10, loop = true,})
             else
                 --minetest.chat_send_all("clicou")
                 --a passenger
