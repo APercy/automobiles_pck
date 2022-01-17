@@ -229,6 +229,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             stored_total_laps = self._total_laps,
             stored_race_id = self._race_id,
             stored_rag = self._show_rag,
+            stored_pitch = self._pitch,
         })
     end,
 
@@ -246,6 +247,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             self._total_laps = data.stored_total_laps
             self._race_id = data.stored_race_id
             self._show_rag = data.stored_rag
+            self._pitch = data.stored_pitch
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)
