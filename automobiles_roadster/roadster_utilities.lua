@@ -21,12 +21,19 @@ function roadster.destroy(self, puncher)
     end
 
     local pos = self.object:get_pos()
-    if self.l_wheel then self.l_wheel:remove() end
-    if self.r_wheel then self.r_wheel:remove() end
-    if self.steering_base then self.steering_base:remove() end
-    if self.steering_axis then self.steering_axis:remove() end
+
+    if self.top1 then self.top1:remove() end
+    if self.top2 then self.top2:remove() end
+    if self.front_suspension then self.front_suspension:remove() end
+    if self.lf_wheel then self.lf_wheel:remove() end
+    if self.rf_wheel then self.rf_wheel:remove() end
+    if self.rear_suspension then self.rear_suspension:remove() end
+    if self.lr_wheel then self.lr_wheel:remove() end
+    if self.rr_wheel then self.rr_wheel:remove() end
     if self.steering then self.steering:remove() end
-    if self.dir_bar then self.dir_bar:remove() end
+    if self.steering_axis then self.steering_axis:remove() end
+    if self.driver_seat then self.driver_seat:remove() end
+    if self.passenger_seat then self.passenger_seat:remove() end
 
     self.object:remove()
 
