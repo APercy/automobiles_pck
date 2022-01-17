@@ -27,8 +27,9 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    --local f_y, x = automobiles.get_xz_from_hipotenuse(pos.y, pos.x, 0, hip) --the x is only a mock
-    local front_axis = {x=f_x, y=pos.y, z=f_z}
+    local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
+    --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
+    local front_axis = {x=f_x, y=r_y, z=f_z}
     local front_obstacle_level = automobiles.get_obstacle(front_axis)
 
     --[[local left_front = {x=0, y=f_y, z=0}
@@ -48,12 +49,16 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)]]--
 
     --lets try to get the pitch
-    local deltaX = axis_distance;
-    local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-    --minetest.chat_send_all("deutaY "..deltaY)
-    local m = (deltaY/deltaX)
-    pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-    --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+    if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
+        local deltaX = axis_distance;
+        local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
+        if deltaY <= self.initial_properties.stepheight then
+            --minetest.chat_send_all("deutaY "..deltaY)
+            local m = (deltaY/deltaX)
+            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+        end
+    end
     self._pitch = pitch
 
 end
@@ -70,8 +75,8 @@ function automobiles.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
-    local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
-    --minetest.chat_send_all("bb y: " .. dump(retval.y))
+    local i_pos = {x=ref_pos.x, y=ref_pos.y+0.5, z=ref_pos.z}
+    --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
     retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
 
@@ -98,8 +103,7 @@ function automobiles.eval_interception(initial_pos, end_pos)
                 local drawtype = get_nodedef_field(nodename, "drawtype")
                 if drawtype ~= "plantlike" then
                     ret_y = pos.y
-                    --local node_name = node.name
-                    --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                    --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. nodename)
                     break
                 end
             end

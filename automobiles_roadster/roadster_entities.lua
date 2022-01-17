@@ -360,6 +360,18 @@ minetest.register_entity("automobiles_roadster:roadster", {
             player = minetest.get_player_by_name(self.driver_name)
             
             if player then
+
+        		local ctrl = player:get_player_control()
+		        if ctrl.aux1 then
+                    --sets the engine running - but sets a delay also, cause keypress
+                    if self._last_time_command > 0.8 then
+                        self._last_time_command = 0
+                        minetest.sound_play({name = "roadster_horn"},
+		                        {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})
+                    end
+		        end                
+
+
                 local player_attach = player:get_attach()
                 if player_attach then
                     if self.driver_seat then
@@ -626,7 +638,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 automobiles.attach_driver(self, clicker)
                 -- sound
                 self.sound_handle = minetest.sound_play({name = "roadster_engine"},
-                        {object = self.object, gain = 0.5, pitch = 0.5, max_hear_distance = 10, loop = true,})
+                        {object = self.object, gain = 0.5, pitch = 0.6, max_hear_distance = 10, loop = true,})
             else
                 --minetest.chat_send_all("clicou")
                 --a passenger

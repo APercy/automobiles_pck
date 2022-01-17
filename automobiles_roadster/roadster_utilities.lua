@@ -38,7 +38,7 @@ end
 function roadster.engine_set_sound_and_animation(self, _longit_speed)
     --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
     if self.sound_handle then
-        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.1) or (math.abs(self._longit_speed) + 0.1 < math.abs(_longit_speed)) then
+        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.08) or (math.abs(self._longit_speed) + 0.08 < math.abs(_longit_speed)) then
             --minetest.chat_send_all('test2')
             roadster.engineSoundPlay(self)
         end
@@ -51,7 +51,7 @@ function roadster.engineSoundPlay(self)
     if self.object then
         self.sound_handle = minetest.sound_play({name = "roadster_engine"},
             {object = self.object, gain = 0.5,
-                pitch = 0.5 + ((self._longit_speed/10)/2),
+                pitch = 0.6 + ((self._longit_speed/10)/2),
                 max_hear_distance = 10,
                 loop = true,})
     end

@@ -5,8 +5,8 @@ roadster={}
 roadster.LONGIT_DRAG_FACTOR = 0.16*0.16
 roadster.LATER_DRAG_FACTOR = 30.0
 roadster.gravity = automobiles.gravity
-roadster.max_speed = 10
-roadster.max_acc_factor = 4
+roadster.max_speed = 15
+roadster.max_acc_factor = 5
 roadster.max_fuel = 10
 
 roadster.front_wheel_xpos = 10.26
