@@ -69,7 +69,7 @@ function automobiles.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
-    local i_pos = {x=ref_pos.x, y=ref_pos.y+0.5, z=ref_pos.z}
+    local i_pos = {x=ref_pos.x, y=ref_pos.y+1, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
     retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
