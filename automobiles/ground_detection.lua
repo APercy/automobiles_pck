@@ -1,9 +1,3 @@
---[[
-os experimentos mostraram que a deteção de uma posição de um item atachado retorna a do objeto pai, então pegar a posição das rodas não presta
-proximo experimento sera mis complexo: pegar o yaw do carro, colocar o entreeixos e afastamento das rodas no eixo X e calcular a posição com trigonometria
-]]--
-
-
 --lets assume that the rear axis is at object center, so we will use the distance only for front wheels
 function automobiles.ground_get_distances(self, radius, axis_distance)
 

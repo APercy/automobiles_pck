@@ -531,8 +531,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
         ]]--
         local velocity = self.object:get_velocity()
         local speed = automobiles.get_hipotenuse_value(vector.new(), velocity)
-        if self._engine_running == false and speed <= 0.1 then
-            if automobiles.loadFuel(self, puncher:get_player_name(), roadster.max_fuel) then return end
+        if math.abs(speed) <= 0.1 then
+            if automobiles.loadFuel(self, puncher:get_player_name(), false, roadster.max_fuel) then return end
         end
         -- end refuel
 
@@ -615,23 +615,6 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
 		if name == self.driver_name then
             roadster.driver_formspec(name)
-            --[[
-            --detach all
-            automobiles.dettach_driver(self, clicker)
-            -- sound
-            if self.sound_handle then
-                minetest.sound_stop(self.sound_handle)
-                self.sound_handle = nil
-            end
-
-            local passenger = nil
-            if self._passenger then
-                passenger = minetest.get_player_by_name(self._passenger)
-                if passenger then automobiles.dettach_pax(self, passenger) end
-            end
-
-            self.object:set_acceleration(vector.multiply(automobiles.vector_up, -automobiles.gravity))
-            ]]--
 		else
             if name == self.owner then
                 --is the owner, okay, lets attach
