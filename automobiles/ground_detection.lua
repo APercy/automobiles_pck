@@ -9,7 +9,7 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
 
     --local mid_axis = (axis_length / 2)/10
     local hip = (axis_distance / 10)
-    minetest.chat_send_all("entre-eixo "..hip)
+    --minetest.chat_send_all("entre-eixo "..hip)
     local pitch = self._pitch --+90 for the calculations
 
     local yaw = self.object:get_yaw()
@@ -50,10 +50,10 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     --lets try to get the pitch
     local deltaX = axis_distance;
     local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-    minetest.chat_send_all("deutaY "..deltaY)
+    --minetest.chat_send_all("deutaY "..deltaY)
     local m = (deltaY/deltaX)*10
     pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-    minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+    --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
     self._pitch = pitch
 
 end
