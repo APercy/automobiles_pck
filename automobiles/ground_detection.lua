@@ -21,7 +21,7 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
+    --local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local front_axis = {x=f_x, y=r_y, z=f_z}
     local front_obstacle_level = automobiles.get_obstacle(front_axis)
@@ -46,14 +46,14 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
         local deltaX = axis_distance;
         local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-        if deltaY <= self.initial_properties.stepheight then
-            --minetest.chat_send_all("deutaY "..deltaY)
-            local m = (deltaY/deltaX)
-            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
-        end
+        --minetest.chat_send_all("deutaY "..deltaY)
+        local m = (deltaY/deltaX)
+        pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+        --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
     end
-    self._pitch = pitch
+    if math.abs(math.deg(pitch)) < 50 then
+        self._pitch = pitch
+    end
 
 end
 
@@ -69,10 +69,10 @@ function automobiles.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
-    local i_pos = {x=ref_pos.x, y=ref_pos.y+1.5, z=ref_pos.z}
+    local i_pos = {x=ref_pos.x, y=ref_pos.y+0.5, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 3, z=i_pos.z})
+    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
