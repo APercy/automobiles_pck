@@ -8,7 +8,7 @@ proximo experimento sera mis complexo: pegar o yaw do carro, colocar o entreeixo
 function automobiles.ground_get_distances(self, radius, axis_distance)
 
     --local mid_axis = (axis_length / 2)/10
-    local hip = (axis_distance / 10)
+    local hip = axis_distance
     --minetest.chat_send_all("entre-eixo "..hip)
     local pitch = self._pitch --+90 for the calculations
 
@@ -51,7 +51,7 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     local deltaX = axis_distance;
     local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
     --minetest.chat_send_all("deutaY "..deltaY)
-    local m = (deltaY/deltaX)*10
+    local m = (deltaY/deltaX)
     pitch = math.atan(m) --math.atan2(deltaY, deltaX);
     --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
     self._pitch = pitch
@@ -73,13 +73,20 @@ function automobiles.get_obstacle(ref_pos)
     local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(retval.y))
 
-    retval.y = eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
 end
 
-function eval_interception(initial_pos, end_pos)
+local function get_nodedef_field(nodename, fieldname)
+    if not minetest.registered_nodes[nodename] then
+        return nil
+    end
+    return minetest.registered_nodes[nodename][fieldname]
+end
+
+function automobiles.eval_interception(initial_pos, end_pos)
     local ret_y = nil
 	local cast = minetest.raycast(initial_pos, end_pos, true, false)
 	local thing = cast:next()
@@ -87,10 +94,14 @@ function eval_interception(initial_pos, end_pos)
 		if thing.type == "node" then
             local pos = thing.intersection_point
             if pos then
-                ret_y = pos.y
-                --local node_name = minetest.get_node(thing.under).name
-                --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
-                break
+                local nodename = minetest.get_node(thing.under).name
+                local drawtype = get_nodedef_field(nodename, "drawtype")
+                if drawtype ~= "plantlike" then
+                    ret_y = pos.y
+                    --local node_name = node.name
+                    --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. node_name)
+                    break
+                end
             end
         end
         thing = cast:next()
