@@ -72,7 +72,7 @@ function automobiles.get_obstacle(ref_pos)
     local i_pos = {x=ref_pos.x, y=ref_pos.y+1.5, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 3, z=i_pos.z})
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
