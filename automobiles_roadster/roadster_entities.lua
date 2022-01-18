@@ -213,7 +213,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _last_time_drift_snd = 0,
     _last_time_command = 0,
     _roll = math.rad(0),
-    _pitch = math.rad(90),
+    _pitch = 0,
     _longit_speed = 0,
     _show_rag = true,
 
