@@ -26,8 +26,8 @@ initial_properties = {
 
 minetest.register_entity('automobiles_roadster:rear_suspension',{
 initial_properties = {
-	physical = false,
-	collide_with_objects=false,
+	physical = true,
+	collide_with_objects=true,
 	pointable=false,
 	visual = "mesh",
 	mesh = "automobiles_roadster_rear_suspension.b3d",
@@ -163,7 +163,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-0.5, -0.5, -0.5, 0.5, 1, 0.5},
+	    collisionbox = {-0.1, -0.5, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
         stepheight = 0.5,
 	    visual = "mesh",

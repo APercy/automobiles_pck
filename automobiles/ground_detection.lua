@@ -21,7 +21,7 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    --local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
+    local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local front_axis = {x=f_x, y=r_y, z=f_z}
     local front_obstacle_level = automobiles.get_obstacle(front_axis)
