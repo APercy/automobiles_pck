@@ -19,12 +19,14 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     local rear_axis = {x=r_x, y=r_y, z=r_z}
 
     local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
+    --minetest.chat_send_all("rear"..dump(rear_obstacle_level))
 
     local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
     local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local front_axis = {x=f_x, y=f_y, z=f_z}
     local front_obstacle_level = automobiles.get_obstacle(front_axis)
+    --minetest.chat_send_all("front"..dump(front_obstacle_level))
 
     --[[local left_front = {x=0, y=f_y, z=0}
     left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
@@ -50,8 +52,11 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
         local m = (deltaY/deltaX)
         pitch = math.atan(m) --math.atan2(deltaY, deltaX);
         --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+    else
+        self._pitch = 0
     end
-    if math.abs(math.deg(pitch)) < 50 then
+
+    if math.abs(math.deg(pitch)) <= 45 then
         self._pitch = pitch
     end
 
@@ -69,10 +74,14 @@ function automobiles.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
-    local i_pos = {x=ref_pos.x, y=ref_pos.y+0.5, z=ref_pos.z}
+    local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    retval.y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    local y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    if y then
+        retval.y = y
+    end
+    --minetest.chat_send_all(dump(retval.y))
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    

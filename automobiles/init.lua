@@ -194,7 +194,13 @@ function automobiles.dettach_pax(self, player)
     --remove_physics_override(player, {speed=1,gravity=1,jump=1})
 end
 
-
+function automobiles.get_gauge_angle(value, initial_angle)
+    initial_angle = initial_angle or 90
+    local angle = value * 18
+    angle = angle - initial_angle
+    angle = angle * -1
+	return angle
+end
 
 dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "control.lua")

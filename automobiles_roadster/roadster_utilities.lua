@@ -10,12 +10,14 @@ function roadster.destroy(self, puncher)
 
     if self.driver_name then
         -- detach the driver first (puncher must be driver)
-        puncher:set_detach()
-        puncher:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-        if minetest.global_exists("player_api") then
-            player_api.player_attached[self.driver_name] = nil
-            -- player should stand again
-            player_api.set_animation(puncher, "stand")
+        if puncher then
+            puncher:set_detach()
+            puncher:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+            if minetest.global_exists("player_api") then
+                player_api.player_attached[self.driver_name] = nil
+                -- player should stand again
+                player_api.set_animation(puncher, "stand")
+            end
         end
         self.driver_name = nil
     end
@@ -34,6 +36,7 @@ function roadster.destroy(self, puncher)
     if self.steering_axis then self.steering_axis:remove() end
     if self.driver_seat then self.driver_seat:remove() end
     if self.passenger_seat then self.passenger_seat:remove() end
+    if self.fuel_gauge then self.fuel_gauge:remove() end
 
     self.object:remove()
 

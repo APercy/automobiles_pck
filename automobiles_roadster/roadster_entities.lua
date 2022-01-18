@@ -159,6 +159,28 @@ initial_properties = {
 	
 })
 
+minetest.register_entity('automobiles_roadster:pointer',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_pointer.b3d",
+    visual_size = {x = 1, y = 1, z = 1},
+	textures = {"automobiles_white.png"},
+	},
+	
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+})
+
 minetest.register_entity("automobiles_roadster:roadster", {
 	initial_properties = {
 	    physical = true,
@@ -311,6 +333,10 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    local passenger_seat=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
         passenger_seat:set_attach(self.object,'',{x=4.25,y=7.12,z=9.5},{x=0,y=0,z=0})
 	    self.passenger_seat = passenger_seat
+
+        local fuel_gauge=minetest.add_entity(pos,'automobiles_roadster:pointer')
+        fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
+        self.fuel_gauge = fuel_gauge
 
 		self.object:set_armor_groups({immortal=1})
 
@@ -467,6 +493,29 @@ minetest.register_entity("automobiles_roadster:roadster", {
         if accel.z > max_factor then accel.z = acc_adjusted end
         if accel.z < -max_factor then accel.z = -acc_adjusted end
         -- end correction
+
+        -- calculate energy consumption --
+        ----------------------------------
+        if self._energy > 0 then
+            local zero_reference = vector.new()
+            local acceleration = automobiles.get_hipotenuse_value(accel, zero_reference)
+            --minetest.chat_send_all(acceleration)
+            local consumed_power = acceleration/40000
+            self._energy = self._energy - consumed_power;
+        end
+        if self._energy <= 0 then
+            self._engine_running = false
+            if self.sound_handle then minetest.sound_stop(self.sound_handle) end
+            --minetest.chat_send_player(self.driver_name, "Out of fuel")
+        else
+            roadster.engine_set_sound_and_animation(self, longit_speed)
+        end
+
+        local energy_indicator_angle = automobiles.get_gauge_angle(self._energy)
+        self.fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
+        ----------------------------
+        -- end energy consumption --
+
         accel.y = -automobiles.gravity
 
         if stop ~= true then
@@ -481,27 +530,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
         end
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=0}) end
-        roadster.engine_set_sound_and_animation(self, longit_speed)
 
         --saves last velocity for collision detection (abrupt stop)
         self.lastvelocity = self.object:get_velocity()
         self._longit_speed = longit_speed
 
-        -- calculate energy consumption --
-        ----------------------------------
-        if self._energy > 0 and self._engine_running and not automobiles.is_creative then
-            local zero_reference = vector.new()
-            local acceleration = automobiles.get_hipotenuse_value(accel, zero_reference)
-            local consumed_power = acceleration/200000
-            self._energy = self._energy - consumed_power;
-        end
-        if self._energy <= 0 and self._engine_running then
-            self._engine_running = false
-            if self.sound_handle then minetest.sound_stop(self.sound_handle) end
-            minetest.chat_send_player(self.driver_name, "Out of fuel")
-        end
-        ----------------------------
-        -- end energy consumption --
 	end,
 
 	on_punch = function(self, puncher, ttime, toolcaps, dir, damage)
@@ -521,7 +554,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 		end
         
         local is_attached = false
-        if puncher:get_attach() == self.object then is_attached = true end
+        if puncher:get_attach() == self.driver_seat then is_attached = true end
 
         local itmstck=puncher:get_wielded_item()
         local item_name = ""

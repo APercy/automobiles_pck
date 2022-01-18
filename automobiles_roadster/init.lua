@@ -9,6 +9,8 @@ roadster.max_speed = 15
 roadster.max_acc_factor = 5
 roadster.max_fuel = 10
 
+ROADSTER_GAUGE_FUEL_POSITION =  {x=0,y=8.04,z=17.84}
+
 roadster.front_wheel_xpos = 10.26
 roadster.rear_wheel_xpos = 10.26
 

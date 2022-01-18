@@ -34,9 +34,8 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
 		local ctrl = player:get_player_control()
 		
         local acc = 0
-        if self._engine_running then
-            --running
-	        if longit_speed < max_speed and ctrl.up then
+        if self._energy > 0 then
+            if longit_speed < roadster.max_speed and ctrl.up then
                 --get acceleration factor
                 acc = automobiles.check_road_is_ok(self.object, max_acc_factor)
                 --minetest.chat_send_all('engineacc: '.. engineacc)
@@ -44,24 +43,14 @@ function automobiles.control(self, dtime, hull_direction, longit_speed, longit_d
                     --improper road will reduce speed
                     acc = -1
                 end
-	        end
-        else
-            --slow maneuver
-	        if longit_speed < roadster.max_speed and ctrl.up then
-                --get acceleration factor
-                acc = automobiles.check_road_is_ok(self.object, max_acc_factor)
-                --minetest.chat_send_all('engineacc: '.. engineacc)
-                if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
-                    --improper road will reduce speed
-                    acc = -1
-                end
+            end
+
+
+            --reversing
+	        if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
+                acc = -1
 	        end
         end
-
-        --reversing
-	    if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
-            acc = -1
-	    end
 
         --break
         if ctrl.down then

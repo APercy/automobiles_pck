@@ -39,3 +39,4 @@ function automobiles.loadFuel(self, player_name, free, max_fuel)
 
     return false
 end
+
