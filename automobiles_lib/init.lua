@@ -69,8 +69,7 @@ function automobiles_lib.attach_driver(self, player)
 
     -- attach the driver
     player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-    player:set_eye_offset({x = 0, y = -4, z = 2}, {x = 0, y = 1, z = -30})
-    player:set_eye_offset({x = 0, y = -4, z = 2}, {x = 0, y = 1, z = -30})
+    player:set_eye_offset({x = 0, y = -4, z = 0}, {x = 0, y = 1, z = -30})
     player_api.player_attached[name] = true
     -- make the driver sit
     minetest.after(0.2, function()
@@ -122,7 +121,7 @@ function automobiles_lib.attach_pax(self, player, onside)
 
             -- attach the driver
             player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-            player:set_eye_offset({x = 0, y = -4, z = 2}, {x = 0, y = 3, z = -30})
+            player:set_eye_offset({x = 0, y = -4, z = 0}, {x = 0, y = 3, z = -30})
             player_api.player_attached[name] = true
             -- make the driver sit
             minetest.after(0.2, function()
