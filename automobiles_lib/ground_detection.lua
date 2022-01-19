@@ -1,5 +1,5 @@
 --lets assume that the rear axis is at object center, so we will use the distance only for front wheels
-function automobiles.ground_get_distances(self, radius, axis_distance)
+function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
     --local mid_axis = (axis_length / 2)/10
     local hip = axis_distance
@@ -14,35 +14,35 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
     
     local pos = self.object:get_pos()
 
-    local r_x, r_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
+    local r_x, r_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, 0)
     local r_y = pos.y
     local rear_axis = {x=r_x, y=r_y, z=r_z}
 
-    local rear_obstacle_level = automobiles.get_obstacle(rear_axis)
+    local rear_obstacle_level = automobiles_lib.get_obstacle(rear_axis)
     --minetest.chat_send_all("rear"..dump(rear_obstacle_level))
 
-    local f_x, f_z = automobiles.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    local x, f_y = automobiles.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
+    local f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
+    local x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local front_axis = {x=f_x, y=f_y, z=f_z}
-    local front_obstacle_level = automobiles.get_obstacle(front_axis)
+    local front_obstacle_level = automobiles_lib.get_obstacle(front_axis)
     --minetest.chat_send_all("front"..dump(front_obstacle_level))
 
     --[[local left_front = {x=0, y=f_y, z=0}
-    left_front.x, left_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
+    left_front.x, left_front.z = automobiles_lib.get_xz_from_hipotenuse(f_x, f_z, yaw+math.rad(90), mid_axis)
 
     local right_front = {x=0, y=f_y, z=0}
-    right_front.x, right_front.z = automobiles.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)]]--
+    right_front.x, right_front.z = automobiles_lib.get_xz_from_hipotenuse(f_x, f_z, yaw-math.rad(90), mid_axis)]]--
     
     --[[
 
-    local rear_obstacle_level = automobiles.get_obstacle(rear_axis, 0.2, 0.25)]]--
+    local rear_obstacle_level = automobiles_lib.get_obstacle(rear_axis, 0.2, 0.25)]]--
 
     --[[local left_rear = {x=0, y=r_y, z=0}
-    left_rear.x, left_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw+math.rad(90), mid_axis)
+    left_rear.x, left_rear.z = automobiles_lib.get_xz_from_hipotenuse(r_x, r_z, yaw+math.rad(90), mid_axis)
 
     local right_rear = {x=0, y=r_y, z=0}
-    right_rear.x, right_rear.z = automobiles.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)]]--
+    right_rear.x, right_rear.z = automobiles_lib.get_xz_from_hipotenuse(r_x, r_z, yaw-math.rad(90), mid_axis)]]--
 
     --lets try to get the pitch
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
@@ -62,7 +62,7 @@ function automobiles.ground_get_distances(self, radius, axis_distance)
 
 end
 
-function automobiles.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
+function automobiles_lib.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
     --cara, o minetest é bizarro, ele considera o eixo no sentido ANTI-HORÁRIO... Então pra equação funcionar, subtrair o angulo de 360 antes
     yaw = math.rad(360) - yaw
     local z = (math.cos(yaw)*distance) + orig_z
@@ -70,14 +70,14 @@ function automobiles.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
     return x, z
 end
 
-function automobiles.get_obstacle(ref_pos)
+function automobiles_lib.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
     local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    local y = automobiles.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
     if y then
         retval.y = y
     end
@@ -94,7 +94,7 @@ local function get_nodedef_field(nodename, fieldname)
     return minetest.registered_nodes[nodename][fieldname]
 end
 
-function automobiles.eval_interception(initial_pos, end_pos)
+function automobiles_lib.eval_interception(initial_pos, end_pos)
     local ret_y = nil
 	local cast = minetest.raycast(initial_pos, end_pos, true, false)
 	local thing = cast:next()
@@ -116,7 +116,7 @@ function automobiles.eval_interception(initial_pos, end_pos)
     return ret_y
 end
 
-function automobiles.get_node_below(pos, dist)
+function automobiles_lib.get_node_below(pos, dist)
     local node = minetest.get_node(pos)
     local pos_below = pos
     pos_below.y = pos_below.y - (dist + 0.1)

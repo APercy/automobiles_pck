@@ -39,7 +39,7 @@ minetest.register_craftitem("automobiles_roadster:roadster", {
                 ent.owner = owner
 			    car:set_yaw(placer:get_look_horizontal())
 			    itemstack:take_item()
-                ent.object:set_acceleration({x=0,y=-automobiles.gravity,z=0})
+                ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
             end
 		end
 

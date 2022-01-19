@@ -1,15 +1,15 @@
 -- Minetest 5.4.1 : automobiles
 
-automobiles = {}
+automobiles_lib = {}
 
-automobiles.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
+automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
                 ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10}
 
-automobiles.gravity = 9.8
-automobiles.is_creative = minetest.settings:get_bool("creative_mode", false)
+automobiles_lib.gravity = 9.8
+automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
 
 --cars colors
-automobiles.colors ={
+automobiles_lib.colors ={
     black='#2b2b2b',
     blue='#0063b0',
     brown='#8c5922',
@@ -31,24 +31,24 @@ automobiles.colors ={
 -- helpers and co.
 --
 
-function automobiles.get_hipotenuse_value(point1, point2)
+function automobiles_lib.get_hipotenuse_value(point1, point2)
     return math.sqrt((point1.x - point2.x) ^ 2 + (point1.y - point2.y) ^ 2 + (point1.z - point2.z) ^ 2)
 end
 
-function automobiles.dot(v1,v2)
+function automobiles_lib.dot(v1,v2)
 	return (v1.x*v2.x)+(v1.y*v2.y)+(v1.z*v2.z)
 end
 
-function automobiles.sign(n)
+function automobiles_lib.sign(n)
 	return n>=0 and 1 or -1
 end
 
-function automobiles.minmax(v,m)
+function automobiles_lib.minmax(v,m)
 	return math.min(math.abs(v),m)*minekart.sign(v)
 end
 
 --painting
-function automobiles.paint(self, colstr)
+function automobiles_lib.paint(self, colstr)
     if colstr then
         self._color = colstr
         local l_textures = self.initial_properties.textures
@@ -63,7 +63,7 @@ function automobiles.paint(self, colstr)
 end
 
 -- attach player
-function automobiles.attach_driver(self, player)
+function automobiles_lib.attach_driver(self, player)
     local name = player:get_player_name()
     self.driver_name = name
 
@@ -82,7 +82,7 @@ function automobiles.attach_driver(self, player)
     end)
 end
 
-function automobiles.dettach_driver(self, player)
+function automobiles_lib.dettach_driver(self, player)
     local name = self.driver_name
 
     --self._engine_running = false
@@ -101,7 +101,7 @@ function automobiles.dettach_driver(self, player)
 
     -- detach the player
     if player then
-        --automobiles.remove_hud(player)
+        --automobiles_lib.remove_hud(player)
 
         player:set_detach()
         player_api.player_attached[name] = nil
@@ -112,7 +112,7 @@ function automobiles.dettach_driver(self, player)
 end
 
 -- attach passenger
-function automobiles.attach_pax(self, player, onside)
+function automobiles_lib.attach_pax(self, player, onside)
     local onside = onside or false
     local name = player:get_player_name()
 
@@ -170,7 +170,7 @@ function automobiles.attach_pax(self, player, onside)
     end
 end
 
-function automobiles.dettach_pax(self, player)
+function automobiles_lib.dettach_pax(self, player)
     local name = player:get_player_name() --self._passenger
 
     -- passenger clicked the object => driver gets off the vehicle
@@ -194,7 +194,7 @@ function automobiles.dettach_pax(self, player)
     --remove_physics_override(player, {speed=1,gravity=1,jump=1})
 end
 
-function automobiles.get_gauge_angle(value, initial_angle)
+function automobiles_lib.get_gauge_angle(value, initial_angle)
     initial_angle = initial_angle or 90
     local angle = value * 18
     angle = angle - initial_angle
@@ -202,8 +202,8 @@ function automobiles.get_gauge_angle(value, initial_angle)
 	return angle
 end
 
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "custom_physics.lua")
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "control.lua")
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "fuel_management.lua")
-dofile(minetest.get_modpath("automobiles") .. DIR_DELIM .. "ground_detection.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")
 

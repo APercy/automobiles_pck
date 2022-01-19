@@ -1,7 +1,7 @@
 local min = math.min
 local abs = math.abs
 
-function automobiles.physics(self)
+function automobiles_lib.physics(self)
     local friction = 0.99
 	local vel=self.object:get_velocity()
 		-- dumb friction

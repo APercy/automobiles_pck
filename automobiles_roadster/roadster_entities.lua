@@ -220,7 +220,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     infotext = "A very nice roadster!",
     hp = 50,
     buoyancy = 2,
-    physics = automobiles.physics,
+    physics = automobiles_lib.physics,
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
@@ -274,7 +274,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)
 
-        automobiles.paint(self, self._color)
+        automobiles_lib.paint(self, self._color)
         local pos = self.object:get_pos()
 
         local top1=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:top1')
@@ -361,14 +361,14 @@ minetest.register_entity("automobiles_roadster:roadster", {
         local nhdir = {x=hull_direction.z,y=0,z=-hull_direction.x}		-- lateral unit vector
         local velocity = self.object:get_velocity()
 
-        local longit_speed = automobiles.dot(velocity,hull_direction)
+        local longit_speed = automobiles_lib.dot(velocity,hull_direction)
         local fuel_weight_factor = (5 - self._energy)/5000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
-            (roadster.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles.sign(longit_speed))
+            (roadster.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
-		local later_speed = automobiles.dot(velocity,nhdir)
+		local later_speed = automobiles_lib.dot(velocity,nhdir)
         local later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*roadster.LATER_DRAG_FACTOR*-1*automobiles.sign(later_speed))
+            later_speed*roadster.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
 
@@ -411,7 +411,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
         local curr_pos = self.object:get_pos()
 		if is_attached then --and self.driver_name == self.owner then
-            local impact = automobiles.get_hipotenuse_value(velocity, self.lastvelocity)
+            local impact = automobiles_lib.get_hipotenuse_value(velocity, self.lastvelocity)
             if impact > 1 then
                 --self.damage = self.damage + impact --sum the impact value directly to damage meter
                 if self._last_time_collision_snd > 0.3 then
@@ -426,7 +426,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
                     })
                 end
                 --[[if self.damage > 100 then --if acumulated damage is greater than 100, adieu
-                    automobiles.destroy(self)
+                    automobiles_lib.destroy(self)
                 end]]--
             end
 
@@ -448,7 +448,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             --control
             local steering_angle_max = 30
             local steering_speed = 40
-			accel, stop = automobiles.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
+			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
         else
             if self.sound_handle ~= nil then
 	            minetest.sound_stop(self.sound_handle)
@@ -470,10 +470,10 @@ minetest.register_entity("automobiles_roadster:roadster", {
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)
 			newyaw = yaw + dtime*(1 - 1 / (math.abs(longit_speed) + 1)) *
-                self._steering_angle / 30 * turn_rate * automobiles.sign(longit_speed)
+                self._steering_angle / 30 * turn_rate * automobiles_lib.sign(longit_speed)
 		end
 
-        automobiles.ground_get_distances(self, 0.5, 2.422)
+        automobiles_lib.ground_get_distances(self, 0.5, 2.422)
 
         --[[if player and is_attached then
             player:set_look_horizontal(newyaw)
@@ -498,7 +498,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
         ----------------------------------
         if self._energy > 0 then
             local zero_reference = vector.new()
-            local acceleration = automobiles.get_hipotenuse_value(accel, zero_reference)
+            local acceleration = automobiles_lib.get_hipotenuse_value(accel, zero_reference)
             --minetest.chat_send_all(acceleration)
             local consumed_power = acceleration/40000
             self._energy = self._energy - consumed_power;
@@ -511,12 +511,12 @@ minetest.register_entity("automobiles_roadster:roadster", {
             roadster.engine_set_sound_and_animation(self, longit_speed)
         end
 
-        local energy_indicator_angle = automobiles.get_gauge_angle(self._energy)
+        local energy_indicator_angle = automobiles_lib.get_gauge_angle(self._energy)
         self.fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
         ----------------------------
         -- end energy consumption --
 
-        accel.y = -automobiles.gravity
+        accel.y = -automobiles_lib.gravity
 
         if stop ~= true then
 	        self.object:set_pos(curr_pos)
@@ -565,9 +565,9 @@ minetest.register_entity("automobiles_roadster:roadster", {
         refuel works it car is stopped and engine is off
         ]]--
         local velocity = self.object:get_velocity()
-        local speed = automobiles.get_hipotenuse_value(vector.new(), velocity)
+        local speed = automobiles_lib.get_hipotenuse_value(vector.new(), velocity)
         if math.abs(speed) <= 0.1 then
-            if automobiles.loadFuel(self, puncher:get_player_name(), false, roadster.max_fuel) then return end
+            if automobiles_lib.loadFuel(self, puncher:get_player_name(), false, roadster.max_fuel) then return end
         end
         -- end refuel
 
@@ -589,7 +589,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 local color, indx, _
                 if split[1] then _,indx = split[1]:find('dye') end
                 if indx then
-                    for clr,_ in pairs(automobiles.colors) do
+                    for clr,_ in pairs(automobiles_lib.colors) do
                         local _,x = split[2]:find(clr)
                         if x then color = clr end
                     end
@@ -601,10 +601,10 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
                     --lets paint!!!!
 				    --local color = item_name:sub(indx+1)
-				    local colstr = automobiles.colors[color]
+				    local colstr = automobiles_lib.colors[color]
                     --minetest.chat_send_all(color ..' '.. dump(colstr))
 				    if colstr then
-                        automobiles.paint(self, colstr)
+                        automobiles_lib.paint(self, colstr)
 					    itmstck:set_count(itmstck:get_count()-1)
 					    puncher:set_wielded_item(itmstck)
 				    end
@@ -653,7 +653,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 		else
             if name == self.owner then
                 --is the owner, okay, lets attach
-                automobiles.attach_driver(self, clicker)
+                automobiles_lib.attach_driver(self, clicker)
                 -- sound
                 self.sound_handle = minetest.sound_play({name = "roadster_engine"},
                         {object = self.object, gain = 0.5, pitch = 0.6, max_hear_distance = 10, loop = true,})
@@ -663,13 +663,13 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 if self._passenger == nil then
                     --there is no passenger, so lets attach
                     if self.driver_name then
-                        automobiles.attach_pax(self, clicker, true)
+                        automobiles_lib.attach_pax(self, clicker, true)
                     end
                 else
                     --there is a passeger
                     if self._passenger == name then
                         --if you are the psenger, so deattach
-                        automobiles.dettach_pax(self, clicker)
+                        automobiles_lib.dettach_pax(self, clicker)
                     end
                 end
             end
