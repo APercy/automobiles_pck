@@ -449,7 +449,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             local steering_angle_max = 30
             local steering_speed = 40
             if math.abs(longit_speed) > 1 then
-                 steering_speed = steering_speed / (longit_speed/2)
+                 steering_speed = steering_speed / (longit_speed/3)
             end
 			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
         else
