@@ -69,13 +69,16 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
             if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
                 pitch = pitch + ((pitch - midpitch) / 2)
             end
+            
         end
     else
         self._pitch = 0
     end
 
-    if math.abs(math.deg(pitch)) <= 45 then
+    if math.abs(math.deg(pitch)) <= 45 and math.abs(math.deg(pitch - self._pitch)) < 20 then
         self._pitch = pitch
+    else
+        self._pitch = 0
     end
 
 end
