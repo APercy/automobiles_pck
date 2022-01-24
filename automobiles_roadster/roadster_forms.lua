@@ -28,23 +28,27 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "roadster:driver_main" then
         local name = player:get_player_name()
         local car_obj = roadster.getCarFromPlayer(player)
-        local ent = car_obj:get_luaentity()
-        if fields.top then
-            if ent._show_rag == true then
-                ent._show_rag = false
-            else
-                ent._show_rag = true
+        if car_obj then
+            local ent = car_obj:get_luaentity()
+            if ent then
+                if fields.top then
+                    if ent._show_rag == true then
+                        ent._show_rag = false
+                    else
+                        ent._show_rag = true
+                    end
+                end
+		        if fields.go_out then
+
+                    if ent._passenger then --any pax?
+                        local pax_obj = minetest.get_player_by_name(ent._passenger)
+                        automobiles_lib.dettach_pax(ent, pax_obj)
+                    end
+
+                    automobiles_lib.dettach_driver(ent, player)
+		        end
             end
         end
-		if fields.go_out then
-
-            if ent._passenger then --any pax?
-                local pax_obj = minetest.get_player_by_name(ent._passenger)
-                automobiles_lib.dettach_pax(ent, pax_obj)
-            end
-
-            automobiles_lib.dettach_driver(ent, player)
-		end
         minetest.close_formspec(name, "roadster:driver_main")
     end
 end)
