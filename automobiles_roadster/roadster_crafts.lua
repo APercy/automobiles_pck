@@ -40,6 +40,7 @@ minetest.register_craftitem("automobiles_roadster:roadster", {
 			    car:set_yaw(placer:get_look_horizontal())
 			    itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
+                automobiles_lib.setText(ent, "Roadster")
             end
 		end
 
@@ -84,40 +85,3 @@ if minetest.get_modpath("default") then
 end
 
 
-
---[[if minetest.get_modpath("default") then
-    if not minetest.registered_items["hidroplane:wings"] then
-	    minetest.register_craft({
-		    output = "supercub:wings",
-		    recipe = {
-			    {"wool:white", "farming:string", "wool:white"},
-			    {"group:wood", "group:wood", "group:wood"},
-			    {"wool:white", "default:steel_ingot", "wool:white"},
-		    }
-	    })
-    end
-    if not minetest.registered_items["hidroplane:fuselage"] then
-	    minetest.register_craft({
-		    output = "supercub:fuselage",
-		    recipe = {
-			    {"default:steel_ingot", "default:diamondblock", "default:steel_ingot"},
-			    {"wool:white", "default:steel_ingot",  "wool:white"},
-			    {"default:steel_ingot", "default:mese_block",   "default:steel_ingot"},
-		    }
-	    })
-    end
-	minetest.register_craft({
-		output = "supercub:supercub",
-		recipe = {
-			{"supercub:wings",},
-			{"supercub:fuselage",},
-		}
-	})
-	minetest.register_craft({
-		output = "supercub:supercub",
-		recipe = {
-			{"hidroplane:wings",},
-			{"hidroplane:fuselage",},
-		}
-	})
-end]]--

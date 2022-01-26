@@ -270,6 +270,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             self._race_id = data.stored_race_id
             self._show_rag = data.stored_rag
             self._pitch = data.stored_pitch
+            automobiles_lib.setText(self, "Roadster")
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)

@@ -203,6 +203,20 @@ function automobiles_lib.get_gauge_angle(value, initial_angle)
 	return angle
 end
 
+function automobiles_lib.setText(self, vehicle_name)
+    local properties = self.object:get_properties()
+    local formatted = ""
+    if self.hp_max then
+        formatted = " Current hp: " .. string.format(
+           "%.2f", self.hp_max
+        )
+    end
+    if properties then
+        properties.infotext = "Nice ".. vehicle_name .." of " .. self.owner .. "." .. formatted
+        self.object:set_properties(properties)
+    end
+end
+
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
