@@ -99,10 +99,7 @@ function automobiles_lib.get_obstacle(ref_pos)
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
     local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
-    if y then
-        retval.y = y
-    end
-    --minetest.chat_send_all(dump(retval.y))
+    retval.y = y
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
