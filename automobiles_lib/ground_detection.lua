@@ -63,13 +63,14 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
         if mid_car_level then
             deltaX = axis_distance/2;
-            deltaY = mid_car_level.y - rear_obstacle_level.y;
-            m = (deltaY/deltaX)
-            local midpitch = math.atan(m)
-            if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
-                pitch = pitch + ((pitch - midpitch) / 2)
+            if mid_car_level.y ~= nil then
+                deltaY = mid_car_level.y - rear_obstacle_level.y;
+                m = (deltaY/deltaX)
+                local midpitch = math.atan(m)
+                if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
+                    pitch = pitch + ((pitch - midpitch) / 2)
+                end
             end
-            
         end
     else
         self._pitch = 0
