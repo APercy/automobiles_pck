@@ -29,11 +29,11 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     --minetest.chat_send_all("front"..dump(front_obstacle_level))
 
     --[[ here lets someting to smooth the detection using the middle os the car as reference]]--
-    f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip/2)
+    --[[f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip/2)
     x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip/2) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local mid_car = {x=f_x, y=f_y, z=f_z}
-    local mid_car_level = automobiles_lib.get_obstacle(mid_car)
+    local mid_car_level = automobiles_lib.get_obstacle(mid_car)]]--
 
 
     --[[local left_front = {x=0, y=f_y, z=0}
@@ -61,7 +61,7 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
         pitch = math.atan(m) --math.atan2(deltaY, deltaX);
         --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
 
-        if mid_car_level then
+        --[[if mid_car_level then
             deltaX = axis_distance/2;
             if mid_car_level.y ~= nil then
                 deltaY = mid_car_level.y - rear_obstacle_level.y;
@@ -71,7 +71,7 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
                     pitch = pitch + ((pitch - midpitch) / 2)
                 end
             end
-        end
+        end]]--
     else
         self._pitch = 0
     end

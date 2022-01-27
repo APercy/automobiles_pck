@@ -48,7 +48,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
 
             --reversing
 	        if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
-                acc = -1
+                acc = -2
 	        end
         end
 
