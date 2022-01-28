@@ -56,50 +56,40 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
         local deltaX = axis_distance;
         local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-        --minetest.chat_send_all("deutaY "..deltaY)
-        local m = (deltaY/deltaX)
-        pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-        --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+        if self.initial_properties.stepheight then
+            --minetest.chat_send_all("deutaY "..deltaY)
+            local m = (deltaY/deltaX)
+            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
 
-        --[[if mid_car_level then
-            deltaX = axis_distance/2;
-            if mid_car_level.y ~= nil then
-                deltaY = mid_car_level.y - rear_obstacle_level.y;
-                m = (deltaY/deltaX)
-                local midpitch = math.atan(m)
-                if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
-                    pitch = pitch + ((pitch - midpitch) / 2)
+            --[[if mid_car_level then
+                deltaX = axis_distance/2;
+                if mid_car_level.y ~= nil then
+                    deltaY = mid_car_level.y - rear_obstacle_level.y;
+                    m = (deltaY/deltaX)
+                    local midpitch = math.atan(m)
+                    if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
+                        pitch = pitch + ((pitch - midpitch) / 2)
+                    end
                 end
-            end
-        end]]--
+            end]]--
+        end
     else
-        self._pitch = 0
+        pitch = 0
     end
 
-    if math.abs(math.deg(pitch)) <= 45 and math.abs(math.deg(pitch - self._pitch)) < 20 then
-        self._pitch = pitch
-    else
-        self._pitch = 0
-    end
+    self._pitch = pitch
 
-end
-
-function automobiles_lib.get_xz_from_hipotenuse(orig_x, orig_z, yaw, distance)
-    --cara, o minetest é bizarro, ele considera o eixo no sentido ANTI-HORÁRIO... Então pra equação funcionar, subtrair o angulo de 360 antes
-    yaw = math.rad(360) - yaw
-    local z = (math.cos(yaw)*distance) + orig_z
-    local x = (math.sin(yaw)*distance) + orig_x
-    return x, z
 end
 
 function automobiles_lib.get_obstacle(ref_pos)
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
-    local i_pos = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
+    local i_pos = {x=ref_pos.x, y=ref_pos.y + 1, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 2, z=i_pos.z})
+    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 3, z=i_pos.z})
     retval.y = y
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))

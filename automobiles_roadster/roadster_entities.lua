@@ -47,6 +47,29 @@ initial_properties = {
 	
 })
 
+minetest.register_entity('automobiles_roadster:lights',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+    glow = 15,
+	visual = "mesh",
+	mesh = "automobiles_roadster_lights.b3d",
+    textures = {"automobiles_roadster_lights.png",},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+	
+})
+
 minetest.register_entity('automobiles_roadster:wheel',{
 initial_properties = {
 	physical = false,
@@ -239,6 +262,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _pitch = 0,
     _longit_speed = 0,
     _show_rag = true,
+    _show_lights = false,
+    _light_old_pos = nil,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -253,6 +278,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             stored_race_id = self._race_id,
             stored_rag = self._show_rag,
             stored_pitch = self._pitch,
+            stored_light_old_pos = self._light_old_pos,
         })
     end,
 
@@ -271,6 +297,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             self._race_id = data.stored_race_id
             self._show_rag = data.stored_rag
             self._pitch = data.stored_pitch
+            self._light_old_pos = data.stored_light_old_pos
             automobiles_lib.setText(self, "Roadster")
         end
 
@@ -339,6 +366,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
         local fuel_gauge=minetest.add_entity(pos,'automobiles_roadster:pointer')
         fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
         self.fuel_gauge = fuel_gauge
+
+        local lights = minetest.add_entity(pos,'automobiles_roadster:lights')
+	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.lights = lights
+        self.lights:set_properties({is_visible=false})
 
 		self.object:set_armor_groups({immortal=1})
 
@@ -411,6 +443,14 @@ minetest.register_entity("automobiles_roadster:roadster", {
             end
         end
 
+        if self._show_lights == true and is_attached then
+            self.lights:set_properties({is_visible=true})
+            automobiles_lib.put_light(self)
+        else
+            self.lights:set_properties({is_visible=false})
+            automobiles_lib.remove_light(self)
+        end
+
         local curr_pos = self.object:get_pos()
 		if is_attached then --and self.driver_name == self.owner then
             local impact = automobiles_lib.get_hipotenuse_value(velocity, self.lastvelocity)
@@ -456,6 +496,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             end
 			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, roadster.max_acc_factor, roadster.max_speed, steering_angle_max, steering_speed)
         else
+            self._show_lights = false
             if self.sound_handle ~= nil then
 	            minetest.sound_stop(self.sound_handle)
 	            self.sound_handle = nil

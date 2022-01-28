@@ -3,6 +3,7 @@
 
 -- destroy the roadster
 function roadster.destroy(self, puncher)
+    automobiles_lib.remove_light(self)
     if self.sound_handle then
         minetest.sound_stop(self.sound_handle)
         self.sound_handle = nil
@@ -37,6 +38,7 @@ function roadster.destroy(self, puncher)
     if self.driver_seat then self.driver_seat:remove() end
     if self.passenger_seat then self.passenger_seat:remove() end
     if self.fuel_gauge then self.fuel_gauge:remove() end
+    if self.lights then self.lights:remove() end
 
     self.object:remove()
 
