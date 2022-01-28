@@ -6,6 +6,7 @@ minetest.register_entity('automobiles_roadster:front_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
+    collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
 	pointable=false,
 	visual = "mesh",
 	mesh = "automobiles_roadster_front_suspension.b3d",

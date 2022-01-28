@@ -124,8 +124,10 @@ function automobiles_lib.eval_interception(initial_pos, end_pos)
                 local nodename = minetest.get_node(thing.under).name
                 local drawtype = get_nodedef_field(nodename, "drawtype")
                 if drawtype ~= "plantlike" then
-                    ret_y = pos.y
-                    --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. nodename)
+                    if initial_pos.y >= pos.y then 
+                        ret_y = pos.y
+                        --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. nodename)
+                    end
                     break
                 end
             end
