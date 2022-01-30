@@ -570,7 +570,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
         accel.y = -automobiles_lib.gravity
 
         if stop ~= true then
-	        self.object:set_pos(curr_pos)
+	        self.object:move_to(curr_pos)
             self.object:set_velocity(velocity)
             self.object:set_acceleration(accel)
         else
