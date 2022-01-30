@@ -22,7 +22,8 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     --minetest.chat_send_all("rear"..dump(rear_obstacle_level))
 
     local f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
-    local x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
+    local f_y = pos.y
+    --local x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local front_axis = {x=f_x, y=f_y, z=f_z}
     local front_obstacle_level = automobiles_lib.get_obstacle(front_axis)
@@ -30,7 +31,8 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
     --[[ here lets someting to smooth the detection using the middle os the car as reference]]--
     --[[f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip/2)
-    x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip/2) --the x is only a mock
+    f_y = pos.y
+    --x, f_y = automobiles_lib.get_xz_from_hipotenuse(f_x, r_y, pitch - math.rad(90), hip/2) --the x is only a mock
     --minetest.chat_send_all("r: "..r_y.." f: "..f_y .." - "..math.deg(pitch))
     local mid_car = {x=f_x, y=f_y, z=f_z}
     local mid_car_level = automobiles_lib.get_obstacle(mid_car)]]--
@@ -56,26 +58,29 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
         local deltaX = axis_distance;
         local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-        if self.initial_properties.stepheight then
-            --minetest.chat_send_all("deutaY "..deltaY)
-            local m = (deltaY/deltaX)
-            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+        --minetest.chat_send_all("deutaY "..deltaY)
+        local m = (deltaY/deltaX)
+        pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+        --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
 
-            --[[if mid_car_level then
-                deltaX = axis_distance/2;
-                if mid_car_level.y ~= nil then
-                    deltaY = mid_car_level.y - rear_obstacle_level.y;
-                    m = (deltaY/deltaX)
-                    local midpitch = math.atan(m)
-                    if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
-                        pitch = pitch + ((pitch - midpitch) / 2)
-                    end
+        --[[if mid_car_level then
+            deltaX = axis_distance/2;
+            if mid_car_level.y ~= nil then
+                local deltaY_mid = mid_car_level.y - rear_obstacle_level.y;
+                if deltaY >= 1 and deltaY_mid < (deltaY / 2) then
+                    --self.initial_properties.stepheight
+                    pitch = math.rad(0)
                 end
-            end]]--
-        end
+                --[[m = (deltaY_mid/deltaX)
+                local midpitch = math.atan(m)
+                if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
+                    pitch = pitch + ((pitch - midpitch) / 2)
+                end]]--
+            --[[end
+        end]]--
+
     else
-        pitch = 0
+        pitch = math.rad(0)
     end
 
     self._pitch = pitch
@@ -89,7 +94,7 @@ function automobiles_lib.get_obstacle(ref_pos)
     local i_pos = {x=ref_pos.x, y=ref_pos.y + 1, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 3, z=i_pos.z})
+    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y - 4, z=i_pos.z})
     retval.y = y
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))

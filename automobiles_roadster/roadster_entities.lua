@@ -22,6 +22,10 @@ initial_properties = {
       self.sdata.remove=true
       return minetest.serialize(self.sdata)
     end,
+
+    --[[on_step = function(self, dtime, moveresult)
+        minetest.chat_send_all(dump(moveresult))
+    end,]]--
 	
 })
 
