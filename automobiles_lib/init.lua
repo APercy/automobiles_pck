@@ -62,6 +62,25 @@ function automobiles_lib.paint(self, colstr)
     end
 end
 
+--returns 0 for old, 1 for new
+function automobiles_lib.detect_player_api(player)
+    local player_proterties = player:get_properties()
+    local mesh = "character.b3d"
+    if player_proterties.mesh == mesh then
+        local models = player_api.registered_models
+        local character = models[mesh]
+        if character then
+            if character.animations.sit.eye_height then
+                return 1
+            else
+                return 0
+            end
+        end
+    end
+
+    return 0
+end
+
 -- attach player
 function automobiles_lib.attach_driver(self, player)
     local name = player:get_player_name()
@@ -69,7 +88,11 @@ function automobiles_lib.attach_driver(self, player)
 
     -- attach the driver
     player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-    player:set_eye_offset({x = 0, y = -4, z = 0}, {x = 0, y = 1, z = -30})
+    local eye_y = -4
+    if automobiles_lib.detect_player_api(player) == 1 then
+        eye_y = 2.5
+    end
+    player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
     player_api.player_attached[name] = true
     -- make the driver sit
     minetest.after(0.2, function()
@@ -121,7 +144,11 @@ function automobiles_lib.attach_pax(self, player, onside)
 
             -- attach the driver
             player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-            player:set_eye_offset({x = 0, y = -4, z = 0}, {x = 0, y = 3, z = -30})
+            local eye_y = -4
+            if automobiles_lib.detect_player_api(player) == 1 then
+                eye_y = 2.5
+            end
+            player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
             player_api.player_attached[name] = true
             -- make the driver sit
             minetest.after(0.2, function()
