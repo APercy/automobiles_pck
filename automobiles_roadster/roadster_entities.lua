@@ -269,6 +269,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _show_lights = false,
     _light_old_pos = nil,
     _last_ground_check = 0,
+    _last_light_move = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -448,12 +449,16 @@ minetest.register_entity("automobiles_roadster:roadster", {
             end
         end
 
-        if self._show_lights == true and is_attached then
-            self.lights:set_properties({is_visible=true})
-            automobiles_lib.put_light(self)
-        else
-            self.lights:set_properties({is_visible=false})
-            automobiles_lib.remove_light(self)
+        self._last_light_move = self._last_light_move + dtime
+        if self._last_light_move > 0.25 then
+            self._last_light_move = 0
+            if self._show_lights == true and is_attached then
+                self.lights:set_properties({is_visible=true})
+                automobiles_lib.put_light(self)
+            else
+                self.lights:set_properties({is_visible=false})
+                automobiles_lib.remove_light(self)
+            end
         end
 
         local curr_pos = self.object:get_pos()
@@ -526,7 +531,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 		end
 
         self._last_ground_check = self._last_ground_check + dtime
-        if self._last_ground_check > 0.25 then
+        if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
             automobiles_lib.ground_get_distances(self, 0.5, 2.422)
         end

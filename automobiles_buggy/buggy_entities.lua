@@ -287,6 +287,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _show_lights = false,
     _light_old_pos = nil,
     _last_ground_check = 0,
+    _last_light_move = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -467,20 +468,24 @@ minetest.register_entity("automobiles_buggy:buggy", {
             end
         end
 
-        if self._show_lights == true then
-            --self.lights:set_properties({is_visible=true})
-            self.lights:set_properties({textures={"automobiles_buggy_lights.png"}, glow=15})
-            if is_breaking == false then
-                self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights.png"}, glow=5})
+        self._last_light_move = self._last_light_move + dtime
+        if self._last_light_move > 0.25 then
+            self._last_light_move = 0
+            if self._show_lights == true then
+                --self.lights:set_properties({is_visible=true})
+                self.lights:set_properties({textures={"automobiles_buggy_lights.png"}, glow=15})
+                if is_breaking == false then
+                    self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights.png"}, glow=5})
+                end
+                automobiles_lib.put_light(self)
+            else
+                --self.lights:set_properties({is_visible=false})
+                self.lights:set_properties({textures={"automobiles_grey.png"}, glow=0})
+                if is_breaking == false then
+                    self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights_off.png"}, glow=0})
+                end
+                automobiles_lib.remove_light(self)
             end
-            automobiles_lib.put_light(self)
-        else
-            --self.lights:set_properties({is_visible=false})
-            self.lights:set_properties({textures={"automobiles_grey.png"}, glow=0})
-            if is_breaking == false then
-                self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights_off.png"}, glow=0})
-            end
-            automobiles_lib.remove_light(self)
         end
 
         local curr_pos = self.object:get_pos()
@@ -553,7 +558,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
 		end
 
         self._last_ground_check = self._last_ground_check + dtime
-        if self._last_ground_check > 0.25 then
+        if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
             automobiles_lib.ground_get_distances(self, 0.372, 2.3)
         end
