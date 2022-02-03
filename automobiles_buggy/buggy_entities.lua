@@ -553,7 +553,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
 		end
 
         self._last_ground_check = self._last_ground_check + dtime
-        if self._last_ground_check > 0.15 then
+        if self._last_ground_check > 0.25 then
             self._last_ground_check = 0
             automobiles_lib.ground_get_distances(self, 0.372, 2.3)
         end
