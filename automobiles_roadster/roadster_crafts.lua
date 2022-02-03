@@ -7,11 +7,6 @@ minetest.register_craftitem("automobiles_roadster:roadster_body",{
 	description = "Roadster body",
 	inventory_image = "roadster_body.png",
 })
--- engine
-minetest.register_craftitem("automobiles_roadster:engine",{
-	description = "Roadster engine",
-	inventory_image = "roadster_engine.png",
-})
 -- wheel
 minetest.register_craftitem("automobiles_roadster:wheel",{
 	description = "Roadster wheel",
@@ -55,7 +50,7 @@ if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_roadster:roadster",
 		recipe = {
-			{"automobiles_roadster:wheel", "automobiles_roadster:engine", "automobiles_roadster:wheel"},
+			{"automobiles_roadster:wheel", "automobiles_lib:engine", "automobiles_roadster:wheel"},
 			{"automobiles_roadster:wheel","automobiles_roadster:roadster_body",  "automobiles_roadster:wheel"},
 		}
 	})

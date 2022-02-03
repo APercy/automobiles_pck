@@ -355,3 +355,18 @@ dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")
 
+-- engine
+minetest.register_craftitem("automobiles_lib:engine",{
+	description = "Car engine",
+	inventory_image = "automobiles_engine.png",
+})
+
+if minetest.get_modpath("default") then
+	minetest.register_craft({
+		output = "automobiles_lib:engine",
+		recipe = {
+			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
+			{"default:steelblock","default:mese_block", "default:steelblock"},
+		}
+	})
+end
