@@ -476,7 +476,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
                 --self.lights:set_properties({is_visible=true})
                 self.lights:set_properties({textures={"automobiles_buggy_lights.png"}, glow=15})
                 if is_breaking == false then
-                    self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights.png"}, glow=8})
+                    self.r_lights:set_properties({textures={"automobiles_buggy_rear_lights.png"}, glow=10})
                 end
                 automobiles_lib.put_light(self)
             else
