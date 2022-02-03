@@ -63,13 +63,6 @@ if minetest.get_modpath("default") then
 		}
 	})
 	minetest.register_craft({
-		output = "automobiles_roadster:engine",
-		recipe = {
-			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
-			{"default:steelblock","default:mese_block", "default:steelblock"},
-		}
-	})
-	minetest.register_craft({
 		output = "automobiles_roadster:wheel",
 		recipe = {
 			{"group:wood", "default:stick", "group:wood"},

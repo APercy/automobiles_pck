@@ -470,7 +470,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
         end
 
         self._last_light_move = self._last_light_move + dtime
-        if self._last_light_move > 0.25 then
+        if self._last_light_move > 0.15 then
             self._last_light_move = 0
             if self._show_lights == true then
                 --self.lights:set_properties({is_visible=true})

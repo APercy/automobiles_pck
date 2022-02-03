@@ -451,7 +451,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
         end
 
         self._last_light_move = self._last_light_move + dtime
-        if self._last_light_move > 0.25 then
+        if self._last_light_move > 0.15 then
             self._last_light_move = 0
             if self._show_lights == true and is_attached then
                 self.lights:set_properties({is_visible=true})
