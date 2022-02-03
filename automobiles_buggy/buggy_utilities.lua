@@ -57,10 +57,10 @@ end
 function buggy.engine_set_sound_and_animation(self, _longit_speed)
     --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
     if self.sound_handle then
-        --if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.08) or (math.abs(self._longit_speed) + 0.08 < math.abs(_longit_speed)) then
+        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.08) or (math.abs(self._longit_speed) + 0.08 < math.abs(_longit_speed)) then
             --minetest.chat_send_all('test2')
             buggy.engineSoundPlay(self)
-        --end
+        end
     end
 end
 
