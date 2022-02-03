@@ -288,6 +288,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _light_old_pos = nil,
     _last_ground_check = 0,
     _last_light_move = 0,
+    _last_engine_sound_update = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -596,7 +597,11 @@ minetest.register_entity("automobiles_buggy:buggy", {
             if self.sound_handle then minetest.sound_stop(self.sound_handle) end
             --minetest.chat_send_player(self.driver_name, "Out of fuel")
         else
-            buggy.engine_set_sound_and_animation(self, longit_speed)
+            self._last_engine_sound_update = self._last_engine_sound_update + dtime
+            if self._last_engine_sound_update > 0.300 then
+                self._last_engine_sound_update = 0
+                buggy.engine_set_sound_and_animation(self, longit_speed)
+            end
         end
 
         local energy_indicator_angle = automobiles_lib.get_gauge_angle(self._energy)
