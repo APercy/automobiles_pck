@@ -268,6 +268,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _show_rag = true,
     _show_lights = false,
     _light_old_pos = nil,
+    _last_ground_check = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -524,7 +525,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
                 self._steering_angle / 30 * turn_rate * automobiles_lib.sign(longit_speed)
 		end
 
-        automobiles_lib.ground_get_distances(self, 0.5, 2.422)
+        self._last_ground_check = self._last_ground_check + dtime
+        if self._last_ground_check > 0.15 then
+            self._last_ground_check = 0
+            automobiles_lib.ground_get_distances(self, 0.5, 2.422)
+        end
 
         --[[if player and is_attached then
             player:set_look_horizontal(newyaw)
