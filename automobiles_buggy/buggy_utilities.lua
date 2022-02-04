@@ -37,10 +37,8 @@ function buggy.destroy(self, puncher)
     if self.driver_seat then self.driver_seat:remove() end
     if self.passenger_seat then self.passenger_seat:remove() end
     if self.fuel_gauge then self.fuel_gauge:remove() end
-    if self.f_lights then self.f_lights:remove() end
-    --if self.f_lights_off then self.f_lights_off:remove() end
+    if self.lights then self.lights:remove() end
     if self.r_lights then self.r_lights:remove() end
-    --if self.r_lights_off then self.r_lights_off:remove() end
 
     self.object:remove()
 
