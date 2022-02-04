@@ -215,7 +215,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
         collide_with_objects = true,
 	    collisionbox = {-0.1, -0.5, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
-        stepheight = 0.5,
+        stepheight = 0.6,
 	    visual = "mesh",
 	    mesh = "automobiles_roadster.b3d",
         textures = {
