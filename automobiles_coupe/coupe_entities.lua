@@ -2,14 +2,14 @@
 -- entity
 --
 
-minetest.register_entity('automobiles_buggy:front_suspension',{
+minetest.register_entity('automobiles_coupe:front_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
     collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
 	pointable=false,
 	visual = "mesh",
-	mesh = "automobiles_buggy_f_suspension.b3d",
+	mesh = "automobiles_pivot_mesh.b3d",
     textures = {"automobiles_black.png",},
 	},
 
@@ -29,13 +29,13 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:rear_suspension',{
+minetest.register_entity('automobiles_coupe:rear_suspension',{
 initial_properties = {
 	physical = true,
 	collide_with_objects=true,
 	pointable=false,
 	visual = "mesh",
-	mesh = "automobiles_buggy_r_suspension.b3d",
+	mesh = "automobiles_pivot_mesh.b3d",
     textures = {"automobiles_black.png",},
 	},
 
@@ -51,14 +51,14 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:f_lights',{
+minetest.register_entity('automobiles_coupe:f_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
     glow = 0,
 	visual = "mesh",
-	mesh = "automobiles_buggy_f_lights.b3d",
+	mesh = "automobiles_coupe_f_lights.b3d",
     textures = {"automobiles_grey.png",},
 	},
 
@@ -74,14 +74,14 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:r_lights',{
+minetest.register_entity('automobiles_coupe:r_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
     glow = 0,
 	visual = "mesh",
-	mesh = "automobiles_buggy_r_lights.b3d",
+	mesh = "automobiles_coupe_rear_pos_lights.b3d",
     textures = {"automobiles_rear_lights_off.png",},
 	},
 
@@ -97,17 +97,17 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:f_wheel',{
+minetest.register_entity('automobiles_coupe:reverse_lights',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
+    glow = 0,
 	visual = "mesh",
-	mesh = "automobiles_buggy_f_wheel.b3d",
-    backface_culling = false,
-	textures = {"automobiles_black.png", "automobiles_metal.png", "automobiles_buggy_wheel.png"},
+	mesh = "automobiles_coupe_reverse_lights.b3d",
+    textures = {"automobiles_grey.png",},
 	},
-	
+
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
@@ -120,17 +120,17 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:r_wheel',{
+minetest.register_entity('automobiles_coupe:turn_left_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
+    glow = 0,
 	visual = "mesh",
-	mesh = "automobiles_buggy_r_wheel.b3d",
-    backface_culling = false,
-	textures = {"automobiles_black.png", "automobiles_metal.png", "automobiles_buggy_wheel.png"},
+	mesh = "automobiles_coupe_turn_l_light.b3d",
+    textures = {"automobiles_turn.png",},
 	},
-	
+
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
@@ -143,17 +143,17 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:rag',{
+minetest.register_entity('automobiles_coupe:turn_right_light',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
+    glow = 0,
 	visual = "mesh",
-	mesh = "automobiles_buggy_rag.b3d",
-    backface_culling = false,
-	textures = {"automobiles_black.png", "automobiles_buggy_rag_window.png"},
+	mesh = "automobiles_coupe_turn_r_light.b3d",
+    textures = {"automobiles_turn.png",},
 	},
-	
+
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
@@ -166,7 +166,7 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:pivot_mesh',{
+minetest.register_entity('automobiles_coupe:pivot_mesh',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
@@ -188,14 +188,14 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:steering',{
+minetest.register_entity('automobiles_coupe:steering',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
 	visual = "mesh",
-	mesh = "automobiles_buggy_drive_wheel.b3d",
-    textures = {"automobiles_metal.png", "automobiles_black.png", "automobiles_metal.png"},
+	mesh = "automobiles_coupe_drive_wheel.b3d",
+    textures = {"automobiles_black.png", "automobiles_black.png", "automobiles_black.png"},
 	},
 	
     on_activate = function(self,std)
@@ -210,14 +210,14 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:pointer',{
+minetest.register_entity('automobiles_coupe:pointer',{
 initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
 	visual = "mesh",
 	mesh = "automobiles_pointer.b3d",
-    visual_size = {x = 0.8, y = 0.8, z = 0.8},
+    visual_size = {x = 0.5, y = 0.5, z = 0.5},
 	textures = {"automobiles_white.png"},
 	},
 	
@@ -232,30 +232,26 @@ initial_properties = {
     end,
 })
 
-minetest.register_entity("automobiles_buggy:buggy", {
+minetest.register_entity("automobiles_coupe:coupe", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-0.1, -0.45, -0.1, 0.1, 1, 0.1},
+	    collisionbox = {-0.1, -0.2, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
-        stepheight = 0.7,
+        stepheight = 0.55,
 	    visual = "mesh",
-	    mesh = "automobiles_buggy_body.b3d",
+	    mesh = "automobiles_coupe_body.b3d",
         textures = {
             "automobiles_black.png", --bancos
             "automobiles_painting.png", --carroceria
-            "automobiles_black.png", --banco traseiro
-            "automobiles_black.png", --chssis
-            "automobiles_metal.png", --frontlights
-            "automobiles_black.png", --interior
-            "automobiles_metal.png", --engine
-            "automobiles_buggy_fuel.png", --panel
-            "automobiles_metal.png", --windshield
-            "automobiles_buggy_windshield.png", --windshield
-            "automobiles_metal.png", --engine protection
-            "automobiles_metal.png", --front protection
-            "automobiles_metal.png", --driver protection
-            "automobiles_black.png", -- engine details
+            "automobiles_black.png", --paralamas
+            "automobiles_black.png", --saia
+            "automobiles_black.png", --banco
+            "automobiles_coupe_glasses.png", --vidros
+            "automobiles_black.png", --aletas vidro traseiro
+            "automobiles_grey.png", --interior
+            "automobiles_black.png", --panel
+            "automobiles_coupe_fuel.png",
             },
     },
     textures = {},
@@ -263,14 +259,14 @@ minetest.register_entity("automobiles_buggy:buggy", {
 	sound_handle = nil,
     owner = "",
     static_save = true,
-    infotext = "A very nice buggy!",
+    infotext = "A very nice coupe!",
     hp = 50,
     buoyancy = 2,
     physics = automobiles_lib.physics,
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
-    _color = "#ff8b0e",
+    _color = "#6d6d6d",
     _steering_angle = 0,
     _engine_running = false,
     _last_checkpoint = "",
@@ -289,6 +285,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _last_ground_check = 0,
     _last_light_move = 0,
     _last_engine_sound_update = 0,
+    _turn_light_timer = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -331,71 +328,82 @@ minetest.register_entity("automobiles_buggy:buggy", {
         automobiles_lib.paint(self, self._color)
         local pos = self.object:get_pos()
 
-        local rag=minetest.add_entity(self.object:get_pos(),'automobiles_buggy:rag')
-	    rag:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.rag = rag
-
-        local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_buggy:front_suspension')
-	    front_suspension:set_attach(self.object,'',{x=0,y=-0.7,z=23},{x=0,y=0,z=0})
+        local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_coupe:front_suspension')
+	    front_suspension:set_attach(self.object,'',{x=0,y=1.5,z=24.5},{x=0,y=0,z=0})
 	    self.front_suspension = front_suspension
 
-	    local lf_wheel=minetest.add_entity(pos,'automobiles_buggy:f_wheel')
-	    lf_wheel:set_attach(self.front_suspension,'',{x=-buggy.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+	    local lf_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    lf_wheel:set_attach(self.front_suspension,'',{x=-coupe.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
-        lf_wheel:set_animation({x = 1, y = 13}, 0, 0, true)
+        lf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.lf_wheel = lf_wheel
 
-	    local rf_wheel=minetest.add_entity(pos,'automobiles_buggy:f_wheel')
-	    rf_wheel:set_attach(self.front_suspension,'',{x=buggy.front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+	    local rf_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    rf_wheel:set_attach(self.front_suspension,'',{x=coupe.front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
 		-- set the animation once and later only change the speed
-        rf_wheel:set_animation({x = 1, y = 13}, 0, 0, true)
+        rf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.rf_wheel = rf_wheel
 
-        local rear_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_buggy:rear_suspension')
-	    rear_suspension:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+        local rear_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_coupe:rear_suspension')
+	    rear_suspension:set_attach(self.object,'',{x=0,y=1.5,z=0},{x=0,y=0,z=0})
 	    self.rear_suspension = rear_suspension
 
-	    local lr_wheel=minetest.add_entity(pos,'automobiles_buggy:r_wheel')
-	    lr_wheel:set_attach(self.rear_suspension,'',{x=-buggy.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+	    local lr_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    lr_wheel:set_attach(self.rear_suspension,'',{x=-coupe.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
-        lr_wheel:set_animation({x = 1, y = 13}, 0, 0, true)
+        lr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.lr_wheel = lr_wheel
 
-	    local rr_wheel=minetest.add_entity(pos,'automobiles_buggy:r_wheel')
-	    rr_wheel:set_attach(self.rear_suspension,'',{x=buggy.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+	    local rr_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    rr_wheel:set_attach(self.rear_suspension,'',{x=coupe.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
 		-- set the animation once and later only change the speed
-        rr_wheel:set_animation({x = 1, y = 13}, 0, 0, true)
+        rr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.rr_wheel = rr_wheel
 
-	    local steering_axis=minetest.add_entity(pos,'automobiles_buggy:pivot_mesh')
+	    local steering_axis=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
         steering_axis:set_attach(self.object,'',{x=-4.26,y=6.01,z=14.18},{x=15,y=0,z=0})
 	    self.steering_axis = steering_axis
 
-	    local steering=minetest.add_entity(self.steering_axis:get_pos(),'automobiles_buggy:steering')
+	    local steering=minetest.add_entity(self.steering_axis:get_pos(),'automobiles_coupe:steering')
         steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.steering = steering
 
-	    local driver_seat=minetest.add_entity(pos,'automobiles_buggy:pivot_mesh')
+	    local driver_seat=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
         driver_seat:set_attach(self.object,'',{x=-4.25,y=0.48,z=9.5},{x=0,y=0,z=0})
 	    self.driver_seat = driver_seat
 
-	    local passenger_seat=minetest.add_entity(pos,'automobiles_buggy:pivot_mesh')
+	    local passenger_seat=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
         passenger_seat:set_attach(self.object,'',{x=4.25,y=0.48,z=9.5},{x=0,y=0,z=0})
 	    self.passenger_seat = passenger_seat
 
-        local fuel_gauge=minetest.add_entity(pos,'automobiles_buggy:pointer')
-        fuel_gauge:set_attach(self.object,'',BUGGY_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
+        local fuel_gauge=minetest.add_entity(pos,'automobiles_coupe:pointer')
+        fuel_gauge:set_attach(self.object,'',COUPE_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
         self.fuel_gauge = fuel_gauge
 
-        local lights = minetest.add_entity(pos,'automobiles_buggy:f_lights')
+        local lights = minetest.add_entity(pos,'automobiles_coupe:f_lights')
 	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.lights = lights
         self.lights:set_properties({is_visible=true})
 
-        local r_lights = minetest.add_entity(pos,'automobiles_buggy:r_lights')
+        local r_lights = minetest.add_entity(pos,'automobiles_coupe:r_lights')
 	    r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.r_lights = r_lights
         self.r_lights:set_properties({is_visible=true})
+
+        local reverse_lights = minetest.add_entity(pos,'automobiles_coupe:reverse_lights')
+	    reverse_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.reverse_lights = reverse_lights
+        self.reverse_lights:set_properties({is_visible=true})
+
+        local turn_l_light = minetest.add_entity(pos,'automobiles_coupe:turn_left_light')
+	    turn_l_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.turn_l_light = turn_l_light
+        self.turn_l_light:set_properties({is_visible=true})
+
+        local turn_r_light = minetest.add_entity(pos,'automobiles_coupe:turn_right_light')
+	    turn_r_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.turn_r_light = turn_r_light
+        self.turn_r_light:set_properties({is_visible=true})
 
 		self.object:set_armor_groups({immortal=1})
 
@@ -423,19 +431,13 @@ minetest.register_entity("automobiles_buggy:buggy", {
         local longit_speed = automobiles_lib.dot(velocity,hull_direction)
         local fuel_weight_factor = (5 - self._energy)/5000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
-            (buggy.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
+            (coupe.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
 		local later_speed = automobiles_lib.dot(velocity,nhdir)
         local later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*buggy.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
+            later_speed*coupe.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
-
-        if self._show_rag == true then
-            self.rag:set_properties({is_visible=true})
-        else
-            self.rag:set_properties({is_visible=false})
-        end
 
         local player = nil
         local is_attached = false
@@ -467,6 +469,11 @@ minetest.register_entity("automobiles_buggy:buggy", {
                 is_breaking = true
                 self.r_lights:set_properties({textures={"automobiles_rear_lights_full.png"}, glow=15})
             end
+            if ctrl.sneak then
+                self.reverse_lights:set_properties({textures={"automobiles_white.png"}, glow=15})
+            else
+                self.reverse_lights:set_properties({textures={"automobiles_grey.png"}, glow=0})
+            end
         end
 
         self._last_light_move = self._last_light_move + dtime
@@ -474,7 +481,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
             self._last_light_move = 0
             if self._show_lights == true then
                 --self.lights:set_properties({is_visible=true})
-                self.lights:set_properties({textures={"automobiles_buggy_lights.png"}, glow=15})
+                self.lights:set_properties({textures={"automobiles_coupe_lights.png"}, glow=15})
                 if is_breaking == false then
                     self.r_lights:set_properties({textures={"automobiles_rear_lights.png"}, glow=10})
                 end
@@ -532,7 +539,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
                 local mid_speed = (steering_speed/2)
                 steering_speed = mid_speed + mid_speed / math.abs(longit_speed*0.25)
             end
-			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, buggy.max_acc_factor, buggy.max_speed, steering_angle_max, steering_speed)
+			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, coupe.max_acc_factor, coupe.max_speed, steering_angle_max, steering_speed)
         else
             self._show_lights = false
             if self.sound_handle ~= nil then
@@ -542,21 +549,42 @@ minetest.register_entity("automobiles_buggy:buggy", {
 		end
 
         local angle_factor = self._steering_angle / 10
-        self.lf_wheel:set_animation_frame_speed(longit_speed * (10 - angle_factor))
-        self.rf_wheel:set_animation_frame_speed(-longit_speed * (10 + angle_factor))
-        self.lr_wheel:set_animation_frame_speed(longit_speed * (10 - angle_factor))
-        self.rr_wheel:set_animation_frame_speed(-longit_speed * (10 + angle_factor))
+        self.lf_wheel:set_animation_frame_speed(longit_speed * (12 - angle_factor))
+        self.rf_wheel:set_animation_frame_speed(-longit_speed * (12 + angle_factor))
+        self.lr_wheel:set_animation_frame_speed(longit_speed * (12 - angle_factor))
+        self.rr_wheel:set_animation_frame_speed(-longit_speed * (12 + angle_factor))
 
         --whell turn
         self.steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=self._steering_angle*2})
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=-buggy.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=buggy.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=-coupe.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=coupe.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
 
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)
 			newyaw = yaw + dtime*(1 - 1 / (math.abs(longit_speed) + 1)) *
                 self._steering_angle / 30 * turn_rate * automobiles_lib.sign(longit_speed)
 		end
+
+        --turn light
+        self._turn_light_timer = self._turn_light_timer + dtime
+        if math.abs(self._steering_angle) > 15 and self._turn_light_timer >= 1 then
+            self._turn_light_timer = 0
+            --set turn light
+            if self._steering_angle < 0 then
+                self.turn_r_light:set_properties({textures={"automobiles_turn_on.png"}, glow=20})
+            end
+            if self._steering_angle > 0 then
+                self.turn_l_light:set_properties({textures={"automobiles_turn_on.png"}, glow=20})
+            end
+        end
+        if self._turn_light_timer > 0.5 then
+            self.turn_l_light:set_properties({textures={"automobiles_turn.png"}, glow=0})
+            self.turn_r_light:set_properties({textures={"automobiles_turn.png"}, glow=0})
+        end
+        if self._turn_light_timer > 1 then
+            self._turn_light_timer = 1
+        end
+        
 
         self._last_ground_check = self._last_ground_check + dtime
         if self._last_ground_check > 0.18 then
@@ -600,12 +628,12 @@ minetest.register_entity("automobiles_buggy:buggy", {
             self._last_engine_sound_update = self._last_engine_sound_update + dtime
             if self._last_engine_sound_update > 0.300 then
                 self._last_engine_sound_update = 0
-                buggy.engine_set_sound_and_animation(self, longit_speed)
+                coupe.engine_set_sound_and_animation(self, longit_speed)
             end
         end
 
         local energy_indicator_angle = automobiles_lib.get_gauge_angle(self._energy)
-        self.fuel_gauge:set_attach(self.object,'',BUGGY_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
+        self.fuel_gauge:set_attach(self.object,'',COUPE_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
         ----------------------------
         -- end energy consumption --
 
@@ -660,7 +688,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
         local velocity = self.object:get_velocity()
         local speed = automobiles_lib.get_hipotenuse_value(vector.new(), velocity)
         if math.abs(speed) <= 0.1 then
-            if automobiles_lib.loadFuel(self, puncher:get_player_name(), false, buggy.max_fuel) then return end
+            if automobiles_lib.loadFuel(self, puncher:get_player_name(), false, coupe.max_fuel) then return end
         end
         -- end refuel
 
@@ -723,7 +751,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
             end
 
             if self.hp <= 0 then
-                buggy.destroy(self)
+                coupe.destroy(self)
             end
 
         end
@@ -742,13 +770,13 @@ minetest.register_entity("automobiles_buggy:buggy", {
         end
 
 		if name == self.driver_name then
-            buggy.driver_formspec(name)
+            coupe.driver_formspec(name)
 		else
             if name == self.owner then
                 --is the owner, okay, lets attach
                 automobiles_lib.attach_driver(self, clicker)
                 -- sound
-                self.sound_handle = minetest.sound_play({name = "buggy_engine"},
+                self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
                         {object = self.object, gain = 4, pitch = 1, max_hear_distance = 10, loop = true,})
             else
                 --minetest.chat_send_all("clicou")

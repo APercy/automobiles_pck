@@ -361,6 +361,12 @@ minetest.register_craftitem("automobiles_lib:engine",{
 	inventory_image = "automobiles_engine.png",
 })
 
+-- engine
+minetest.register_craftitem("automobiles_lib:wheel",{
+	description = "Car wheel",
+	inventory_image = "automobiles_wheel_icon.png",
+})
+
 if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_lib:engine",
@@ -369,4 +375,35 @@ if minetest.get_modpath("default") then
 			{"default:steelblock","default:mese_block", "default:steelblock"},
 		}
 	})
+	minetest.register_craft({
+		output = "automobiles_lib:wheel",
+		recipe = {
+			{"default:tin_ingot", "default:steel_ingot", "default:tin_ingot"},
+			{"default:steel_ingot","default:steelblock",  "default:steel_ingot"},
+            {"default:tin_ingot", "default:steel_ingot", "default:tin_ingot"},
+		}
+	})
 end
+
+minetest.register_entity('automobiles_lib:wheel',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_wheel.b3d",
+    backface_culling = false,
+	textures = {"automobiles_black.png", "automobiles_metal.png"},
+	},
+	
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+	
+})
