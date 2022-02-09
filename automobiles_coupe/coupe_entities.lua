@@ -238,7 +238,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
         collide_with_objects = true,
 	    collisionbox = {-0.1, -0.2, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
-        stepheight = 0.55,
+        stepheight = 0.65,
 	    visual = "mesh",
 	    mesh = "automobiles_coupe_body.b3d",
         textures = {
