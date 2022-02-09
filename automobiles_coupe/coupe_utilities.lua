@@ -1,7 +1,7 @@
---dofile(minetest.get_modpath("automobiles_buggy") .. DIR_DELIM .. "coupe_global_definitions.lua")
---dofile(minetest.get_modpath("automobiles_buggy") .. DIR_DELIM .. "coupe_hud.lua")
+--dofile(minetest.get_modpath("automobiles_coupe") .. DIR_DELIM .. "coupe_global_definitions.lua")
+--dofile(minetest.get_modpath("automobiles_coupe") .. DIR_DELIM .. "coupe_hud.lua")
 
--- destroy the buggy
+-- destroy the coupe
 function coupe.destroy(self, puncher)
     automobiles_lib.remove_light(self)
     if self.sound_handle then
@@ -46,7 +46,7 @@ function coupe.destroy(self, puncher)
 
     pos.y=pos.y+2
 
-    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:buggy')
+    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:coupe')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')

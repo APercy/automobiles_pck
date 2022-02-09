@@ -320,7 +320,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
             self._show_rag = data.stored_rag
             self._pitch = data.stored_pitch
             self._light_old_pos = data.stored_light_old_pos
-            automobiles_lib.setText(self, "Buggy")
+            automobiles_lib.setText(self, "Coupe")
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)

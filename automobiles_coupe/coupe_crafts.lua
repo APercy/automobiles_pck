@@ -8,7 +8,7 @@ minetest.register_craftitem("automobiles_coupe:coupe_body",{
 	inventory_image = "automobiles_coupe_body.png",
 })
 
--- buggy
+-- coupe
 minetest.register_craftitem("automobiles_coupe:coupe", {
 	description = "Coupe",
 	inventory_image = "automobiles_coupe.png",
