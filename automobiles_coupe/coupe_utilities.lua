@@ -38,6 +38,9 @@ function coupe.destroy(self, puncher)
     if self.fuel_gauge then self.fuel_gauge:remove() end
     if self.lights then self.lights:remove() end
     if self.r_lights then self.r_lights:remove() end
+    if self.reverse_lights then self.reverse_lights:remove() end
+    if self.turn_l_light then self.turn_l_light:remove() end
+    if self.turn_r_light then self.turn_r_light:remove() end
 
     self.object:remove()
 
@@ -45,10 +48,10 @@ function coupe.destroy(self, puncher)
 
     --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:buggy')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
 end
 
 function coupe.engine_set_sound_and_animation(self, _longit_speed)
