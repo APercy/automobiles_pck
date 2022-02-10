@@ -98,7 +98,7 @@ function automobiles_lib.attach_driver(self, player)
     minetest.after(0.2, function()
         player = minetest.get_player_by_name(name)
         if player then
-            player:set_properties({physical=false})
+            --player:set_properties({physical=false})
 	        player_api.set_animation(player, "sit")
             --apply_physics_override(player, {speed=0,gravity=0,jump=0})
         end
@@ -126,7 +126,7 @@ function automobiles_lib.dettach_driver(self, player)
     if player then
         --automobiles_lib.remove_hud(player)
 
-        player:set_properties({physical=true})
+        --player:set_properties({physical=true})
         player:set_detach()
         player_api.player_attached[name] = nil
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
@@ -156,7 +156,7 @@ function automobiles_lib.attach_pax(self, player, onside)
             minetest.after(0.2, function()
                 player = minetest.get_player_by_name(name)
                 if player then
-                    player:set_properties({physical=false})
+                    --player:set_properties({physical=false})
 	                player_api.set_animation(player, "sit")
                     --apply_physics_override(player, {speed=0,gravity=0,jump=0})
                 end
@@ -217,7 +217,7 @@ function automobiles_lib.dettach_pax(self, player)
 
     -- detach the player
     if player then
-        player:set_properties({physical=true})
+        --player:set_properties({physical=true})
         player:set_detach()
         player_api.player_attached[name] = nil
         player_api.set_animation(player, "stand")
