@@ -497,6 +497,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
         end
 
         local curr_pos = self.object:get_pos()
+        self.object:move_to(curr_pos)
 		if is_attached then --and self.driver_name == self.owner then
             local impact = automobiles_lib.get_hipotenuse_value(velocity, self.lastvelocity)
             if impact > 1 then
@@ -640,7 +641,6 @@ minetest.register_entity("automobiles_coupe:coupe", {
         accel.y = -automobiles_lib.gravity
 
         if stop ~= true then
-	        self.object:move_to(curr_pos)
             self.object:set_velocity(velocity)
             self.object:set_acceleration(accel)
         else
