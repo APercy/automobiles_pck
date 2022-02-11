@@ -1,6 +1,5 @@
 --lets assume that the rear axis is at object center, so we will use the distance only for front wheels
 function automobiles_lib.ground_get_distances(self, radius, axis_distance)
-
     --local mid_axis = (axis_length / 2)/10
     local hip = axis_distance
     --minetest.chat_send_all("entre-eixo "..hip)
@@ -20,6 +19,10 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
     local rear_obstacle_level = automobiles_lib.get_obstacle(rear_axis)
     --minetest.chat_send_all("rear"..dump(rear_obstacle_level))
+
+    if not self._last_front_detection then
+        self._last_front_detection = rear_obstacle_level.y
+    end
 
     local f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
     local f_y = pos.y
@@ -56,29 +59,36 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
     --lets try to get the pitch
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
-        local deltaX = axis_distance;
-        local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-        --minetest.chat_send_all("deutaY "..deltaY)
-        local m = (deltaY/deltaX)
-        pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-        --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
+        if (front_obstacle_level.y-self._last_front_detection) <= self.initial_properties.stepheight then
+            self._last_front_detection = front_obstacle_level.y
+            local deltaX = axis_distance;
+            local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
+            --minetest.chat_send_all("deutaY "..deltaY)
+            local m = (deltaY/deltaX)
+            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
 
-        --[[if mid_car_level then
-            deltaX = axis_distance/2;
-            if mid_car_level.y ~= nil then
-                local deltaY_mid = mid_car_level.y - rear_obstacle_level.y;
-                if deltaY >= 1 and deltaY_mid < (deltaY / 2) then
-                    --self.initial_properties.stepheight
-                    pitch = math.rad(0)
-                end
-                --[[m = (deltaY_mid/deltaX)
-                local midpitch = math.atan(m)
-                if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
-                    pitch = pitch + ((pitch - midpitch) / 2)
-                end]]--
-            --[[end
-        end]]--
-
+            --[[if mid_car_level then
+                deltaX = axis_distance/2;
+                if mid_car_level.y ~= nil then
+                    local deltaY_mid = mid_car_level.y - rear_obstacle_level.y;
+                    if deltaY >= 1 and deltaY_mid < (deltaY / 2) then
+                        --self.initial_properties.stepheight
+                        pitch = math.rad(0)
+                    end
+                    --[[m = (deltaY_mid/deltaX)
+                    local midpitch = math.atan(m)
+                    if math.abs(math.deg(pitch) - math.deg(midpitch)) < 20 then
+                        pitch = pitch + ((pitch - midpitch) / 2)
+                    end]]--
+                --[[end
+            end]]--
+        else
+            self._last_front_detection = rear_obstacle_level.y
+            --here we need to set the collision effect
+            self.object:set_acceleration({x=0,y=0,z=0})
+            self.object:set_velocity({x=0,y=0,z=0})
+        end
     else
         pitch = math.rad(0)
     end

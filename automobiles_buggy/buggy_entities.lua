@@ -559,18 +559,6 @@ minetest.register_entity("automobiles_buggy:buggy", {
                 self._steering_angle / 30 * turn_rate * automobiles_lib.sign(longit_speed)
 		end
 
-        self._last_ground_check = self._last_ground_check + dtime
-        if self._last_ground_check > 0.18 then
-            self._last_ground_check = 0
-            automobiles_lib.ground_get_distances(self, 0.372, 2.3)
-        end
-
-        --[[if player and is_attached then
-            player:set_look_horizontal(newyaw)
-        end]]--
-
-		local newpitch = self._pitch --velocity.y * math.rad(6)
-
         --[[
         accell correction
         under some circunstances the acceleration exceeds the max value accepted by set_acceleration and
@@ -621,6 +609,13 @@ minetest.register_entity("automobiles_buggy:buggy", {
                 self.object:set_velocity({x=0,y=0,z=0})
             end
         end
+
+        self._last_ground_check = self._last_ground_check + dtime
+        if self._last_ground_check > 0.18 then
+            self._last_ground_check = 0
+            automobiles_lib.ground_get_distances(self, 0.372, 2.3)
+        end
+		local newpitch = self._pitch --velocity.y * math.rad(6)
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=0}) end
 
