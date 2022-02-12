@@ -672,34 +672,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
                     return
                 end
 
-                --painting
-                local split = string.split(item_name, ":")
-                local color, indx, _
-                if split[1] then _,indx = split[1]:find('dye') end
-                if indx then
-                    for clr,_ in pairs(automobiles_lib.colors) do
-                        local _,x = split[2]:find(clr)
-                        if x then color = clr end
-                    end
-                else
-                    color = false
-                end
-                    
-			    if color then
-
-                    --lets paint!!!!
-				    --local color = item_name:sub(indx+1)
-				    local colstr = automobiles_lib.colors[color]
-                    --minetest.chat_send_all(color ..' '.. dump(colstr))
-				    if colstr then
-                        automobiles_lib.paint(self, colstr)
-					    itmstck:set_count(itmstck:get_count()-1)
-					    puncher:set_wielded_item(itmstck)
-				    end
-                    -- end painting
-
-			    else -- deal damage
-
+                if automobiles_lib.set_paint(self, puncher, itmstck) == false then
                     local is_admin = false
                     is_admin = minetest.check_player_privs(puncher, {server=true})
                     --minetest.chat_send_all('owner '.. self.owner ..' - name '.. name)

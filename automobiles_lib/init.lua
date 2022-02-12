@@ -47,6 +47,42 @@ function automobiles_lib.minmax(v,m)
 	return math.min(math.abs(v),m)*minekart.sign(v)
 end
 
+function automobiles_lib.set_paint(self, puncher, itmstck)
+    local item_name = ""
+    if itmstck then item_name = itmstck:get_name() end
+
+    if item_name == "bike:painter" then
+        --painting with bike painter
+        local meta = itmstck:get_meta()
+	    local colstr = meta:get_string("paint_color")
+        automobiles_lib.paint(self, colstr)
+        return true
+    else
+        --painting with dyes
+        local split = string.split(item_name, ":")
+        local color, indx, _
+        if split[1] then _,indx = split[1]:find('dye') end
+        if indx then
+            for clr,_ in pairs(automobiles_lib.colors) do
+                local _,x = split[2]:find(clr)
+                if x then color = clr end
+            end
+            --lets paint!!!!
+	        --local color = item_name:sub(indx+1)
+	        local colstr = automobiles_lib.colors[color]
+            --minetest.chat_send_all(color ..' '.. dump(colstr))
+	        if colstr then
+                automobiles_lib.paint(self, colstr)
+		        itmstck:set_count(itmstck:get_count()-1)
+		        puncher:set_wielded_item(itmstck)
+                return true
+	        end
+            -- end painting
+        end
+    end
+    return false
+end
+
 --painting
 function automobiles_lib.paint(self, colstr)
     if colstr then
