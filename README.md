@@ -14,4 +14,5 @@ D: Right
 E: Horn
 Shift: Reverse
 
-It can be painted by punching dye on it. And fueled by punching biofuel
+It can be painted by punching dye on it. Or the painter.
+And fueled by punching biofuel
