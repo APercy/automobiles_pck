@@ -42,6 +42,7 @@ function coupe.destroy(self, puncher)
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
 
+    automobiles_lib.destroy_inventory(self)
     self.object:remove()
 
     pos.y=pos.y+2

@@ -286,6 +286,8 @@ minetest.register_entity("automobiles_coupe:coupe", {
     _last_light_move = 0,
     _last_engine_sound_update = 0,
     _turn_light_timer = 0,
+    _inv = nil,
+    _inv_id = "",
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -301,8 +303,13 @@ minetest.register_entity("automobiles_coupe:coupe", {
             stored_rag = self._show_rag,
             stored_pitch = self._pitch,
             stored_light_old_pos = self._light_old_pos,
+            stored_inv_id = self._inv_id,
         })
     end,
+
+	on_deactivate = function(self)
+        automobiles_lib.save_inventory(self)
+	end,
 
 	on_activate = function(self, staticdata, dtime_s)
         if staticdata ~= "" and staticdata ~= nil then
@@ -320,6 +327,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
             self._show_rag = data.stored_rag
             self._pitch = data.stored_pitch
             self._light_old_pos = data.stored_light_old_pos
+            self._inv_id = data.stored_inv_id
             automobiles_lib.setText(self, "Coupe")
         end
 
@@ -406,6 +414,15 @@ minetest.register_entity("automobiles_coupe:coupe", {
         self.turn_r_light:set_properties({is_visible=true})
 
 		self.object:set_armor_groups({immortal=1})
+
+		local inv = minetest.get_inventory({type = "detached", name = self._inv_id})
+		-- if the game was closed the inventories have to be made anew, instead of just reattached
+		if not inv then
+            automobiles_lib.create_inventory(self, coupe.trunk_slots)
+		else
+		    self.inv = inv
+        end
+
 
         mobkit.actfunc(self, staticdata, dtime_s)
 	end,
@@ -740,11 +757,15 @@ minetest.register_entity("automobiles_coupe:coupe", {
             coupe.driver_formspec(name)
 		else
             if name == self.owner then
-                --is the owner, okay, lets attach
-                automobiles_lib.attach_driver(self, clicker)
-                -- sound
-                self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
-                        {object = self.object, gain = 4, pitch = 1, max_hear_distance = 10, loop = true,})
+                if clicker:get_player_control().sneak == true then
+                    automobiles_lib.show_vehicle_trunk_formspec(self, clicker, 8)
+                else
+                    --is the owner, okay, lets attach
+                    automobiles_lib.attach_driver(self, clicker)
+                    -- sound
+                    self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
+                            {object = self.object, gain = 4, pitch = 1, max_hear_distance = 10, loop = true,})
+                end
             else
                 --minetest.chat_send_all("clicou")
                 --a passenger

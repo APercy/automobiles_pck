@@ -27,10 +27,12 @@ minetest.register_craftitem("automobiles_coupe:coupe", {
             local owner = placer:get_player_name()
             if ent then
                 ent.owner = owner
-			    car:set_yaw(placer:get_look_horizontal())
-			    itemstack:take_item()
+                --minetest.chat_send_all("owner: " .. ent.owner)
+		        car:set_yaw(placer:get_look_horizontal())
+		        itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
-                automobiles_lib.setText(ent, "coupe")
+                automobiles_lib.setText(ent, "Coupe")
+                automobiles_lib.create_inventory(ent, coupe.trunk_slots, owner)
             end
 		end
 

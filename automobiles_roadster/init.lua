@@ -8,6 +8,7 @@ roadster.gravity = automobiles_lib.gravity
 roadster.max_speed = 12
 roadster.max_acc_factor = 5
 roadster.max_fuel = 10
+roadster.trunk_slots = 8
 
 ROADSTER_GAUGE_FUEL_POSITION =  {x=0,y=8.04,z=17.84}
 

@@ -8,6 +8,7 @@ coupe.gravity = automobiles_lib.gravity
 coupe.max_speed = 22
 coupe.max_acc_factor = 8
 coupe.max_fuel = 10
+coupe.trunk_slots = 8
 
 COUPE_GAUGE_FUEL_POSITION =  {x=0,y=6.2,z=15.8}
 

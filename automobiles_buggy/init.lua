@@ -8,6 +8,7 @@ buggy.gravity = automobiles_lib.gravity
 buggy.max_speed = 15
 buggy.max_acc_factor = 5
 buggy.max_fuel = 10
+buggy.trunk_slots = 8
 
 BUGGY_GAUGE_FUEL_POSITION =  {x=0,y=4.65,z=15.17}
 

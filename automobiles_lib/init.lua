@@ -395,6 +395,7 @@ dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "painter.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "inventory_management.lua")
 
 -- engine
 minetest.register_craftitem("automobiles_lib:engine",{

@@ -40,6 +40,7 @@ function buggy.destroy(self, puncher)
     if self.lights then self.lights:remove() end
     if self.r_lights then self.r_lights:remove() end
 
+    automobiles_lib.destroy_inventory(self)
     self.object:remove()
 
     pos.y=pos.y+2

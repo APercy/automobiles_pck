@@ -40,6 +40,7 @@ function roadster.destroy(self, puncher)
     if self.fuel_gauge then self.fuel_gauge:remove() end
     if self.lights then self.lights:remove() end
 
+    automobiles_lib.destroy_inventory(self)
     self.object:remove()
 
     pos.y=pos.y+2
