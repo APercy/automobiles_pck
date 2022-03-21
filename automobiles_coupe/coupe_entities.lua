@@ -757,8 +757,8 @@ minetest.register_entity("automobiles_coupe:coupe", {
             coupe.driver_formspec(name)
 		else
             if name == self.owner then
-                if clicker:get_player_control().sneak == true then
-                    automobiles_lib.show_vehicle_trunk_formspec(self, clicker, 8)
+                if clicker:get_player_control().aux1 == true then
+                    automobiles_lib.show_vehicle_trunk_formspec(self, clicker, coupe.trunk_slots)
                 else
                     --is the owner, okay, lets attach
                     automobiles_lib.attach_driver(self, clicker)
