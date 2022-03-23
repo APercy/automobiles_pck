@@ -85,23 +85,25 @@ end
 
 function automobiles_lib.remove_inventory(self)
     local inventory = automobiles_lib.get_inventory(self)
-    if inventory:is_empty("main") then
-	    return minetest.remove_detached_inventory(self._inv_id)
-    else
-        local inv_content = inventory:get_list("main")
-        if inv_content then
-            local pos = self.object:get_pos()
-            for k, v in pairs(inv_content) do
-                local count = 0
-                for i = 0,v:get_count()-1,1 
-                do 
-                    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},v:get_name())
-                    count = count + 1
-                    if count >= 5 then break end
+    if inventory then
+        if inventory:is_empty("main") then
+	        return minetest.remove_detached_inventory(self._inv_id)
+        else
+            local inv_content = inventory:get_list("main")
+            if inv_content then
+                local pos = self.object:get_pos()
+                for k, v in pairs(inv_content) do
+                    local count = 0
+                    for i = 0,v:get_count()-1,1 
+                    do 
+                        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},v:get_name())
+                        count = count + 1
+                        if count >= 5 then break end
+                    end
                 end
             end
+            return minetest.remove_detached_inventory(self._inv_id)
         end
-        return minetest.remove_detached_inventory(self._inv_id)
     end
     return false
 end
