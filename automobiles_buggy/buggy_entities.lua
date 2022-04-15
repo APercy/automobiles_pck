@@ -617,7 +617,8 @@ minetest.register_entity("automobiles_buggy:buggy", {
         accel.y = -automobiles_lib.gravity
 
         if stop ~= true then
-            self.object:set_velocity(velocity)
+            --self.object:set_velocity(velocity)
+            self.object:set_acceleration(self.object:get_acceleration())
             self.object:set_acceleration(accel)
         else
             if stop == true then
