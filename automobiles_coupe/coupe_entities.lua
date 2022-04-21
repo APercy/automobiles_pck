@@ -646,7 +646,9 @@ minetest.register_entity("automobiles_coupe:coupe", {
 
         if stop ~= true then
             --self.object:set_velocity(velocity)
-            self.object:set_acceleration(self.object:get_acceleration())
+            if player then
+                automobiles_lib.attach_driver(self, player)
+            end
             self.object:set_acceleration(accel)
         else
             if stop == true then
