@@ -324,8 +324,8 @@ function automobiles_lib.put_light(self)
 end
 
 minetest.register_node("automobiles_lib:light", {
-	drawtype = "glasslike",
-	tile_images = {"automobiles_light.png"},
+	drawtype = "airlike",
+	--tile_images = {"automobiles_light.png"},
 	inventory_image = minetest.inventorycube("automobiles_light.png"),
 	paramtype = "light",
 	walkable = false,
