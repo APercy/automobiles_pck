@@ -242,7 +242,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
 	    visual = "mesh",
 	    mesh = "automobiles_coupe_body.b3d",
         --use_texture_alpha = true,
-        --backface_culling = false,
+        backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos
             "automobiles_painting.png", --carroceria
