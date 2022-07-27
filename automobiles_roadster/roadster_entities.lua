@@ -219,7 +219,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
 	    visual = "mesh",
 	    mesh = "automobiles_roadster.b3d",
         --use_texture_alpha = true,
-        backface_culling = false,
+        --backface_culling = false,
         textures = {
             "automobiles_metal2.png", --parabrisa movel
             "automobiles_glass.png", --vidro do parabrisa movel

@@ -243,7 +243,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
 	    visual = "mesh",
 	    mesh = "automobiles_buggy_body.b3d",
         --use_texture_alpha = true,
-        backface_culling = false,
+        --backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos
             "automobiles_painting.png", --carroceria
