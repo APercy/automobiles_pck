@@ -150,7 +150,7 @@ initial_properties = {
 	pointable=false,
 	visual = "mesh",
 	mesh = "automobiles_buggy_rag.b3d",
-    use_texture_alpha = true,
+    --use_texture_alpha = true,
     backface_culling = false,
 	textures = {"automobiles_black.png", "automobiles_buggy_rag_window.png"},
 	},
