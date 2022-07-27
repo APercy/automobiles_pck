@@ -150,6 +150,7 @@ initial_properties = {
 	pointable=false,
 	visual = "mesh",
 	mesh = "automobiles_buggy_rag.b3d",
+    use_texture_alpha = true,
     backface_culling = false,
 	textures = {"automobiles_black.png", "automobiles_buggy_rag_window.png"},
 	},
@@ -241,6 +242,8 @@ minetest.register_entity("automobiles_buggy:buggy", {
         stepheight = 0.7,
 	    visual = "mesh",
 	    mesh = "automobiles_buggy_body.b3d",
+        use_texture_alpha = true,
+        backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos
             "automobiles_painting.png", --carroceria

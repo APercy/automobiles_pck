@@ -218,9 +218,15 @@ minetest.register_entity("automobiles_roadster:roadster", {
         stepheight = 0.6,
 	    visual = "mesh",
 	    mesh = "automobiles_roadster.b3d",
+        --use_texture_alpha = true,
+        backface_culling = false,
         textures = {
-            "automobiles_black.png", --bancos
+            "automobiles_metal2.png", --parabrisa movel
+            "automobiles_glass.png", --vidro do parabrisa movel
+            "automobiles_painting.png", --portas
+            "automobiles_black.png", --portas interno
             "automobiles_wood.png", --assoalho
+            "automobiles_black.png", --bancos
             "automobiles_painting.png", --pintura
             "automobiles_black.png", --chassis
             "automobiles_metal2.png", --carcaça farol
@@ -230,11 +236,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             "automobiles_wood.png", --parede de fogo
             "automobiles_roadster_fuel.png", --combustivel
             "automobiles_metal2.png", --parabrisa fixo
-            "automobiles_alpha.png", --vidro do parabrisa fixo
-            "automobiles_painting.png", --portas
-            "automobiles_black.png", --portas interno
-            "automobiles_metal2.png", --parabrisa movel
-            "automobiles_alpha.png", --vidro do parabrisa movel
+            "automobiles_glass.png", --vidro do parabrisa fixo
             "automobiles_black.png", --paralamas
             "automobiles_metal2.png", --carenagem do radiador
             "automobiles_painting.png", --tanque de combustivel
@@ -430,11 +432,11 @@ minetest.register_entity("automobiles_roadster:roadster", {
         local accel = vector.add(longit_drag,later_drag)
 
         if self._show_rag == true then
-            self.object:set_bone_position("parabrisa", {x=0, y=15.8317, z=15.0394}, {x=0, y=0, z=0})
+            self.object:set_bone_position("windshield", {x=0, y=15.8317, z=15.0394}, {x=0, y=0, z=0})
             self.top2:set_properties({is_visible=true})
             self.top1:set_properties({is_visible=false})
         else
-            self.object:set_bone_position("parabrisa", {x=0, y=15.8317, z=15.0394}, {x=math.rad(-145), y=0, z=0})
+            self.object:set_bone_position("windshield", {x=0, y=15.8317, z=15.0394}, {x=math.rad(-145), y=0, z=0})
             self.top2:set_properties({is_visible=false})
             self.top1:set_properties({is_visible=true})
         end
