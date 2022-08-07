@@ -356,7 +356,7 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
     local item_name = ""
     if itmstck then item_name = itmstck:get_name() end
 
-    if item_name == "automobiles_lib:painter" or item_name == "bike:painter" then
+    if item_name == "bike:painter" then
         --painting with bike painter
         local meta = itmstck:get_meta()
 	    local colstr = meta:get_string("paint_color")

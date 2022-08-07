@@ -290,6 +290,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
     _turn_light_timer = 0,
     _inv = nil,
     _inv_id = "",
+    _is_automobile = true,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
