@@ -64,17 +64,17 @@ local function painter_form(player, rgb)
         "container[0,2.4]" ..
         "scrollbaroptions[min=0;max=255;smallstep=20]" ..
         
-        "box[0.4,0;4.79,0.38;red]" ..
+        "box[0.4,0;4.77,0.38;red]" ..
         "label[0.2,0.2;-]" ..
         "scrollbar[0.4,0;4.8,0.4;horizontal;r;" .. rgb.r .."]" ..
         "label[5.2,0.2;+]" ..
         
-        "box[0.4,0.6;4.79,0.38;green]" ..
+        "box[0.4,0.6;4.77,0.38;green]" ..
         "label[0.2,0.8;-]" ..
         "scrollbar[0.4,0.6;4.8,0.4;horizontal;g;" .. rgb.g .."]" ..
         "label[5.2,0.8;+]" ..
         
-        "box[0.4,1.2;4.79,0.38;blue]" ..
+        "box[0.4,1.2;4.77,0.38;blue]" ..
         "label[0.2,1.4;-]" ..
         "scrollbar[0.4,1.2;4.8,0.4;horizontal;b;" .. rgb.b .. "]" ..
         "label[5.2,1.4;+]" ..
@@ -120,7 +120,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             local object_ref = automobiles_being_painted[player]
             if object_ref and object_ref:get_pos() then
                 local luaentity = object_ref:get_luaentity()
-                automobiles_lib.paint(luaentity, rgb_to_hex(rgb))
+                luaentity:_change_color(rgb_to_hex(rgb))
             end
             automobiles_being_painted[player] = nil
         elseif fields.r and fields.r:find("^CHG") or
@@ -151,15 +151,15 @@ minetest.register_tool("automobiles_lib:painter", {
     on_use = function(itemstack, user, pointed_thing)
         if pointed_thing.type == "object" and not pointed_thing.ref:is_player() then
             local luaentity = pointed_thing.ref:get_luaentity()
-            if luaentity._is_automobile then
+            if luaentity and type(luaentity._change_color) == "function" then
                 local player_name = user:get_player_name()
-                if luaentity.owner == player_name then
+                if not luaentity.owner or luaentity.owner == player_name then
                     automobiles_being_painted[user] = pointed_thing.ref
                     local color = luaentity._color
                     local rgb = is_hex(color) and hex_to_rgb(color) or {r = 0, g = 0, b = 0}
                     painter_form(user, rgb)
                 else
-                    minetest.chat_send_player(player_name, "Only the owner can paint this automobile.")
+                    minetest.chat_send_player(player_name, "Only the owner can paint this entity.")
                 end
             end
         end
