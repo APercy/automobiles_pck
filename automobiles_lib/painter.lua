@@ -21,130 +21,160 @@ Copyright (C) 2018 Hume2
  THE SOFTWARE.
 ]]--
 
---[[painting functions adapted from bike mod]]--
 
 local function is_hex(color)
-	if color:len() ~= 7 then return nil end
-	return color:match("#%x%x%x%x%x%x")
+    if not color or color:len() ~= 7 then return end
+    return color:match("#%x%x%x%x%x%x")
 end
 
 -- hex translation
 local function hex_to_rgb(hex_value)
-	hex_value = hex_value:gsub("#","")
-	local rgb = {
-		r = tonumber("0x"..hex_value:sub(1,2)),
-		g = tonumber("0x"..hex_value:sub(3,4)),
-		b = tonumber("0x"..hex_value:sub(5,6)),
-	}
-	return rgb
+    hex_value = hex_value:gsub("#","")
+    local rgb = {
+        r = tonumber("0x"..hex_value:sub(1,2)),
+        g = tonumber("0x"..hex_value:sub(3,4)),
+        b = tonumber("0x"..hex_value:sub(5,6)),
+    }
+    return rgb
 end
 
-local function rgb_to_hex(r, g, b)
-	return string.format("#%02X%02X%02X", r, g, b)
+local function rgb_to_hex(rgb)
+    return string.format("#%02X%02X%02X", rgb.r, rgb.g, rgb.b)
 end
 
 -- Painter formspec
-local function painter_form(itemstack, player)
-	local meta = itemstack:get_meta()
-	local color = meta:get_string("paint_color")
-	if color == nil or color == "" then
-		color = "#FFFFFF"
-		meta:set_string("paint_color", color)
-		meta:set_string("description", "Automobiles Painter ("..color:upper()..")")
-	end
-	local rgb = hex_to_rgb(color)
-	minetest.show_formspec(player:get_player_name(), "automobiles_lib:painter",
-		-- Init formspec
-		"size[6,4.7;true]"..
-		"position[0.5, 0.45]"..
-		-- Preview
-		"label[0,0;Preview:]"..
-		"image[1.2,0;2,2;automobiles_painting.png^[colorize:"..color..":255]"..
-		-- RGB sliders
-		"scrollbaroptions[min=0;max=255]"..
-		"scrollbar[0,2;5,0.3;horizontal;r;"..rgb.r.."]"..
-		"label[5.1,1.9;R: "..rgb.r.."]"..
-		"scrollbar[0,2.6;5,0.3;horizontal;g;"..rgb.g.."]"..
-		"label[5.1,2.5;G: "..rgb.g.."]"..
-		"scrollbar[0,3.2;5,0.3;horizontal;b;"..rgb.b.."]"..
-		"label[5.1,3.1;B: "..rgb.b.."]"..
-		-- Hex field
-		"field[0.3,4.5;2,0.8;hex;Hex Color;"..color.."]"..
-		"button[4.05,4.1;2,1;set;Set color]"
-	)
+local function painter_form(player, rgb)
+    local color = rgb_to_hex(rgb)
+    minetest.show_formspec(player:get_player_name(), "automobiles_lib:painter",
+        -- Init formspec
+        "formspec_version[3]" .. -- Minetest 5.2+
+        "size[5.6,5.2;true]" ..
+        "position[0.5,0.45]" ..
+        
+        -- Color preview
+        "image[0.2,0.2;2,2;automobiles_painting.png^[colorize:" .. color .. ":255]" ..
+        "label[0.3,1.2;Preview]" ..
+        
+        -- Hex field
+        "field_close_on_enter[hex;false]" ..
+        "field[2.4,0.2;3,0.8;hex;;" .. color .. "]" ..
+        "button[2.4,1;3,0.8;set_hex;Set Hex]" ..
+        
+        -- RGB sliders
+        "container[0,2.4]" ..
+        "scrollbaroptions[min=0;max=255;smallstep=20]" ..
+        
+        "box[0.4,0;4.77,0.38;red]" ..
+        "label[0.2,0.2;-]" ..
+        "scrollbar[0.4,0;4.8,0.4;horizontal;r;" .. rgb.r .."]" ..
+        "label[5.2,0.2;+]" ..
+        
+        "box[0.4,0.6;4.77,0.38;green]" ..
+        "label[0.2,0.8;-]" ..
+        "scrollbar[0.4,0.6;4.8,0.4;horizontal;g;" .. rgb.g .."]" ..
+        "label[5.2,0.8;+]" ..
+        
+        "box[0.4,1.2;4.77,0.38;blue]" ..
+        "label[0.2,1.4;-]" ..
+        "scrollbar[0.4,1.2;4.8,0.4;horizontal;b;" .. rgb.b .. "]" ..
+        "label[5.2,1.4;+]" ..
+        
+        "container_end[]" ..
+        
+        -- Bottom buttons
+        "button_exit[0.2,4.2;2.8,0.8;set_color;Set Color]" ..
+        "button_exit[3.2,4.2;2.2,0.8;quit;Cancel]"
+    )
 end
 
+local automobiles_being_painted = {}
 local formspec_timers = {}
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == "automobiles_lib:painter" then
-		if formspec_timers[player] then
-			formspec_timers[player]:cancel()
-			formspec_timers[player] = nil
-		end
+    if formname == "automobiles_lib:painter" then
+        if formspec_timers[player] then
+            formspec_timers[player]:cancel()
+            formspec_timers[player] = nil
+        end
+        
+        local function parse_scrollbar_field(value)
+            value = value or ""
+            local num = math.floor(tonumber((value:gsub(".*:", ""))) or 0)
+            if num > 255 or num < 0 then num = 0 end
+            return num
+        end
 
-		local itemstack = player:get_wielded_item()
-		if fields.set or fields.quit then
-			if itemstack:get_name() == "automobiles_lib:painter" then
-				local meta = itemstack:get_meta()
-				local hex = fields.hex
-                if hex then
-				    if is_hex(hex) == nil then
-					    hex = "#FFFFFF"
-				    end
-				    -- Save color data to painter (rgba sliders will adjust to hex/alpha too!)
-				    meta:set_string("paint_color", hex)
-				    meta:set_string("description", "Automobiles Painter ("..hex:upper()..")")
-				    player:set_wielded_item(itemstack)
-				    painter_form(itemstack, player)
+        local rgb = {
+            r = parse_scrollbar_field(fields.r),
+            g = parse_scrollbar_field(fields.g),
+            b = parse_scrollbar_field(fields.b),
+        }
+        
+        if fields.set_hex or fields.key_enter then
+            if is_hex(fields.hex) then
+                painter_form(player, hex_to_rgb(fields.hex))
+            else
+                painter_form(player, rgb)
+            end
+        elseif fields.set_color then
+            local object_ref = automobiles_being_painted[player]
+            if object_ref and object_ref:get_pos() then
+                local luaentity = object_ref:get_luaentity()
+                luaentity:_change_color(rgb_to_hex(rgb))
+            end
+            automobiles_being_painted[player] = nil
+        elseif fields.r and fields.r:find("^CHG") or
+        fields.g and fields.g:find("^CHG") or
+        fields.b and fields.b:find("^CHG") then -- Has a scrollbar changed?
+            formspec_timers[player] = minetest.after(0.2, function(itemstack, name)
+                local player = minetest.get_player_by_name(name)
+                if player then
+                    painter_form(player, rgb)
                 end
-			end
-		elseif fields.r or fields.g or fields.b then
-			if itemstack:get_name() == "automobiles_lib:painter" then
-				-- Save on slider adjustment (hex/alpha will adjust to match the rgba!)
-				local meta = itemstack:get_meta()
-				local function sval(value)
-					local num = math.floor(tonumber((value:gsub(".*:", ""))) or 0)
-					if num > 255 or num < 0 then num = 0 end
-					return num
-				end
-				meta:set_string("paint_color", rgb_to_hex(sval(fields.r),sval(fields.g),sval(fields.b)))
-				-- Keep track of what this painter is painting
-				meta:set_string("description", "Automobiles Painter ("..meta:get_string("paint_color"):upper()..")")
-				
-				formspec_timers[player] = minetest.after(0.2, function(itemstack, name)
-					local player = minetest.get_player_by_name(name)
-					if player then
-						local wield = player:get_wielded_item()
-						if wield:get_name() == itemstack:get_name() then
-							player:set_wielded_item(itemstack)
-							painter_form(itemstack, player)
-						end
-					end
-					formspec_timers[player] = nil
-				end, itemstack, player:get_player_name())
-			end
-		end
-		return true
-	end
+                formspec_timers[player] = nil
+            end, itemstack, player:get_player_name())
+        end
+        
+        if fields.quit then
+            automobiles_being_painted[player] = nil
+        end
+        return true
+    end
 end)
---[[end of adaptations]]--
 
 
 -- Make the actual thingy
 minetest.register_tool("automobiles_lib:painter", {
-	description = "Automobiles Painter",
-	inventory_image = "automobiles_painter.png",
-	wield_scale = {x = 2, y = 2, z = 1},
-	on_place = painter_form,
-	on_secondary_use = painter_form,
+    description = "Automobiles Painter",
+    inventory_image = "automobiles_painter.png",
+    wield_scale = {x = 2, y = 2, z = 1},
+    on_use = function(itemstack, user, pointed_thing)
+        if pointed_thing.type == "object" and not pointed_thing.ref:is_player() then
+            local luaentity = pointed_thing.ref:get_luaentity()
+            if luaentity and type(luaentity._change_color) == "function" then
+                local player_name = user:get_player_name()
+                if not luaentity.owner or luaentity.owner == player_name then
+                    automobiles_being_painted[user] = pointed_thing.ref
+                    local color = luaentity._color
+                    local rgb = is_hex(color) and hex_to_rgb(color) or {r = 0, g = 0, b = 0}
+                    painter_form(user, rgb)
+                else
+                    minetest.chat_send_player(player_name, "Only the owner can paint this entity.")
+                end
+            end
+        end
+    end
 })
 
+minetest.register_on_leaveplayer(function(player, timed_out)
+    automobiles_being_painted[player] = nil
+end)
+
 minetest.register_craft({
-	output = "automobiles_lib:painter",
-	recipe = {
-		{"", "default:steel_ingot", ""},
-		{"dye:red", "dye:green", "dye:blue"},
-		{"", "default:steel_ingot", ""},
-	},
+    output = "automobiles_lib:painter",
+    recipe = {
+        {"", "default:steel_ingot", ""},
+        {"dye:red", "dye:green", "dye:blue"},
+        {"", "default:steel_ingot", ""},
+    },
 })

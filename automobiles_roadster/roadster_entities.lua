@@ -275,6 +275,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _last_engine_sound_update = 0,
     _inv = nil,
     _inv_id = "",
+    _change_color = automobiles_lib.paint,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
