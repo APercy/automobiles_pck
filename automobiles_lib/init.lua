@@ -403,6 +403,7 @@ function automobiles_lib.paint(self, colstr)
     end
 end
 
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "physics_lib.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")

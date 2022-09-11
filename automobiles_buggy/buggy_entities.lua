@@ -419,11 +419,11 @@ minetest.register_entity("automobiles_buggy:buggy", {
 		    self.inv = inv
         end
 
-        mobkit.actfunc(self, staticdata, dtime_s)
+        automobiles_lib.actfunc(self, staticdata, dtime_s)
 	end,
 
 	on_step = function(self, dtime)
-        mobkit.stepfunc(self, dtime)
+        automobiles_lib.stepfunc(self, dtime)
         --[[sound play control]]--
         self._last_time_collision_snd = self._last_time_collision_snd + dtime
         if self._last_time_collision_snd > 1 then self._last_time_collision_snd = 1 end

@@ -39,28 +39,28 @@ function automobiles_lib.physics(self)
 	-- buoyancy
 	local surface = nil
 	local surfnodename = nil
-	local spos = mobkit.get_stand_pos(self)
+	local spos = automobiles_lib.get_stand_pos(self)
 	spos.y = spos.y+0.01
 	-- get surface height
-	local snodepos = mobkit.get_node_pos(spos)
-	local surfnode = mobkit.nodeatpos(spos)
+	local snodepos = automobiles_lib.get_node_pos(spos)
+	local surfnode = automobiles_lib.nodeatpos(spos)
 	while surfnode and (surfnode.drawtype == 'liquid' or surfnode.drawtype == 'flowingliquid') do
 		surfnodename = surfnode.name
 		surface = snodepos.y +0.5
 		if surface > spos.y+self.height then break end
 		snodepos.y = snodepos.y+1
-		surfnode = mobkit.nodeatpos(snodepos)
+		surfnode = automobiles_lib.nodeatpos(snodepos)
 	end
 	self.isinliquid = surfnodename
 	if surface then				-- standing in liquid
 --		self.isinliquid = true
 		local submergence = min(surface-spos.y,self.height)/self.height
 --		local balance = self.buoyancy*self.height
-		local buoyacc = mobkit.gravity*(self.buoyancy-submergence)
-		mobkit.set_acceleration(self.object,
+		local buoyacc = (automobiles_lib.gravity*-1)*(self.buoyancy-submergence)
+		automobiles_lib.set_acceleration(self.object,
 			{x=-vel.x*self.water_drag,y=buoyacc-vel.y*abs(vel.y)*0.4,z=-vel.z*self.water_drag})
 	else
-	    self.object:set_acceleration({x=0,y=mobkit.gravity,z=0})
+	    self.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
 	end
 
 end

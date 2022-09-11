@@ -1,10 +1,9 @@
-Coupe
-
 This mod adds library for automobiles
 
 licence of code
-LGPL3
-except painter.lua, licenced as MIT
+MIT
+
+physics_lib.lua - MIT by TheTermos
 
 licence of the media:
 licence CC0
