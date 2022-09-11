@@ -284,8 +284,8 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                 --sets the engine running - but sets a delay also, cause keypress
                 if self._last_time_command > 0.8 then
                     self._last_time_command = 0
-                    minetest.sound_play({name = "automobiles_horn"},
-	                        {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})
+                    --[[minetest.sound_play({name = "automobiles_horn"},
+	                        {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})]]--
                 end
 	        end
             if ctrl.down then
