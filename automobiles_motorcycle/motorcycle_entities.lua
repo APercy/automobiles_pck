@@ -252,7 +252,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         local velocity = self.object:get_velocity()
 
         local longit_speed = automobiles_lib.dot(velocity,hull_direction)
-        local fuel_weight_factor = (5 - self._energy)/8000
+        local fuel_weight_factor = (5 - self._energy)/5000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
             (motorcycle.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
@@ -417,7 +417,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
             local zero_reference = vector.new()
             local acceleration = automobiles_lib.get_hipotenuse_value(accel, zero_reference)
             --minetest.chat_send_all(acceleration)
-            local consumed_power = acceleration/40000
+            local consumed_power = acceleration/100000
             self._energy = self._energy - consumed_power;
         end
         if self._energy <= 0 then

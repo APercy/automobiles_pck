@@ -94,7 +94,7 @@ function motorcycle.dettach_driver_stand(self, player)
         end
 
         --player:set_properties({visual_size = {x=1, y=1}})
-        if driver_mesh then
+        if self.driver_mesh then
             self.driver_mesh:set_properties({is_visible=false})
             self.driver_mesh:remove()
         end
