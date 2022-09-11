@@ -132,7 +132,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
-    _color = "#AAAAAA",
+    _color = "#444444",
     _steering_angle = 0,
     _engine_running = false,
     _last_checkpoint = "",
@@ -240,8 +240,6 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         --[[sound play control]]--
         self._last_time_collision_snd = self._last_time_collision_snd + dtime
         if self._last_time_collision_snd > 1 then self._last_time_collision_snd = 1 end
-        self._last_time_drift_snd = self._last_time_drift_snd + dtime
-        if self._last_time_drift_snd > 1 then self._last_time_drift_snd = 1 end
         --[[end sound control]]--
 
         local rotation = self.object:get_rotation()
@@ -254,7 +252,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         local velocity = self.object:get_velocity()
 
         local longit_speed = automobiles_lib.dot(velocity,hull_direction)
-        local fuel_weight_factor = (5 - self._energy)/5000
+        local fuel_weight_factor = (5 - self._energy)/8000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
             (motorcycle.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
@@ -354,21 +352,6 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                 --[[if self.damage > 100 then --if acumulated damage is greater than 100, adieu
                     automobiles_lib.destroy(self)
                 end]]--
-            end
-
-            local min_later_speed = 0.9
-            if (later_speed > min_later_speed or later_speed < -min_later_speed) and
-                    self._last_time_drift_snd > 0.6 then
-                self._last_time_drift_snd = 0
-                minetest.sound_play("drifting", {
-                    to_player = self.driver_name,
-                    pos = curr_pos,
-                    max_hear_distance = 5,
-                    gain = 1.0,
-                    fade = 0.0,
-                    pitch = 1.0,
-                    ephemeral = true,
-                })
             end
 
             --control
