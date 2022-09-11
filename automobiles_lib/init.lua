@@ -288,6 +288,7 @@ function automobiles_lib.swap_node(self, pos)
                 minetest.swap_node(target_pos, {name="air"})
             end
         end, target_pos)]]--
+
         return true
     end
     return false

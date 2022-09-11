@@ -313,7 +313,14 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                     self.lights:set_properties({textures={"automobiles_motorcycle_lights.png",}, glow=32})
                     self.rlights:set_properties({textures={"automobiles_motorcycle_rear_lights_full.png",}, glow=10})
                 end
-                automobiles_lib.put_light(self)
+
+                --turn the light on just when needed to avoid lag
+                local target_pos = self.object:get_pos()
+                target_pos.y = target_pos.y + 2
+                local light_now = minetest.get_node_light(target_pos)
+                if light_now < 12 then
+                    automobiles_lib.put_light(self)
+                end
             else
                 if is_breaking == false then
                     --desligado

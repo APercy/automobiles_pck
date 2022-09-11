@@ -1,7 +1,7 @@
---dofile(minetest.get_modpath("automobiles_motorcycle") .. DIR_DELIM .. "buggy_global_definitions.lua")
---dofile(minetest.get_modpath("automobiles_motorcycle") .. DIR_DELIM .. "buggy_hud.lua")
+--dofile(minetest.get_modpath("automobiles_motorcycle") .. DIR_DELIM .. "motorcycle_global_definitions.lua")
+--dofile(minetest.get_modpath("automobiles_motorcycle") .. DIR_DELIM .. "motorcycle_hud.lua")
 
--- destroy the buggy
+-- destroy the motorcycle
 function motorcycle.destroy(self, puncher)
     automobiles_lib.remove_light(self)
     if self.sound_handle then
@@ -37,7 +37,7 @@ function motorcycle.destroy(self, puncher)
 
     pos.y=pos.y+2
 
-    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_motorcycle:buggy')
+    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_motorcycle:motorcycle')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_motorcycle:wheel')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_motorcycle:wheel')
@@ -57,7 +57,7 @@ function motorcycle.engineSoundPlay(self)
     --sound
     if self.sound_handle then minetest.sound_stop(self.sound_handle) end
     if self.object then
-        self.sound_handle = minetest.sound_play({name = "buggy_engine"},
+        self.sound_handle = minetest.sound_play({name = "motorcycle_engine"},
             {object = self.object, gain = 8,
                 pitch = 1 + ((self._longit_speed/10)/2),
                 max_hear_distance = 10,
