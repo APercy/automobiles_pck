@@ -96,9 +96,9 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-0.2, -0.4, -0.2, 0.2, 1, 0.2},
+	    collisionbox = {-0.1, -0.4, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1, 1, -1, 1, -1, 1},
-        stepheight = 0.7,
+        stepheight = 0.8,
 	    visual = "mesh",
 	    mesh = "automobiles_motorcycle_body.b3d",
         --use_texture_alpha = true,
@@ -452,7 +452,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         self._last_ground_check = self._last_ground_check + dtime
         if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
-            automobiles_lib.ground_get_distances(self, 0.6, 2.3)
+            automobiles_lib.ground_get_distances(self, 0.8, 2.3)
         end
 		local newpitch = self._pitch --velocity.y * math.rad(6)
 
