@@ -35,6 +35,7 @@ function motorcycle.attach_driver_stand(self, player)
    
     -- attach the driver
     player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+    player:set_eye_offset({x = 0, y = 0, z = 1.5}, {x = 0, y = 3, z = -30})
     player_api.player_attached[name] = true
 
     -- makes it "invisible"
@@ -119,6 +120,7 @@ function motorcycle.attach_pax_stand(self, player)
 
         -- attach the driver
         player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+        player:set_eye_offset({x = 0, y = 3, z = 0}, {x = 0, y = 3, z = -30})
         player_api.player_attached[name] = true
 
         -- makes it "invisible"
