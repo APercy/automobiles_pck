@@ -117,9 +117,11 @@ end
 function automobiles_lib.show_vehicle_trunk_formspec(self, player, size)
     if size then
         local form = get_formspec_by_size(self, size)
-        minetest.show_formspec(player:get_player_name(), automobiles_lib.modname .. ":inventory",
-            form
-        )
+        if form then
+            minetest.show_formspec(player:get_player_name(), automobiles_lib.modname .. ":inventory",
+                form
+            )
+        end
     end
 end
 
