@@ -96,7 +96,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
-	    collisionbox = {-0.1, -0.43, -0.1, 0.1, 1, 0.1},
+	    collisionbox = {-0.1, -0.42, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1, 1, -1, 1, -1, 1},
         stepheight = 0.7,
 	    visual = "mesh",
