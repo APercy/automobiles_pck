@@ -405,7 +405,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)
 			newyaw = yaw + dtime*(1 - 1 / (math.abs(longit_speed) + 1)) *
-                self._steering_angle / 30 * turn_rate * automobiles_lib.sign(longit_speed)
+                self._steering_angle / 20 * turn_rate * automobiles_lib.sign(longit_speed)
 		end
 
         --[[
