@@ -115,10 +115,12 @@ end
 
 --show inventory form to user
 function automobiles_lib.show_vehicle_trunk_formspec(self, player, size)
-    local form = get_formspec_by_size(self, size)
-    minetest.show_formspec(player:get_player_name(), automobiles_lib.modname .. ":inventory",
-        form
-    )
+    if size then
+        local form = get_formspec_by_size(self, size)
+        minetest.show_formspec(player:get_player_name(), automobiles_lib.modname .. ":inventory",
+            form
+        )
+    end
 end
 
 function automobiles_lib.create_inventory(self, size, owner)
