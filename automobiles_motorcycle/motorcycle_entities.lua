@@ -462,6 +462,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
             if stop == true then
                 self.object:set_acceleration({x=0,y=0,z=0})
                 self.object:set_velocity({x=0,y=0,z=0})
+                if self._longit_speed > 0 then motorcycle.engineSoundPlay(self) end
             end
         end
 
@@ -476,7 +477,14 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         if turn_effect_speed > 10 then turn_effect_speed = 10 end
         local newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
 
-		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=newroll}) end
+        if is_attached == false then
+            newroll = math.rad(-12)
+            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=-90, y=0, z=0})
+        else
+            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=0, y=0, z=0})
+        end
+
+		self.object:set_rotation({x=newpitch,y=newyaw,z=newroll})
 
         --saves last velocity for collision detection (abrupt stop)
         self.lastvelocity = self.object:get_velocity()
@@ -579,7 +587,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                     motorcycle.attach_driver_stand(self, clicker)
                     -- sound
                     self.sound_handle = minetest.sound_play({name = "motorcycle_engine"},
-                            {object = self.object, gain = 4, pitch = 1, max_hear_distance = 10, loop = true,})
+                            {object = self.object, gain = 1, pitch = 0.5, max_hear_distance = 30, loop = true,})
                 end
             else
                 --minetest.chat_send_all("clicou")
