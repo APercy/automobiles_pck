@@ -21,6 +21,27 @@ function automobiles_lib.check_road_is_ok(obj, max_acc_factor)
     end
 end
 
+function automobiles_lib.set_yaw_by_mouse(self, dir, steering_limit)
+    local rotation = self.object:get_rotation()
+    local rot_y = math.deg(rotation.y)
+    
+    local total = math.abs(math.floor(rot_y/360))
+
+    if rot_y < 0 then rot_y = rot_y + (360*total) end
+    if rot_y > 360 then rot_y = rot_y - (360*total) end
+    if rot_y >= 270 and dir <= 90 then dir = dir + 360 end
+    if rot_y <= 90 and dir >= 270 then dir = dir - 360 end
+
+    local command = (rot_y - dir) * 2
+    if command < -90 then command = -90 
+    elseif command > 90 then command = 90 end
+    --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..(rot_y - dir))
+
+    --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..command)
+
+	return (-command * steering_limit)/90
+end
+
 function automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, max_acc_factor, max_speed, steering_limit, steering_speed)
     self._last_time_command = self._last_time_command + dtime
     if self._last_time_command > 1 then self._last_time_command = 1 end
@@ -103,22 +124,29 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
             end]]--
 		end
 
-		-- steering
-		if ctrl.right then
-			self._steering_angle = math.max(self._steering_angle-steering_speed*dtime,-steering_limit)
-		elseif ctrl.left then
-			self._steering_angle = math.min(self._steering_angle+steering_speed*dtime,steering_limit)
+		-- yaw
+        local yaw_cmd = 0
+        if self._yaw_by_mouse == true then
+		    local rot_y = math.deg(player:get_look_horizontal())
+            self._steering_angle = automobiles_lib.set_yaw_by_mouse(self, rot_y, steering_limit)
         else
-            --center steering
-            if longit_speed > 0 then
-                local factor = 1
-                if self._steering_angle > 0 then factor = -1 end
-                local correction = (steering_limit*(longit_speed/75)) * factor
-                local before_correction = self._steering_angle
-                self._steering_angle = self._steering_angle + correction
-                if math.sign(before_correction) ~= math.sign(self._steering_angle) then self._steering_angle = 0 end
-            end
-		end
+		    -- steering
+		    if ctrl.right then
+			    self._steering_angle = math.max(self._steering_angle-steering_speed*dtime,-steering_limit)
+		    elseif ctrl.left then
+			    self._steering_angle = math.min(self._steering_angle+steering_speed*dtime,steering_limit)
+            else
+                --center steering
+                if longit_speed > 0 then
+                    local factor = 1
+                    if self._steering_angle > 0 then factor = -1 end
+                    local correction = (steering_limit*(longit_speed/75)) * factor
+                    local before_correction = self._steering_angle
+                    self._steering_angle = self._steering_angle + correction
+                    if math.sign(before_correction) ~= math.sign(self._steering_angle) then self._steering_angle = 0 end
+                end
+		    end
+        end
 
         local angle_factor = self._steering_angle / 60
         if angle_factor < 0 then angle_factor = angle_factor * -1 end
