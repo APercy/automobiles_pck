@@ -153,6 +153,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
     _inv = nil,
     _inv_id = "",
     _change_color = automobiles_lib.paint,
+    _intensity = 2,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({

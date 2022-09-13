@@ -295,6 +295,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _inv = nil,
     _inv_id = "",
     _change_color = automobiles_lib.paint,
+    _intensity = 4,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({

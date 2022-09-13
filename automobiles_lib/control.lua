@@ -32,7 +32,9 @@ function automobiles_lib.set_yaw_by_mouse(self, dir, steering_limit)
     if rot_y >= 270 and dir <= 90 then dir = dir + 360 end
     if rot_y <= 90 and dir >= 270 then dir = dir - 360 end
 
-    local command = (rot_y - dir) * 2
+    local intensity = 2
+    if self._intensity then intensity = self._intensity end
+    local command = (rot_y - dir) * intensity
     if command < -90 then command = -90 
     elseif command > 90 then command = 90 end
     --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..(rot_y - dir))
