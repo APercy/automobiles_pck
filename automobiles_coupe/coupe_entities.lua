@@ -767,7 +767,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
                     automobiles_lib.attach_driver(self, clicker)
                     -- sound
                     self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
-                            {object = self.object, gain = 4, pitch = 1, max_hear_distance = 10, loop = true,})
+                            {object = self.object, gain = 4, pitch = 1, max_hear_distance = 30, loop = true,})
                 end
             else
                 --minetest.chat_send_all("clicou")
