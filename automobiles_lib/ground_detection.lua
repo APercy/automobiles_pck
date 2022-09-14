@@ -23,6 +23,9 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     if not self._last_front_detection then
         self._last_front_detection = rear_obstacle_level.y
     end
+    if not self._last_pitch then
+        self._last_pitch = 0
+    end
 
     local f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, hip)
     local f_y = pos.y
@@ -34,20 +37,33 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
     --lets try to get the pitch
     if front_obstacle_level.y ~= nil and rear_obstacle_level.y ~= nil then
+        local deltaX = axis_distance;
+        local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
+        --minetest.chat_send_all("deutaY "..deltaY)
+        local m = (deltaY/deltaX)
+        local new_pitch = math.atan(m) --math.atan2(deltaY, deltaX);
+        --local deg_angle = math.deg(new_pitch)
+        
+        --first test front wheels before
         if (front_obstacle_level.y-self._last_front_detection) <= self.initial_properties.stepheight then
+            pitch = new_pitch --math.atan2(deltaY, deltaX);
+            self._last_pitch = new_pitch
             self._last_front_detection = front_obstacle_level.y
-            local deltaX = axis_distance;
-            local deltaY = front_obstacle_level.y - rear_obstacle_level.y;
-            --minetest.chat_send_all("deutaY "..deltaY)
-            local m = (deltaY/deltaX)
-            pitch = math.atan(m) --math.atan2(deltaY, deltaX);
-            --minetest.chat_send_all("m: "..m.." pitch ".. math.deg(pitch))
         else
-            self._last_front_detection = rear_obstacle_level.y
-            --here we need to set the collision effect
-            self.object:set_acceleration({x=0,y=0,z=0})
-            self.object:set_velocity({x=0,y=0,z=0})
+            --until 20 deg, climb
+            if math.deg(new_pitch - self._last_pitch) <= 20 then
+                pitch = new_pitch
+                self._last_pitch = new_pitch
+                self._last_front_detection = front_obstacle_level.y
+            else
+                --no climb here
+                self._last_front_detection = rear_obstacle_level.y
+                --here we need to set the collision effect
+                self.object:set_acceleration({x=0,y=0,z=0})
+                self.object:set_velocity({x=0,y=0,z=0})
+            end
         end
+
     else
         pitch = math.rad(0)
     end
