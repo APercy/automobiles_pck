@@ -51,7 +51,7 @@ if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_motorcycle:motorcycle",
 		recipe = {
-			{"automobiles_motorcycle:wheel", "automobiles_lib:body", "automobiles_motorcycle:wheel"},
+			{"automobiles_motorcycle:wheel", "automobiles_motorcycle:body", "automobiles_motorcycle:wheel"},
 		}
 	})
 	minetest.register_craft({
