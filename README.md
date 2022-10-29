@@ -1,18 +1,23 @@
-# automobiles
+[![automobiles](https://user-images.githubusercontent.com/95320171/198845469-fe7bbe2d-19e9-42da-8343-9c32c1cdbd0b.png)](https://content.minetest.net/packages/apercy/automobiles_pck/)
 
-Modpack to add automobiles to minetest
+Modpack to add automobiles to Minetest. The main goal of this modpack is realistic driving over slopes and elevations.
+Fuel is needed to operate the vehicles, however a small amount of fuel is provided in each vehicle on creation.
 
-depends:
-biofuel,mobkit
+## Dependencies
+- [biofuel](https://content.minetest.net/packages/Lokrates/biofuel/)
+- player_api
 
-The main goal of this modpack is the detection of slopes and elevations by the vehycles, so the expected is for the vehicle to follow them.
-For the vehicle operation, fuel is needed, although it will always start with some.
-W: Forward
-S: Brake
-A: Left
-D: Right
-E: Horn
-Shift: Reverse
+## Vehicle Operation
+<kbd>W</kbd>: Forward
 
-It can be painted by punching dye on it. Or the painter.
-And fueled by punching biofuel
+<kbd>S</kbd>: Brake
+
+<kbd>A</kbd>: Left
+
+<kbd>D</kbd>: Right
+
+<kbd>E</kbd>: Horn
+
+<kbd>Shift</kbd>: Reverse
+
+Vehicles can be colored by punching them with either dye or the vehicle painter. To fuel a vehicle, punch it with biofuel.
