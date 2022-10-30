@@ -1,11 +1,10 @@
-Coupe
+## Coupe
 
-This mod adds a buggy automobile to minetest
+This mod adds a coupe automobile to Minetest.
 
+## Licenses
+- Code: see [LICENSE](/LICENSE)
+- Media: Model adapted from car assets v1 made by https://www.racoon-media.nl; licence CC0
 
-
-licence of code see the files
-
-licence of the media:
-Model adapted from car assets v1 made by www.racoon-media.nl
-licence CC0 as original model
+## Screenshot
+![buggy](/automobiles_coupe/screenshot.jpg)

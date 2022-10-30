@@ -1,7 +1,10 @@
-Buggy
+## Buggy
 
-This mod adds a buggy automobile to minetest
+This mod adds a buggy automobile to Minetest.
 
+## Licenses
+- Code: see [LICENSE](/LICENSE)
+- Media: see [license_media.txt](/license_media.txt)
 
-
-licence see the files
+## Screenshot
+![buggy](/automobiles_buggy/screenshot.jpg)

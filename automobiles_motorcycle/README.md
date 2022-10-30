@@ -1,5 +1,7 @@
-Motorcycle
+## Motorcycle
 
-This mod adds a motorcycle to minetest
+This mod adds a motorcycle to Minetest.
 
-licence see the files
+## Licenses
+- Code: see [LICENSE](/LICENSE)
+- Media: see [license_media.txt](/license_media.txt)
