@@ -21,6 +21,7 @@ Copyright (C) 2018 Hume2
  THE SOFTWARE.
 ]]--
 
+local S = minetest.get_translator(minetest.get_current_modname())
 
 local function is_hex(color)
     if not color or color:len() ~= 7 then return end
