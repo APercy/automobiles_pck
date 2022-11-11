@@ -1,16 +1,18 @@
+local S = minetest.get_translator(minetest.get_current_modname())
+
 --
 -- items
 --
 
 -- body
 minetest.register_craftitem("automobiles_coupe:coupe_body",{
-	description = "Coupe body",
+	description = S("Coupe Body"),
 	inventory_image = "automobiles_coupe_body.png",
 })
 
 -- coupe
 minetest.register_craftitem("automobiles_coupe:coupe", {
-	description = "Coupe",
+	description = S("Coupe"),
 	inventory_image = "automobiles_coupe.png",
     liquids_pointable = false,
 
@@ -18,7 +20,7 @@ minetest.register_craftitem("automobiles_coupe:coupe", {
 		if pointed_thing.type ~= "node" then
 			return
 		end
-        
+
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
 		local car = minetest.add_entity(pointed_pos, "automobiles_coupe:coupe")
@@ -60,5 +62,3 @@ if minetest.get_modpath("default") then
 		}
 	})
 end
-
-

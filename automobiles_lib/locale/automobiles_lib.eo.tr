@@ -1,0 +1,8 @@
+# textdomain: automobiles_lib
+
+### init.lua ###
+Car Engine=Aŭta Motoro
+Car Wheel=Aŭta Rado
+
+### painter.lua ###
+Automobiles Painter=Aŭta Pentrilo

@@ -1,0 +1,8 @@
+# textdomain: automobiles_lib
+
+### init.lua ###
+Car Engine=
+Car Wheel=
+
+### painter.lua ###
+Automobiles Painter=

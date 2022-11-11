@@ -1,21 +1,23 @@
+local S = minetest.get_translator(minetest.get_current_modname())
+
 --
 -- items
 --
 
 -- body
 minetest.register_craftitem("automobiles_buggy:buggy_body",{
-	description = "Buggy body",
+	description = S("Buggy Body"),
 	inventory_image = "automobiles_buggy_body.png",
 })
 -- wheel
 minetest.register_craftitem("automobiles_buggy:wheel",{
-	description = "Buggy wheel",
+	description = S("Buggy Wheel"),
 	inventory_image = "automobiles_buggy_wheel_icon.png",
 })
 
 -- buggy
 minetest.register_craftitem("automobiles_buggy:buggy", {
-	description = "Buggy",
+	description = S("Buggy"),
 	inventory_image = "automobiles_buggy.png",
     liquids_pointable = false,
 
@@ -23,7 +25,7 @@ minetest.register_craftitem("automobiles_buggy:buggy", {
 		if pointed_thing.type ~= "node" then
 			return
 		end
-        
+
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
 		local car = minetest.add_entity(pointed_pos, "automobiles_buggy:buggy")
@@ -72,5 +74,3 @@ if minetest.get_modpath("default") then
 		}
 	})
 end
-
-
