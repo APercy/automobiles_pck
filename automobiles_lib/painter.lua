@@ -50,37 +50,37 @@ local function painter_form(player, rgb)
         "formspec_version[3]" .. -- Minetest 5.2+
         "size[5.6,5.2;true]" ..
         "position[0.5,0.45]" ..
-        
+
         -- Color preview
         "image[0.2,0.2;2,2;automobiles_painting.png^[colorize:" .. color .. ":255]" ..
         "label[0.3,1.2;Preview]" ..
-        
+
         -- Hex field
         "field_close_on_enter[hex;false]" ..
         "field[2.4,0.2;3,0.8;hex;;" .. color .. "]" ..
         "button[2.4,1;3,0.8;set_hex;Set Hex]" ..
-        
+
         -- RGB sliders
         "container[0,2.4]" ..
         "scrollbaroptions[min=0;max=255;smallstep=20]" ..
-        
+
         "box[0.4,0;4.77,0.38;red]" ..
         "label[0.2,0.2;-]" ..
         "scrollbar[0.4,0;4.8,0.4;horizontal;r;" .. rgb.r .."]" ..
         "label[5.2,0.2;+]" ..
-        
+
         "box[0.4,0.6;4.77,0.38;green]" ..
         "label[0.2,0.8;-]" ..
         "scrollbar[0.4,0.6;4.8,0.4;horizontal;g;" .. rgb.g .."]" ..
         "label[5.2,0.8;+]" ..
-        
+
         "box[0.4,1.2;4.77,0.38;blue]" ..
         "label[0.2,1.4;-]" ..
         "scrollbar[0.4,1.2;4.8,0.4;horizontal;b;" .. rgb.b .. "]" ..
         "label[5.2,1.4;+]" ..
-        
+
         "container_end[]" ..
-        
+
         -- Bottom buttons
         "button_exit[0.2,4.2;2.8,0.8;set_color;Set Color]" ..
         "button_exit[3.2,4.2;2.2,0.8;quit;Cancel]"
@@ -96,7 +96,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             formspec_timers[player]:cancel()
             formspec_timers[player] = nil
         end
-        
+
         local function parse_scrollbar_field(value)
             value = value or ""
             local num = math.floor(tonumber((value:gsub(".*:", ""))) or 0)
@@ -109,7 +109,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             g = parse_scrollbar_field(fields.g),
             b = parse_scrollbar_field(fields.b),
         }
-        
+
         if fields.set_hex or fields.key_enter then
             if is_hex(fields.hex) then
                 painter_form(player, hex_to_rgb(fields.hex))
@@ -134,7 +134,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                 formspec_timers[player] = nil
             end, itemstack, player:get_player_name())
         end
-        
+
         if fields.quit then
             automobiles_being_painted[player] = nil
         end
@@ -145,7 +145,7 @@ end)
 
 -- Make the actual thingy
 minetest.register_tool("automobiles_lib:painter", {
-    description = "Automobiles Painter",
+    description = S("Automobiles Painter"),
     inventory_image = "automobiles_painter.png",
     wield_scale = {x = 2, y = 2, z = 1},
     on_use = function(itemstack, user, pointed_thing)

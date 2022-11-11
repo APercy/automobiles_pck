@@ -1,0 +1,5 @@
+# textdomain: automobiles_coupe
+
+### coupe_crafts.lua ###
+Coupe Body=
+Coupe=

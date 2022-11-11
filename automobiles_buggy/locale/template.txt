@@ -1,0 +1,6 @@
+# textdomain: automobiles_buggy
+
+### buggy_crafts.lua ###
+Buggy Body=
+Buggy Wheel=
+Buggy=

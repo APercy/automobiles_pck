@@ -204,8 +204,8 @@ function automobiles_lib.dettach_pax(self, player)
     if self._passenger == name then
         self._passenger = nil
     else
-        --[[for i = 10,1,-1 
-        do 
+        --[[for i = 10,1,-1
+        do
             if self._passengers[i] == name then
                 self._passengers[i] = nil
                 break
@@ -276,7 +276,7 @@ function automobiles_lib.swap_node(self, pos)
         count = count + 1
         target_pos.y = target_pos.y + 1
     end
-    
+
     if have_air then
         minetest.set_node(target_pos, {name='automobiles_lib:light'})
         automobiles_lib.remove_light(self)
@@ -414,13 +414,13 @@ dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "inventory_manage
 
 -- engine
 minetest.register_craftitem("automobiles_lib:engine",{
-	description = "Car engine",
+	description = S("Car Engine"),
 	inventory_image = "automobiles_engine.png",
 })
 
 -- engine
 minetest.register_craftitem("automobiles_lib:wheel",{
-	description = "Car wheel",
+	description = S("Car Wheel"),
 	inventory_image = "automobiles_wheel_icon.png",
 })
 
@@ -452,15 +452,15 @@ initial_properties = {
     backface_culling = false,
 	textures = {"automobiles_black.png", "automobiles_metal.png"},
 	},
-	
+
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
     end,
-	    
+
     get_staticdata=function(self)
       self.sdata.remove=true
       return minetest.serialize(self.sdata)
     end,
-	
+
 })
