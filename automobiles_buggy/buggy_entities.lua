@@ -451,6 +451,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
             later_speed*buggy.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
+        local stop = nil
 
         if self._show_rag == true then
             self.rag:set_properties({is_visible=true})

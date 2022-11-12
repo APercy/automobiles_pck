@@ -459,6 +459,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
             later_speed*coupe.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
+        local stop = nil
 
         local player = nil
         local is_attached = false

@@ -432,6 +432,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
             later_speed*roadster.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
+        local stop = nil
 
         if self._show_rag == true then
             self.object:set_bone_position("windshield", {x=0, y=15.8317, z=15.0394}, {x=0, y=0, z=0})
