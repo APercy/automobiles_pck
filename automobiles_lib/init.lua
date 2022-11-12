@@ -122,7 +122,7 @@ function automobiles_lib.dettach_driver(self, player)
     end
 
     -- detach the player
-    if player then
+    if player.set_detach then
         --automobiles_lib.remove_hud(player)
 
         --player:set_properties({physical=true})
