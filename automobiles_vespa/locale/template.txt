@@ -1,0 +1,6 @@
+# textdomain: automobiles_vespa
+
+### motorcycle_crafts.lua ###
+Vespa Body=
+Vespa Wheel=
+Vespa=

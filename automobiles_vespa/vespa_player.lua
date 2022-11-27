@@ -1,4 +1,4 @@
-minetest.register_entity('automobiles_motorcycle:player_mesh',{
+minetest.register_entity('automobiles_vespa:player_mesh',{
 initial_properties = {
 	    physical = false,
 	    collide_with_objects=false,
@@ -22,7 +22,7 @@ initial_properties = {
 })
 
 -- attach player
-function motorcycle.attach_driver_stand(self, player)
+function vespa.attach_driver_stand(self, player)
     local name = player:get_player_name()
     self.driver_name = name
     self.driver_properties = player:get_properties()
@@ -44,15 +44,15 @@ function motorcycle.attach_driver_stand(self, player)
 
     --create the dummy mesh
     local pos = player:get_pos()
-    local driver_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
+    local driver_mesh=minetest.add_entity(pos,'automobiles_vespa:player_mesh')
     driver_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
     self.driver_mesh = driver_mesh
     self.driver_mesh:set_properties({is_visible=false})
 
     --position the dummy arms and legs
     self.driver_mesh:set_properties(self.driver_properties)
-    self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=12, y=0, z=10})
-    self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=12, y=0, z=-10})
+    self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=1, z=0}, {x=12, y=0, z=7})
+    self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=1, z=0}, {x=12, y=0, z=-7})
 	self.driver_mesh:set_properties({
         is_visible=true,
 	})
@@ -63,7 +63,7 @@ function motorcycle.attach_driver_stand(self, player)
     player:set_bone_position("Arm_Right", {x=-3.0, y=5, z=-1}, {x=180+70, y=0, z=0})]]--
 end
 
-function motorcycle.dettach_driver_stand(self, player)
+function vespa.dettach_driver_stand(self, player)
     local name = self.driver_name
 
     --self._engine_running = false
@@ -106,7 +106,7 @@ function motorcycle.dettach_driver_stand(self, player)
 end
 
 -- attach passenger
-function motorcycle.attach_pax_stand(self, player)
+function vespa.attach_pax_stand(self, player)
     local onside = onside or false
     local name = player:get_player_name()
 
@@ -130,15 +130,19 @@ function motorcycle.attach_pax_stand(self, player)
 
         --create the dummy mesh
         local pos = player:get_pos()
-        local pax_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
+        local pax_mesh=minetest.add_entity(pos,'automobiles_vespa:player_mesh')
         pax_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
         self.pax_mesh = pax_mesh
         self.pax_mesh:set_properties({is_visible=false})
 
         --position the dummy arms and legs
         self.pax_mesh:set_properties(self.pax_properties)
-        self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=12, y=0, z=10})
-        self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=12, y=0, z=-10})
+        self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=12, y=0, z=15})
+        self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=12, y=0, z=-15})
+
+        self.pax_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=0}, {x=45, y=0, z=0})
+        self.pax_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=0}, {x=45, y=0, z=0})
+
 	    self.pax_mesh:set_properties({
             is_visible=true,
 	    })
@@ -146,7 +150,7 @@ function motorcycle.attach_pax_stand(self, player)
 
 end
 
-function motorcycle.dettach_pax_stand(self, player)
+function vespa.dettach_pax_stand(self, player)
     if not player then return end
     local name = player:get_player_name() --self._passenger
 
