@@ -85,7 +85,9 @@ function motorcycle.dettach_driver_stand(self, player)
         --automobiles_lib.remove_hud(player)
 
         player:set_detach()
-        player_api.player_attached[name] = nil
+        if player_api.player_attached[name] then
+            player_api.player_attached[name] = nil
+        end
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
         player_api.set_animation(player, "stand")
 
