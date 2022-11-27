@@ -59,17 +59,17 @@ if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_vespa:body",
 		recipe = {
-            {"default:glass" ,"","default:steel_ingot"},
-			{"default:steel_ingot","","default:steel_ingot"},
-			{"default:steel_ingot","automobiles_lib:engine", "default:steel_ingot"},
+            {"default:tin_ingot","",""},
+			{"default:tin_ingot","","default:tin_ingot"},
+			{"default:tin_ingot","automobiles_lib:engine", "default:tin_ingot"},
 		}
 	})
 	minetest.register_craft({
 		output = "automobiles_vespa:wheel",
 		recipe = {
-			{"default:steel_ingot", "default:tin_ingot", "default:steel_ingot"},
-			{"default:steel_ingot","default:steelblock",  "default:steel_ingot"},
-            {"default:steel_ingot", "default:tin_ingot", "default:steel_ingot"},
+			{"default:tin_ingot", "", "default:tin_ingot"},
+			{"","default:steelblock",  ""},
+            {"default:tin_ingot", "", "default:tin_ingot"},
 		}
 	})
 end
