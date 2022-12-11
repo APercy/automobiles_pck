@@ -2,6 +2,65 @@
 -- entity
 --
 
+local old_entities = {"automobiles_coupe:steering"}
+for _,entity_name in ipairs(old_entities) do
+    minetest.register_entity(":"..entity_name, {
+        on_activate = function(self, staticdata)
+            self.object:remove()
+        end,
+    })
+end
+
+minetest.register_entity('automobiles_coupe:wheel',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_coupe_wheel.b3d",
+    backface_culling = false,
+	textures = {"automobiles_black.png", "automobiles_metal.png", "automobiles_coupe_wheel.png"},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+
+})
+
+minetest.register_entity('automobiles_coupe:normal_kit',{
+initial_properties = {
+	physical = true,
+	collide_with_objects=true,
+    collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_coupe_normal_kit.b3d",
+    textures = {"automobiles_black.png","automobiles_coupe_glasses.png"},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+
+    --[[on_step = function(self, dtime, moveresult)
+        minetest.chat_send_all(dump(moveresult))
+    end,]]--
+	
+})
+
 minetest.register_entity('automobiles_coupe:front_suspension',{
 initial_properties = {
 	physical = true,
@@ -59,7 +118,7 @@ initial_properties = {
     glow = 0,
 	visual = "mesh",
 	mesh = "automobiles_coupe_f_lights.b3d",
-    textures = {"automobiles_grey.png",},
+    textures = {"automobiles_grey.png", "automobiles_black.png"},
 	},
 
     on_activate = function(self,std)
@@ -82,7 +141,7 @@ initial_properties = {
     glow = 0,
 	visual = "mesh",
 	mesh = "automobiles_coupe_rear_pos_lights.b3d",
-    textures = {"automobiles_rear_lights_off.png",},
+    textures = {"automobiles_rear_lights_off.png"},
 	},
 
     on_activate = function(self,std)
@@ -188,28 +247,6 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_coupe:steering',{
-initial_properties = {
-	physical = false,
-	collide_with_objects=false,
-	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_coupe_drive_wheel.b3d",
-    textures = {"automobiles_black.png", "automobiles_black.png", "automobiles_black.png"},
-	},
-	
-    on_activate = function(self,std)
-	    self.sdata = minetest.deserialize(std) or {}
-	    if self.sdata.remove then self.object:remove() end
-    end,
-	    
-    get_staticdata=function(self)
-      self.sdata.remove=true
-      return minetest.serialize(self.sdata)
-    end,
-	
-})
-
 minetest.register_entity('automobiles_coupe:pointer',{
 initial_properties = {
 	physical = false,
@@ -244,16 +281,26 @@ minetest.register_entity("automobiles_coupe:coupe", {
         --use_texture_alpha = true,
         --backface_culling = false,
         textures = {
-            "automobiles_black.png", --bancos
-            "automobiles_painting.png", --carroceria
+            "automobiles_dark_grey.png", --bancos
+            "automobiles_painting.png", --pintura portas
+            "automobiles_black.png", --retrovisores
+            "automobiles_dark_grey.png", --forro da porta
+            "automobiles_coupe_glasses.png", --vidros das portas
+            "automobiles_metal.png", --espelhos
+            "automobiles_black.png", --volante
+            "automobiles_painting2.png", --face
+            "automobiles_black.png", --moldura parabrisa
+            "automobiles_coupe_glasses.png", --parabrisa
+            "automobiles_black.png", --grade_motor
+            "automobiles_dark_grey.png", --revestimento interno
+            "automobiles_coupe_fuel.png", --combustivel
+            "automobiles_painting.png", --pintura
+            "automobiles_black.png", --frisos
             "automobiles_black.png", --paralamas
-            "automobiles_black.png", --saia
-            "automobiles_black.png", --banco
-            "automobiles_coupe_glasses.png", --vidros
-            "automobiles_black.png", --aletas vidro traseiro
-            "automobiles_grey.png", --interior
-            "automobiles_black.png", --panel
-            "automobiles_coupe_fuel.png",
+            "automobiles_black.png", --assoalho
+            "automobiles_painting2.png", --traseira
+            "automobiles_black.png", --traseira placa
+            "automobiles_black.png", --ventilação vidro traseiro
             },
     },
     textures = {},
@@ -341,16 +388,16 @@ minetest.register_entity("automobiles_coupe:coupe", {
         local pos = self.object:get_pos()
 
         local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_coupe:front_suspension')
-	    front_suspension:set_attach(self.object,'',{x=0,y=1.5,z=24.5},{x=0,y=0,z=0})
+	    front_suspension:set_attach(self.object,'',{x=0,y=1.5,z=27.7057},{x=0,y=0,z=0})
 	    self.front_suspension = front_suspension
 
-	    local lf_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    local lf_wheel=minetest.add_entity(pos,'automobiles_coupe:wheel')
 	    lf_wheel:set_attach(self.front_suspension,'',{x=-coupe.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         lf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.lf_wheel = lf_wheel
 
-	    local rf_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    local rf_wheel=minetest.add_entity(pos,'automobiles_coupe:wheel')
 	    rf_wheel:set_attach(self.front_suspension,'',{x=coupe.front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
 		-- set the animation once and later only change the speed
         rf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
@@ -360,25 +407,19 @@ minetest.register_entity("automobiles_coupe:coupe", {
 	    rear_suspension:set_attach(self.object,'',{x=0,y=1.5,z=0},{x=0,y=0,z=0})
 	    self.rear_suspension = rear_suspension
 
-	    local lr_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    local lr_wheel=minetest.add_entity(pos,'automobiles_coupe:wheel')
 	    lr_wheel:set_attach(self.rear_suspension,'',{x=-coupe.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
 		-- set the animation once and later only change the speed
         lr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.lr_wheel = lr_wheel
 
-	    local rr_wheel=minetest.add_entity(pos,'automobiles_lib:wheel')
+	    local rr_wheel=minetest.add_entity(pos,'automobiles_coupe:wheel')
 	    rr_wheel:set_attach(self.rear_suspension,'',{x=coupe.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
 		-- set the animation once and later only change the speed
         rr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.rr_wheel = rr_wheel
 
-	    local steering_axis=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
-        steering_axis:set_attach(self.object,'',{x=-4.26,y=6.01,z=14.18},{x=15,y=0,z=0})
-	    self.steering_axis = steering_axis
-
-	    local steering=minetest.add_entity(self.steering_axis:get_pos(),'automobiles_coupe:steering')
-        steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.steering = steering
+        self.object:set_bone_position("drive_adjust", {x=-4.26, y=6.31, z=15.69}, {x=15, y=0, z=0}) 
 
 	    local driver_seat=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
         driver_seat:set_attach(self.object,'',{x=-4.25,y=0.48,z=9.5},{x=0,y=0,z=0})
@@ -396,6 +437,11 @@ minetest.register_entity("automobiles_coupe:coupe", {
 	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.lights = lights
         self.lights:set_properties({is_visible=true})
+
+        local normal_kit = minetest.add_entity(pos,'automobiles_coupe:normal_kit')
+	    normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	    self.normal_kit = normal_kit
+        self.normal_kit:set_properties({is_visible=true})
 
         local r_lights = minetest.add_entity(pos,'automobiles_coupe:r_lights')
 	    r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
@@ -503,14 +549,14 @@ minetest.register_entity("automobiles_coupe:coupe", {
             self._last_light_move = 0
             if self._show_lights == true then
                 --self.lights:set_properties({is_visible=true})
-                self.lights:set_properties({textures={"automobiles_coupe_lights.png"}, glow=15})
+                self.lights:set_properties({textures={"automobiles_coupe_lights.png", "automobiles_black.png"}, glow=15})
                 if is_breaking == false then
                     self.r_lights:set_properties({textures={"automobiles_rear_lights.png"}, glow=10})
                 end
                 automobiles_lib.put_light(self)
             else
                 --self.lights:set_properties({is_visible=false})
-                self.lights:set_properties({textures={"automobiles_grey.png"}, glow=0})
+                self.lights:set_properties({textures={"automobiles_grey.png", "automobiles_black.png"}, glow=0})
                 if is_breaking == false then
                     self.r_lights:set_properties({textures={"automobiles_rear_lights_off.png"}, glow=0})
                 end
@@ -578,7 +624,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
         self.rr_wheel:set_animation_frame_speed(-longit_speed * (12 + angle_factor))
 
         --whell turn
-        self.steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=self._steering_angle*2})
+        self.object:set_bone_position("drive_wheel", {x=-0, y=0, z=0}, {x=0, y=0, z=-self._steering_angle*2}) 
         self.lf_wheel:set_attach(self.front_suspension,'',{x=-coupe.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
         self.rf_wheel:set_attach(self.front_suspension,'',{x=coupe.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
 
@@ -593,10 +639,13 @@ minetest.register_entity("automobiles_coupe:coupe", {
         if math.abs(self._steering_angle) > 15 and self._turn_light_timer >= 1 then
             self._turn_light_timer = 0
             --set turn light
+            --minetest.chat_send_all(self._steering_angle)
             if self._steering_angle < 0 then
+                --minetest.chat_send_all("direita")
                 self.turn_r_light:set_properties({textures={"automobiles_turn_on.png"}, glow=20})
             end
             if self._steering_angle > 0 then
+                --minetest.chat_send_all("esquerda")
                 self.turn_l_light:set_properties({textures={"automobiles_turn_on.png"}, glow=20})
             end
         end

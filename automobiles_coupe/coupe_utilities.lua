@@ -31,14 +31,13 @@ function coupe.destroy(self, puncher)
     if self.rear_suspension then self.rear_suspension:remove() end
     if self.lr_wheel then self.lr_wheel:remove() end
     if self.rr_wheel then self.rr_wheel:remove() end
-    if self.steering then self.steering:remove() end
-    if self.steering_axis then self.steering_axis:remove() end
     if self.driver_seat then self.driver_seat:remove() end
     if self.passenger_seat then self.passenger_seat:remove() end
     if self.fuel_gauge then self.fuel_gauge:remove() end
     if self.lights then self.lights:remove() end
     if self.r_lights then self.r_lights:remove() end
     if self.reverse_lights then self.reverse_lights:remove() end
+    if self.normal_kit then self.normal_kit:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
 

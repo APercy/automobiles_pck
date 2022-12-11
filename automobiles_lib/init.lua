@@ -400,6 +400,10 @@ function automobiles_lib.paint(self, colstr)
             if indx then
                 l_textures[_] = "automobiles_painting.png^[multiply:".. colstr
             end
+            indx = texture:find('automobiles_painting2.png')
+            if indx then
+                l_textures[_] = "automobiles_painting2.png^[multiply:".. colstr
+            end
         end
 	    self.object:set_properties({textures=l_textures})
     end

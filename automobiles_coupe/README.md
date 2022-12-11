@@ -7,4 +7,4 @@ This mod adds a coupe automobile to Minetest.
 - Media: Model adapted from car assets v1 made by https://www.racoon-media.nl; licence CC0
 
 ## Screenshot
-![buggy](/automobiles_coupe/screenshot.jpg)
+![coupe](/automobiles_coupe/screenshot.jpg)
