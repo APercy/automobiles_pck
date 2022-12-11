@@ -315,7 +315,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
-    _color = "#6d6d6d",
+    _color = "#9f9f9f",
     _steering_angle = 0,
     _engine_running = false,
     _last_checkpoint = "",
