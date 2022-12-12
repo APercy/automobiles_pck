@@ -151,15 +151,24 @@ function automobiles_lib.attach_pax(self, player, onside)
             end
             player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
             player_api.player_attached[name] = true
-            -- make the driver sit
+            -- make the pax sit
+
             minetest.after(0.2, function()
                 player = minetest.get_player_by_name(name)
                 if player then
-                    --player:set_properties({physical=false})
-	                player_api.set_animation(player, "sit")
-                    --apply_physics_override(player, {speed=0,gravity=0,jump=0})
+                    local speed = 30.01
+                    local mesh = player:get_properties().mesh
+                    if mesh then
+                        local character = player_api.registered_models[mesh]
+                        if character and character.animation_speed then
+                            speed = character.animation_speed + 0.01
+                        end
+                    end
+                    player_api.set_animation(player, "sit", speed)
                 end
             end)
+
+
         end
     else
         --randomize the seat
