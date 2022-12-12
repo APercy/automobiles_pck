@@ -419,14 +419,14 @@ minetest.register_entity("automobiles_coupe:coupe", {
         rr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
 	    self.rr_wheel = rr_wheel
 
-        self.object:set_bone_position("drive_adjust", {x=-4.26, y=6.31, z=15.69}, {x=15, y=0, z=0}) 
+        self.object:set_bone_position("drive_adjust", {x=-4.66, y=6.31, z=15.69}, {x=15, y=0, z=0}) 
 
 	    local driver_seat=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
-        driver_seat:set_attach(self.object,'',{x=-4.25,y=0.48,z=9.5},{x=0,y=0,z=0})
+        driver_seat:set_attach(self.object,'',{x=-4.65,y=0.48,z=9.5},{x=0,y=0,z=0})
 	    self.driver_seat = driver_seat
 
 	    local passenger_seat=minetest.add_entity(pos,'automobiles_coupe:pivot_mesh')
-        passenger_seat:set_attach(self.object,'',{x=4.25,y=0.48,z=9.5},{x=0,y=0,z=0})
+        passenger_seat:set_attach(self.object,'',{x=4.65,y=0.48,z=9.5},{x=0,y=0,z=0})
 	    self.passenger_seat = passenger_seat
 
         local fuel_gauge=minetest.add_entity(pos,'automobiles_coupe:pointer')

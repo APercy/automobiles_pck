@@ -10,7 +10,7 @@ coupe.max_acc_factor = 8
 coupe.max_fuel = 10
 coupe.trunk_slots = 8
 
-COUPE_GAUGE_FUEL_POSITION =  {x=-4.26,y=6.2,z=17.9}
+COUPE_GAUGE_FUEL_POSITION =  {x=-4.66,y=6.2,z=17.9}
 
 coupe.front_wheel_xpos = 9.5
 coupe.rear_wheel_xpos = 9.5
