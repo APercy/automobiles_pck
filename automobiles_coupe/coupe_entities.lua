@@ -61,6 +61,68 @@ initial_properties = {
 	
 })
 
+minetest.register_entity('automobiles_coupe:time_machine_kit',{
+initial_properties = {
+	physical = true,
+	collide_with_objects=true,
+    collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_coupe_time_machine_accessories.b3d",
+    textures = {
+        "automobiles_metal.png", --ok
+        "automobiles_black.png", --ok
+        "automobiles_dark_grey.png", --exausts
+        "automobiles_black.png", --exausts
+        "automobiles_metal.png", --energy base collector
+        "automobiles_painting.png^[multiply:#0063b0", --capacitors
+        "automobiles_black.png", --arc
+        "automobiles_painting.png^[multiply:#07B6BC", --capacitors
+        "automobiles_black.png", --base mr fusion
+        "automobiles_painting.png", --mr fusion
+        "automobiles_metal.png", --ok
+        "automobiles_painting.png", --ok
+        "automobiles_black.png", --ok
+        "automobiles_metal.png", --lateral tubes
+        "automobiles_black.png", --conductors
+        "automobiles_black.png", --ok
+        "automobiles_coupe_brass.png", --ok
+        "automobiles_metal.png", --time panel
+        "automobiles_coupe_time.png", --time panel
+        "automobiles_metal.png", --base circuit switch
+        "automobiles_red.png", --red button
+        "automobiles_dark_grey.png", --ok
+        "automobiles_coupe_brass.png", --ok
+        "automobiles_black.png", --electric switch
+        "automobiles_metal.png", -- flux capacitor
+        "automobiles_coupe_flux.png", --flux capacitor
+        "automobiles_black.png", --flux capacitor
+        "automobiles_dark_grey.png", --base
+        "automobiles_dark_grey.png", --roof panel
+        "automobiles_coupe_roof_1.png", --root panel
+        "automobiles_coupe_roof_2.png", --roof panel
+        "automobiles_metal.png", --f bump
+        "automobiles_dark_grey.png", --f bump
+        "automobiles_metal.png"},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+
+    --[[on_step = function(self, dtime, moveresult)
+        minetest.chat_send_all(dump(moveresult))
+    end,]]--
+	
+})
+
+
 minetest.register_entity('automobiles_coupe:front_suspension',{
 initial_properties = {
 	physical = true,
@@ -269,6 +331,24 @@ initial_properties = {
     end,
 })
 
+local function set_kit(self)
+    local normal_kit = nil
+    if self.normal_kit then self.normal_kit:remove() end
+    local pos = self.object:get_pos()
+    if self._coupe_type == 0 or self._coupe_type == nil then
+        normal_kit = minetest.add_entity(pos,'automobiles_coupe:normal_kit')
+        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+        self.normal_kit = normal_kit
+        self.normal_kit:set_properties({is_visible=true})
+    elseif self._coupe_type == 1 then
+        --time machine
+        normal_kit = minetest.add_entity(pos,'automobiles_coupe:time_machine_kit')
+        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+        self.normal_kit = normal_kit
+        self.normal_kit:set_properties({is_visible=true})
+    end
+end
+
 minetest.register_entity("automobiles_coupe:coupe", {
 	initial_properties = {
 	    physical = true,
@@ -339,6 +419,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
     _inv_id = "",
     _change_color = automobiles_lib.paint,
     _intensity = 4,
+    _coupe_type = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -355,6 +436,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
             stored_pitch = self._pitch,
             stored_light_old_pos = self._light_old_pos,
             stored_inv_id = self._inv_id,
+            stored_coupe_type = self._coupe_type,
         })
     end,
 
@@ -379,6 +461,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
             self._pitch = data.stored_pitch
             self._light_old_pos = data.stored_light_old_pos
             self._inv_id = data.stored_inv_id
+            self._coupe_type = data.stored_coupe_type
             automobiles_lib.setText(self, "Coupe")
         end
 
@@ -438,10 +521,8 @@ minetest.register_entity("automobiles_coupe:coupe", {
 	    self.lights = lights
         self.lights:set_properties({is_visible=true})
 
-        local normal_kit = minetest.add_entity(pos,'automobiles_coupe:normal_kit')
-	    normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.normal_kit = normal_kit
-        self.normal_kit:set_properties({is_visible=true})
+        --normal or time machine?
+        set_kit(self)
 
         local r_lights = minetest.add_entity(pos,'automobiles_coupe:r_lights')
 	    r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
@@ -519,6 +600,14 @@ minetest.register_entity("automobiles_coupe:coupe", {
                         if player_attach == self.driver_seat then is_attached = true end
                     end
                 end
+            end
+        end
+
+        --to fix the load on first time
+        if self._coupe_type == 1 then
+            local ent_propertioes = self.normal_kit:get_properties()
+            if ent_propertioes.mesh ~= "automobiles_coupe_time_machine_accessories.b3d" then
+                set_kit(self)
             end
         end
 
