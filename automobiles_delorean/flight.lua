@@ -31,6 +31,14 @@ function delorean.gravity_auto_correction(self, dtime)
     else
         self._car_gravity = new_car_gravity
     end
+
+    --now desacelerate
+    if self._car_gravity == 0 then
+        local curr_vel = self.object:get_velocity()
+        curr_vel.y = 0
+        self.object:set_velocity(curr_vel)
+    end
+    
     --minetest.chat_send_player(self.driver_name, "depois: " .. self._car_gravity)
 end
 

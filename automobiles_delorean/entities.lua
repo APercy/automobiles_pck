@@ -827,6 +827,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             local turn_effect_speed = longit_speed
             if turn_effect_speed > 10 then turn_effect_speed = 10 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
+            if math.abs(self._steering_angle) < 5 then newroll = 0 end
         end
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=newroll}) end
