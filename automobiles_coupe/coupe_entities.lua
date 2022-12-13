@@ -800,7 +800,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
         self._last_ground_check = self._last_ground_check + dtime
         if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
-            automobiles_lib.ground_get_distances(self, 0.372, 2.3)
+            automobiles_lib.ground_get_distances(self, 0.372, 2.6)
         end
 		local newpitch = self._pitch --velocity.y * math.rad(6)
 
