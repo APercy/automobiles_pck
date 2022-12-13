@@ -597,7 +597,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
                 delorean.gravity_auto_correction(self, dtime)
 
                 --check if is near the ground, so revert the flight mode
-                local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-1}))
+                local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.6}))
                 if (noded and noded.drawtype ~= 'airlike') then
                     if noded.drawtype ~= 'liquid' then
                         self._is_flying = 0
@@ -722,7 +722,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             self.rr_wheel:set_animation_frame_speed(0)
         end
 
-        --drive whell turn
+        --drive wheel turn
         self.object:set_bone_position("drive_wheel", {x=-0, y=0, z=0}, {x=0, y=0, z=-self._steering_angle*2}) 
         delorean.set_wheels_mode(self, angle_factor)
 
@@ -780,6 +780,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
         end
         if self._energy <= 0 then
             self._engine_running = false
+            self._is_flying = 0
             if self.sound_handle then minetest.sound_stop(self.sound_handle) end
             --minetest.chat_send_player(self.driver_name, "Out of fuel")
         else
