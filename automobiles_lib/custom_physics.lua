@@ -52,15 +52,14 @@ function automobiles_lib.physics(self)
 		surfnode = automobiles_lib.nodeatpos(snodepos)
 	end
 	self.isinliquid = surfnodename
-	if surface then				-- standing in liquid
---		self.isinliquid = true
-		local submergence = min(surface-spos.y,self.height)/self.height
---		local balance = self.buoyancy*self.height
-		local buoyacc = (automobiles_lib.gravity*-1)*(self.buoyancy-submergence)
-		automobiles_lib.set_acceleration(self.object,
-			{x=-vel.x*self.water_drag,y=buoyacc-vel.y*abs(vel.y)*0.4,z=-vel.z*self.water_drag})
-	else
-	    self.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
-	end
 
+    --normal use
+    if surface then				-- standing in liquid
+--		self.isinliquid = true
+	    local submergence = min(surface-spos.y,self.height)/self.height
+--		local balance = self.buoyancy*self.height
+	    local buoyacc = (automobiles_lib.gravity*-1)*(self.buoyancy-submergence)
+	    automobiles_lib.set_acceleration(self.object,
+		    {x=-vel.x*self.water_drag,y=buoyacc-vel.y*abs(vel.y)*0.4,z=-vel.z*self.water_drag})
+    end
 end

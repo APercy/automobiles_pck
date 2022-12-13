@@ -1,8 +1,7 @@
---dofile(minetest.get_modpath("automobiles_coupe") .. DIR_DELIM .. "coupe_global_definitions.lua")
---dofile(minetest.get_modpath("automobiles_coupe") .. DIR_DELIM .. "coupe_hud.lua")
 
--- destroy the coupe
-function coupe.destroy(self, puncher)
+
+-- destroy the delorean
+function delorean.destroy(self, puncher)
     automobiles_lib.remove_light(self)
     if self.sound_handle then
         minetest.sound_stop(self.sound_handle)
@@ -31,14 +30,13 @@ function coupe.destroy(self, puncher)
     if self.rear_suspension then self.rear_suspension:remove() end
     if self.lr_wheel then self.lr_wheel:remove() end
     if self.rr_wheel then self.rr_wheel:remove() end
-    if self.steering then self.steering:remove() end
-    if self.steering_axis then self.steering_axis:remove() end
     if self.driver_seat then self.driver_seat:remove() end
     if self.passenger_seat then self.passenger_seat:remove() end
     if self.fuel_gauge then self.fuel_gauge:remove() end
     if self.lights then self.lights:remove() end
     if self.r_lights then self.r_lights:remove() end
     if self.reverse_lights then self.reverse_lights:remove() end
+    if self.normal_kit then self.normal_kit:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
 
@@ -47,7 +45,7 @@ function coupe.destroy(self, puncher)
 
     pos.y=pos.y+2
 
-    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_coupe:coupe')
+    --minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_delorean:delorean')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
@@ -55,17 +53,17 @@ function coupe.destroy(self, puncher)
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
 end
 
-function coupe.engine_set_sound_and_animation(self, _longit_speed)
+function delorean.engine_set_sound_and_animation(self, _longit_speed)
     --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
     if self.sound_handle then
         if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.03) or (math.abs(self._longit_speed) + 0.03 < math.abs(_longit_speed)) then
             --minetest.chat_send_all('test2')
-            coupe.engineSoundPlay(self)
+            delorean.engineSoundPlay(self)
         end
     end
 end
 
-function coupe.engineSoundPlay(self)
+function delorean.engineSoundPlay(self)
     --sound
     if self.sound_handle then minetest.sound_stop(self.sound_handle) end
     if self.object then
