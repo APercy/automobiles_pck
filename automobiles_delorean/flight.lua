@@ -46,9 +46,9 @@ function delorean.control_flight(self, player)
     if self._is_flying == 1 then
         local ctrl = player:get_player_control()
         if ctrl.jump then
-            self._car_gravity = 5
+            self._car_gravity = 3
         elseif ctrl.sneak then
-            self._car_gravity = -5
+            self._car_gravity = -3
         end
     end
 end
@@ -72,7 +72,7 @@ end
 function delorean.turn_flight_mode(self)
     if self._is_flying == 1 then
         --initial lift
-        self._car_gravity = 5
+        self._car_gravity = 2
         local curr_pos = self.object:get_pos()
         curr_pos.y = curr_pos.y + 1.5
         self.object:move_to(curr_pos)
