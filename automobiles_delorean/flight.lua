@@ -21,7 +21,7 @@ function delorean.gravity_auto_correction(self, dtime)
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._car_gravity)
     if self._car_gravity > 0 then factor = -1 end
     local time_correction = (dtime/delorean.ideal_step)
-    local intensity = 0.5
+    local intensity = 1
     local correction = (intensity*factor) * time_correction
     --minetest.chat_send_player(self.driver_name, correction)
     local before_correction = self._car_gravity
@@ -35,16 +35,18 @@ function delorean.gravity_auto_correction(self, dtime)
 end
 
 function delorean.control_flight(self, player)
-    local ctrl = player:get_player_control()
-    if ctrl.jump then
-        self._car_gravity = 4
-    elseif ctrl.sneak then
-        self._car_gravity = -4
+    if self._is_flying == 1 then
+        local ctrl = player:get_player_control()
+        if ctrl.jump then
+            self._car_gravity = 5
+        elseif ctrl.sneak then
+            self._car_gravity = -5
+        end
     end
 end
 
 function delorean.set_wheels_mode(self, angle_factor)
-    if not self.is_flying or self.is_flying == 0 then
+    if not self._is_flying or self._is_flying == 0 then
         --whell turn
         self.lf_wheel:set_attach(self.front_suspension,'',{x=-delorean.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
         self.rf_wheel:set_attach(self.front_suspension,'',{x=delorean.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
@@ -58,3 +60,13 @@ function delorean.set_wheels_mode(self, angle_factor)
         self.rr_wheel:set_attach(self.rear_suspension,'',{x=delorean.rear_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
     end
 end
+
+function delorean.turn_flight_mode(self)
+    if self._is_flying == 1 then
+        --initial lift
+        local curr_pos = self.object:get_pos()
+        curr_pos.y = curr_pos.y + 1.5
+        self.object:move_to(curr_pos)
+    end
+end
+

@@ -25,7 +25,7 @@ function delorean.control(self, dtime, hull_direction, longit_speed, longit_drag
             end
 
             --reversing
-            if not self.is_flying or self.is_flying == 0 then
+            if not self._is_flying or self._is_flying == 0 then
 	            if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
                     acc = -2
 	            end
@@ -47,7 +47,7 @@ function delorean.control(self, dtime, hull_direction, longit_speed, longit_drag
                 end
             end
 
-            if not self.is_flying or self.is_flying == 0 then
+            if not self._is_flying or self._is_flying == 0 then
                 if longit_speed < 0 then
                     acc = 5
                     if (longit_speed + acc) > 0 then

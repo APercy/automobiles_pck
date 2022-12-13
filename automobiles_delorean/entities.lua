@@ -394,6 +394,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
     _intensity = 4,
     _delorean_type = 0,
     _car_gravity = -automobiles_lib.gravity,
+    _is_flying = 0,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -565,6 +566,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
 
         local accel = vector.add(longit_drag,later_drag)
         local stop = nil
+        local curr_pos = self.object:get_pos()
 
         local player = nil
         local is_attached = false
@@ -582,21 +584,29 @@ minetest.register_entity("automobiles_delorean:delorean", {
         end
 
         --to fix the load on first time
-        self.is_flying = 0
         if self._delorean_type == 1 then
             local ent_propertioes = self.normal_kit:get_properties()
             if ent_propertioes.mesh ~= "automobiles_delorean_time_machine_accessories.b3d" then
                 delorean.set_kit(self)
             end
             --start flight functions
-            if self.is_flying == 1 then
+            if self._is_flying == 1 then
                 if is_attached then
                     delorean.control_flight(self, player)
                 end
+                delorean.gravity_auto_correction(self, dtime)
+
+                --check if is near the ground, so revert the flight mode
+                local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-1}))
+                if (noded and noded.drawtype ~= 'airlike') then
+                    if noded.drawtype ~= 'liquid' then
+                        self._is_flying = 0
+                    end
+                end
+
             else
                 self._car_gravity = -automobiles_lib.gravity
             end
-            delorean.gravity_auto_correction(self, dtime)
         end
 
         local is_breaking = false
@@ -642,7 +652,6 @@ minetest.register_entity("automobiles_delorean:delorean", {
         end
 
         -- impacts and control
-        local curr_pos = self.object:get_pos()
         self.object:move_to(curr_pos)
 		if is_attached then --and self.driver_name == self.owner then
             local impact = automobiles_lib.get_hipotenuse_value(velocity, self.lastvelocity)
@@ -787,7 +796,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
         -- end energy consumption --
 
         --gravity works
-        if not self.is_flying or self.is_flying == 0 then
+        if not self._is_flying or self._is_flying == 0 then
             accel.y = -automobiles_lib.gravity
         else
             local time_correction = (self.dtime/delorean.ideal_step)
@@ -813,7 +822,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
 		local newpitch = self._pitch --velocity.y * math.rad(6)
 
         local newroll = 0
-        if self.is_flying == 1 then
+        if self._is_flying == 1 then
             local turn_effect_speed = longit_speed
             if turn_effect_speed > 10 then turn_effect_speed = 10 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)

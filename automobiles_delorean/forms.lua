@@ -23,6 +23,9 @@ function delorean.driver_formspec(name)
     local yaw = "false"
     if ent._yaw_by_mouse then yaw = "true" end
 
+    local flight = "false"
+    if ent._is_flying == 1 then flight = "true" end
+
     local basic_form = table.concat({
         "formspec_version[3]",
         "size[6,7]",
@@ -30,6 +33,7 @@ function delorean.driver_formspec(name)
 
 	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
     basic_form = basic_form.."button[1,2.5;4,1;lights;Lights]"
+    if ent._delorean_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;Flight Mode;"..flight.."]" end
     basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
 
     minetest.show_formspec(name, "delorean:driver_main", basic_form)
@@ -64,6 +68,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                     else
                         ent._yaw_by_mouse = true
                     end
+                end
+                if fields.flight then
+                    if ent._is_flying == 1 then
+                        ent._is_flying = 0
+                    else
+                        ent._is_flying = 1
+                    end
+                    delorean.turn_flight_mode(ent)
                 end
             end
         end
