@@ -1,7 +1,7 @@
 --
 -- entity
 --
-local old_entities = {"automobiles_coupe:time_machine_kit", "automobiles_coupe:wheel"}
+local old_entities = {"automobiles_coupe:time_machine_kit", "automobiles_coupe:wheel","automobiles_coupe:normal_kit"}
 for _,entity_name in ipairs(old_entities) do
     minetest.register_entity(":"..entity_name, {
         on_activate = function(self, staticdata)
