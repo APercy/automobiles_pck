@@ -40,14 +40,14 @@ function delorean.control(self, dtime, hull_direction, longit_speed, longit_drag
         
             --total stop
             --wheel break
-            if longit_speed > 0 then
-                acc = -5
-                if (longit_speed + acc) < 0 then
-                    acc = longit_speed * -1
-                end
-            end
-
             if not self._is_flying or self._is_flying == 0 then
+                if longit_speed > 0 then
+                    acc = -5
+                    if (longit_speed + acc) < 0 then
+                        acc = longit_speed * -1
+                    end
+                end
+
                 if longit_speed < 0 then
                     acc = 5
                     if (longit_speed + acc) > 0 then
@@ -57,6 +57,8 @@ function delorean.control(self, dtime, hull_direction, longit_speed, longit_drag
                 if math.abs(longit_speed) < 0.2 then
                     stop = true
                 end
+            else
+                acc = -5
             end
         end
 
