@@ -837,7 +837,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             newpitch = newpitch + (velocity.y * math.rad(max_pitch - h_vel_compensation))
         end
 
-		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=newroll}) end
+		self.object:set_rotation({x=newpitch,y=newyaw,z=newroll})
 
         --saves last velocity for collision detection (abrupt stop)
         self.lastvelocity = self.object:get_velocity()
