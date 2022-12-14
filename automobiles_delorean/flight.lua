@@ -21,7 +21,7 @@ function delorean.gravity_auto_correction(self, dtime)
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._car_gravity)
     if self._car_gravity > 0 then factor = -1 end
     local time_correction = (dtime/delorean.ideal_step)
-    local intensity = 0.1
+    local intensity = 1
     local correction = (intensity*factor) * time_correction
     --minetest.chat_send_player(self.driver_name, correction)
     local before_correction = self._car_gravity
@@ -48,10 +48,17 @@ end
 function delorean.control_flight(self, player)
     if self._is_flying == 1 then
         local ctrl = player:get_player_control()
+        local max = 6
+        local min = -6
+        local curr_vel = self.object:get_velocity()
         if ctrl.jump then
-            self._car_gravity = 3
+            if self._car_gravity < max and curr_vel.y < 2.5 then
+                self._car_gravity = self._car_gravity + 1
+            end
         elseif ctrl.sneak then
-            self._car_gravity = -3
+            if self._car_gravity > min and curr_vel.y > -2.5 then
+                self._car_gravity = self._car_gravity - 1
+            end
         end
     end
 end

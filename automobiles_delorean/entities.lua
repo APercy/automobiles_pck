@@ -801,7 +801,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             accel.y = -automobiles_lib.gravity
         else
             local time_correction = (self.dtime/delorean.ideal_step)
-            local y_accel = accel.y + self._car_gravity*time_correction
+            local y_accel = self._car_gravity*time_correction
             accel.y = y_accel --sets the anti gravity
         end
 
