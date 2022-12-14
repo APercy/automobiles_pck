@@ -37,6 +37,7 @@ function delorean.destroy(self, puncher)
     if self.r_lights then self.r_lights:remove() end
     if self.reverse_lights then self.reverse_lights:remove() end
     if self.normal_kit then self.normal_kit:remove() end
+    if self.instruments then self.instruments:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
 
@@ -67,8 +68,8 @@ function delorean.engineSoundPlay(self)
     --sound
     if self.sound_handle then minetest.sound_stop(self.sound_handle) end
     if self.object then
-        self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
-            {object = self.object, gain = 8,
+        self.sound_handle = minetest.sound_play({name = delorean.engine_sound},
+            {object = self.object, gain = 2,
                 pitch = 1 + ((self._longit_speed/10)/2),
                 max_hear_distance = 10,
                 loop = true,})

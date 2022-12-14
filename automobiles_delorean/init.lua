@@ -10,6 +10,7 @@ delorean.max_acc_factor = 8
 delorean.max_fuel = 10
 delorean.trunk_slots = 8
 delorean.ideal_step = 0.2
+delorean.engine_sound = "delorean_engine"
 
 DELOREAN_GAUGE_FUEL_POSITION =  {x=-4.66,y=6.2,z=17.9}
 

@@ -78,23 +78,51 @@ initial_properties = {
         "automobiles_black.png", --conductors
         "automobiles_black.png", --ok
         "automobiles_delorean_brass.png", --ok
-        "automobiles_metal.png", --time panel
-        "automobiles_delorean_time.png", --time panel
         "automobiles_metal.png", --base circuit switch
         "automobiles_red.png", --red button
         "automobiles_dark_grey.png", --ok
         "automobiles_delorean_brass.png", --ok
         "automobiles_black.png", --electric switch
-        "automobiles_metal.png", -- flux capacitor
-        "automobiles_delorean_flux.png", --flux capacitor
-        "automobiles_black.png", --flux capacitor
         "automobiles_dark_grey.png", --base
-        "automobiles_dark_grey.png", --roof panel
-        "automobiles_delorean_roof_1.png", --root panel
-        "automobiles_delorean_roof_2.png", --roof panel
         "automobiles_metal.png", --f bump
         "automobiles_dark_grey.png", --f bump
         "automobiles_metal.png"},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+
+    --[[on_step = function(self, dtime, moveresult)
+        minetest.chat_send_all(dump(moveresult))
+    end,]]--
+	
+})
+
+minetest.register_entity('automobiles_delorean:time_machine_kit_instruments',{
+    initial_properties = {
+	    physical = true,
+	    collide_with_objects=true,
+        collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+	    pointable=false,
+	    visual = "mesh",
+	    mesh = "automobiles_delorean_time_machine_instruments.b3d",
+        textures = {
+            "automobiles_metal.png", --time panel
+            "automobiles_delorean_time.png", --time panel
+            "automobiles_metal.png", -- flux capacitor
+            "automobiles_delorean_flux.png", --flux capacitor
+            "automobiles_black.png", --flux capacitor
+            "automobiles_dark_grey.png", --roof panel
+            "automobiles_delorean_roof_1.png", --root panel
+            "automobiles_delorean_roof_2.png", --roof panel
+        },
 	},
 
     on_activate = function(self,std)
@@ -583,41 +611,8 @@ minetest.register_entity("automobiles_delorean:delorean", {
             end
         end
 
-        --to fix the load on first time
-        if self._delorean_type == 1 then
-            local ent_propertioes = self.normal_kit:get_properties()
-            if ent_propertioes.mesh ~= "automobiles_delorean_time_machine_accessories.b3d" then
-                delorean.set_kit(self)
-            end
-            --start flight functions
-            if self._is_flying == 1 then
-                if is_attached then
-                    delorean.control_flight(self, player)
-                end
-                delorean.gravity_auto_correction(self, dtime)
-
-                --check if is near the ground, so revert the flight mode
-                local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.6}))
-                if (noded and noded.drawtype ~= 'airlike') then
-                    if noded.drawtype ~= 'liquid' then
-                        self._is_flying = 0
-                    end
-                    --avoid liquids
-                    if noded.drawtype == 'liquid' then
-                        self._car_gravity = 5
-                        local fixed_vel = velocity
-                        fixed_vel.y = 0.1
-                        self.lastvelocity.y = fixed_vel.y --do not compute collision after
-                        self.object:set_velocity(fixed_vel)
-                        --curr_pos.y = curr_pos.y + 0.5
-                        --self.object:move_to(curr_pos)
-                    end
-                end
-
-            else
-                self._car_gravity = -automobiles_lib.gravity
-            end
-        end
+        --to fix the load on first time and turn on the lights of time machine
+        delorean.set_mode(self, is_attached, curr_pos, velocity, player, dtime)
 
         local is_breaking = false
         if is_attached then
@@ -949,8 +944,8 @@ minetest.register_entity("automobiles_delorean:delorean", {
                     --is the owner, okay, lets attach
                     automobiles_lib.attach_driver(self, clicker)
                     -- sound
-                    self.sound_handle = minetest.sound_play({name = "automobiles_engine"},
-                            {object = self.object, gain = 4, pitch = 1, max_hear_distance = 30, loop = true,})
+                    self.sound_handle = minetest.sound_play({name = delorean.engine_sound},
+                            {object = self.object, gain = 1.5, pitch = 1, max_hear_distance = 30, loop = true,})
                 end
             else
                 --minetest.chat_send_all("clicou")
