@@ -801,7 +801,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             accel.y = -automobiles_lib.gravity
         else
             local time_correction = (self.dtime/delorean.ideal_step)
-            local y_accel = self._car_gravity*time_correction
+            local y_accel = accel.y + self._car_gravity*time_correction
             accel.y = y_accel --sets the anti gravity
         end
 
@@ -827,7 +827,14 @@ minetest.register_entity("automobiles_delorean:delorean", {
             local turn_effect_speed = longit_speed
             if turn_effect_speed > 10 then turn_effect_speed = 10 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
-            if math.abs(self._steering_angle) < 10 then newroll = 0 end
+            if math.abs(self._steering_angle) < 1 then newroll = 0 end
+
+            --pitch
+            local max_pitch = 6
+            local h_vel_compensation = (((longit_speed * 2) * 100)/max_pitch)/100
+            if h_vel_compensation < 0 then h_vel_compensation = 0 end
+            if h_vel_compensation > max_pitch then h_vel_compensation = max_pitch end
+            newpitch = newpitch + (velocity.y * math.rad(max_pitch - h_vel_compensation))
         end
 
 		if newyaw~=yaw or newpitch~=pitch then self.object:set_rotation({x=newpitch,y=newyaw,z=newroll}) end
