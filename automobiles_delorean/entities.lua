@@ -602,6 +602,16 @@ minetest.register_entity("automobiles_delorean:delorean", {
                     if noded.drawtype ~= 'liquid' then
                         self._is_flying = 0
                     end
+                    --avoid liquids
+                    if noded.drawtype == 'liquid' then
+                        self._car_gravity = 5
+                        local fixed_vel = velocity
+                        fixed_vel.y = 0.1
+                        self.lastvelocity.y = fixed_vel.y --do not compute collision after
+                        self.object:set_velocity(fixed_vel)
+                        --curr_pos.y = curr_pos.y + 0.5
+                        --self.object:move_to(curr_pos)
+                    end
                 end
 
             else
