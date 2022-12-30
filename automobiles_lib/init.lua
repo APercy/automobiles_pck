@@ -100,6 +100,7 @@ function automobiles_lib.attach_driver(self, player)
                 end
             end
             player_api.set_animation(player, "sit", speed)
+            if emote then emote.start(player:get_player_name(), "sit") end
         end
     end)
 end
@@ -165,6 +166,7 @@ function automobiles_lib.attach_pax(self, player, onside)
                         end
                     end
                     player_api.set_animation(player, "sit", speed)
+                    if emote then emote.start(player:get_player_name(), "sit") end
                 end
             end)
 
@@ -208,29 +210,33 @@ function automobiles_lib.attach_pax(self, player, onside)
 end
 
 function automobiles_lib.dettach_pax(self, player)
-    local name = player:get_player_name() --self._passenger
-
-    -- passenger clicked the object => driver gets off the vehicle
-    if self._passenger == name then
-        self._passenger = nil
-    else
-        --[[for i = 10,1,-1
-        do
-            if self._passengers[i] == name then
-                self._passengers[i] = nil
-                break
-            end
-        end]]--
-    end
-
-    -- detach the player
     if player then
-        --player:set_properties({physical=true})
-        player:set_detach()
-        player_api.player_attached[name] = nil
-        player_api.set_animation(player, "stand")
-        player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-        --remove_physics_override(player, {speed=1,gravity=1,jump=1})
+        local name = player:get_player_name() --self._passenger
+
+        -- passenger clicked the object => driver gets off the vehicle
+        if self._passenger == name then
+            self._passenger = nil
+        else
+            --[[for i = 10,1,-1
+            do
+                if self._passengers[i] == name then
+                    self._passengers[i] = nil
+                    break
+                end
+            end]]--
+        end
+
+        -- detach the player
+        if player then
+            --player:set_properties({physical=true})
+            player:set_detach()
+            player_api.player_attached[name] = nil
+            player_api.set_animation(player, "stand")
+            player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
+            --remove_physics_override(player, {speed=1,gravity=1,jump=1})
+        end
+    else
+        self._passenger = nil
     end
 end
 
