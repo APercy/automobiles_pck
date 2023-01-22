@@ -51,16 +51,17 @@ end
 --returns 0 for old, 1 for new
 function automobiles_lib.detect_player_api(player)
     local player_proterties = player:get_properties()
-    local mesh = "character.b3d"
-    if player_proterties.mesh == mesh or player_proterties.mesh == "max.b3d" then
-        local models = player_api.registered_models
-        local character = models[mesh]
-        if character then
-            if character.animations.sit.eye_height then
+    local models = player_api.registered_models
+    local character = models[player_proterties.mesh]
+    if character then
+        if character.animations.sit.eye_height then
+            if character.animations.sit.eye_height == 0.8 then
+                --minetest.chat_send_all("new model");
                 return 1
-            else
-                return 0
             end
+        else
+            --minetest.chat_send_all("old model");
+            return 0
         end
     end
 
