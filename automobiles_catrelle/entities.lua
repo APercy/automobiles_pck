@@ -661,25 +661,11 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
         self._last_ground_check = self._last_ground_check + dtime
         if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
-            automobiles_lib.ground_get_distances(self, 0.372, 2.6)
+            automobiles_lib.ground_get_distances(self, 0.372, 3.0)
         end
 		local newpitch = self._pitch --velocity.y * math.rad(6)
 
         local newroll = 0
-        if self._is_flying == 1 then
-            local turn_effect_speed = longit_speed
-            if turn_effect_speed > 10 then turn_effect_speed = 10 end
-            newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
-            if math.abs(self._steering_angle) < 1 then newroll = 0 end
-
-            --pitch
-            local max_pitch = 6
-            local h_vel_compensation = (((longit_speed * 2) * 100)/max_pitch)/100
-            if h_vel_compensation < 0 then h_vel_compensation = 0 end
-            if h_vel_compensation > max_pitch then h_vel_compensation = max_pitch end
-            newpitch = newpitch + (velocity.y * math.rad(max_pitch - h_vel_compensation))
-        end
-
 		self.object:set_rotation({x=newpitch,y=newyaw,z=newroll})
 
         --saves last velocity for collision detection (abrupt stop)
