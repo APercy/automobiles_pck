@@ -1,3 +1,16 @@
+function automobiles_lib.pd_controller(current_value, setpoint, last_error, kp, kd)
+    -- parameters
+    kp = kp or 0.5 -- Ganho proporcional
+    kd = kd or 0.2 -- Ganho derivativo
+    
+    --calculo
+    local error = setpoint - current_value
+    local derivative = error - last_error
+    local output = kp * error + kd * derivative
+    last_error = error
+    return output, last_error
+end
+
 --lets assume that the rear axis is at object center, so we will use the distance only for front wheels
 function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     --local mid_axis = (axis_length / 2)/10
@@ -43,6 +56,17 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
         local m = (deltaY/deltaX)
         local new_pitch = math.atan(m) --math.atan2(deltaY, deltaX);
         --local deg_angle = math.deg(new_pitch)
+
+        --[[if self._last_error == nil then self._last_error = 0 end -- Último erro registrado
+        if math.abs(self._pitch) < math.abs(new_pitch) and self._longit_speed > 2 then
+            -- Estado atual do sistema
+            local output, last_error = automobiles_lib.pd_controller(self._pitch, new_pitch, self._last_error, 1.5, 0.0003)
+            self._last_error = last_error 
+            new_pitch = output
+            minetest.chat_send_all(new_pitch)
+        else
+            self._last_error = 0
+        end]]--
         
         --first test front wheels before
         if (front_obstacle_level.y-self._last_front_detection) <= self.initial_properties.stepheight then
