@@ -1,6 +1,6 @@
-## Motorcycle
+## Vespa
 
-This mod adds a motorcycle to Minetest.
+This mod adds a vespa motorcycle to Minetest.
 
 ## Licenses
 - Code: see [LICENSE](/LICENSE)
