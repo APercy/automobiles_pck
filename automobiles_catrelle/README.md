@@ -1,10 +1,10 @@
-## Coupe
+## Catrelle
 
-This mod adds a coupe automobile to Minetest.
+This mod adds a catrelle automobile to Minetest.
 
 ## Licenses
 - Code: see [LICENSE](/LICENSE)
-- Media: Model adapted from car assets v1 made by https://www.racoon-media.nl; licence CC0
+- Media: Model made by myself; licence CC0
 
 ## Screenshot
-![coupe](/automobiles_coupe/screenshot.jpg)
+![catrelle](/automobiles_catrelle/screenshot.jpg)
