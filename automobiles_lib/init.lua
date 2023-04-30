@@ -409,7 +409,7 @@ end
 --painting
 function automobiles_lib.paint(self, colstr, target_texture, second_painting_texture)
     target_texture = target_texture or "automobiles_painting.png"
-    second_painting_texture = second_painting_texture or "'automobiles_painting2.png"
+    second_painting_texture = second_painting_texture or "automobiles_painting2.png"
     if colstr then
         self._color = colstr
         local l_textures = self.initial_properties.textures
