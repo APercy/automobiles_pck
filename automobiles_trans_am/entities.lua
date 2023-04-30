@@ -308,6 +308,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
             "automobiles_black.png", --lights
             "automobiles_trans_am_glasses.png", --vidros
             "automobiles_trans_am_painting.png", --pintura grade frontal
+            "automobiles_black.png", --detalhe grade frontal
             "automobiles_painting.png", --detalhe grade frontal
             "automobiles_black.png", --interior
             "automobiles_black.png", --painel
