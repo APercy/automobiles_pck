@@ -353,7 +353,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
             self._trans_am_type = data.stored_trans_am_type
             self._car_gravity = data.stored_car_gravity or -automobiles_lib.gravity
 
-            automobiles_lib.setText(self, "trans_am")
+            automobiles_lib.setText(self, "Trans Am")
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)
