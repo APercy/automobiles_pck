@@ -304,7 +304,8 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
     _change_color = automobiles_lib.paint,
     _intensity = 4,
     _car_gravity = -automobiles_lib.gravity,
-    _is_flying = 0,
+    --acc control
+    _transmission_state = 1,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -582,7 +583,20 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
                 local mid_speed = (steering_speed/2)
                 steering_speed = mid_speed + mid_speed / math.abs(longit_speed*0.25)
             end
-			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, trans_am.max_acc_factor, trans_am.max_speed, steering_angle_max, steering_speed)
+
+            --adjust engine parameter (transmission emulation)
+            local acc_factor = trans_am.max_acc_factor
+            local transmission_state = automobiles_lib.get_transmission_state(longit_speed, trans_am.max_speed)
+
+            local target_acc_factor = acc_factor
+            if transmission_state == 1 then
+                target_acc_factor = trans_am.max_acc_factor/2
+            end
+            self._transmission_state = transmission_state
+            --minetest.chat_send_all(transmission_state)
+
+            --control
+			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, target_acc_factor, trans_am.max_speed, steering_angle_max, steering_speed)
         else
             self._show_lights = false
             if self.sound_handle ~= nil then

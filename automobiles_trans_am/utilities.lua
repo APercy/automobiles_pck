@@ -1,5 +1,3 @@
-
-
 -- destroy the trans_am
 function trans_am.destroy(self, puncher)
     automobiles_lib.remove_light(self)
@@ -65,10 +63,15 @@ function trans_am.engineSoundPlay(self)
     --sound
     if self.sound_handle then minetest.sound_stop(self.sound_handle) end
     if self.object then
+        local snd_pitch = 1 + ((self._longit_speed/10)/2)
+        if self._transmission_state == 1 then
+            snd_pitch = 1 + (self._longit_speed/10)
+        end
+
         self.sound_handle = minetest.sound_play({name = trans_am.engine_sound},
-            {object = self.object, gain = 2,
-                pitch = 1 + ((self._longit_speed/10)/2),
-                max_hear_distance = 10,
+            {object = self.object, gain = 4,
+                pitch = snd_pitch,
+                max_hear_distance = 15,
                 loop = true,})
     end
 end

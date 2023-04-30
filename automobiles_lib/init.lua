@@ -446,6 +446,13 @@ function automobiles_lib.paint_with_mask(self, colstr, mask_colstr, target_textu
     end
 end
 
+-- very basic transmission emulation for the car
+function automobiles_lib.get_transmission_state(curr_speed, max_speed)
+    local retVal = 1
+    if curr_speed >= (max_speed/4) then retVal = 2 end
+    return retVal
+end
+
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "physics_lib.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")

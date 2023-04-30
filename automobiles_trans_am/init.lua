@@ -10,7 +10,7 @@ trans_am.max_acc_factor = 12
 trans_am.max_fuel = 10
 trans_am.trunk_slots = 12
 trans_am.ideal_step = 0.2
-trans_am.engine_sound = "automobiles_engine"
+trans_am.engine_sound = "trans_am_engine"
 
 trans_am_GAUGE_FUEL_POSITION =  {x=-4,y=6.8,z=16.6}
 
