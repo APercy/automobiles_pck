@@ -554,13 +554,12 @@ minetest.register_entity("automobiles_coupe:coupe", {
                     self._last_time_drift_snd > 0.6 then
                 self._last_time_drift_snd = 0
                 minetest.sound_play("automobiles_drifting", {
-                    to_player = self.driver_name,
-                    pos = curr_pos,
-                    max_hear_distance = 5,
-                    gain = 1.0,
-                    fade = 0.0,
-                    pitch = 1.0,
-                    ephemeral = true,
+                        pos = curr_pos,
+                        max_hear_distance = 20,
+                        gain = 3.0,
+                        fade = 0.0,
+                        pitch = 1.0,
+                        ephemeral = true,
                 })
             end
 
