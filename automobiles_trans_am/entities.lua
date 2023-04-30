@@ -261,7 +261,8 @@ function set_paint(self, puncher, itmstck)
         --painting with bike painter
         local meta = itmstck:get_meta()
 	    local colstr = meta:get_string("paint_color")
-        automobiles_lib.paint(self, colstr)
+        self._det_color = colstr
+        paint(self, self._color)
         return true
     else
         --painting with dyes
@@ -278,7 +279,8 @@ function set_paint(self, puncher, itmstck)
 	        local colstr = automobiles_lib.colors[color]
             --minetest.chat_send_all(color ..' '.. dump(colstr))
 	        if colstr then
-                paint(self, colstr)
+                self._det_color = colstr
+                paint(self, self._color)
 		        itmstck:set_count(itmstck:get_count()-1)
 		        puncher:set_wielded_item(itmstck)
                 return true
