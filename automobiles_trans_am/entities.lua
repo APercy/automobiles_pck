@@ -487,6 +487,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         
 		local later_speed = automobiles_lib.dot(velocity,nhdir)
         local dynamic_later_drag = trans_am.LATER_DRAG_FACTOR
+        if longit_speed > 2 then dynamic_later_drag = 2.0 end
         if longit_speed > 8 then dynamic_later_drag = 0.5 end
         local later_drag = vector.multiply(nhdir,later_speed*
             later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))

@@ -3,7 +3,7 @@
 --
 trans_am={}
 trans_am.LONGIT_DRAG_FACTOR = 0.12*0.12
-trans_am.LATER_DRAG_FACTOR = 2.0
+trans_am.LATER_DRAG_FACTOR = 6.0
 trans_am.gravity = automobiles_lib.gravity
 trans_am.max_speed = 40
 trans_am.max_acc_factor = 12
