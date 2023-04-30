@@ -55,12 +55,12 @@ if minetest.get_modpath("default") then
 			{"automobiles_lib:wheel","automobiles_trans_am:trans_am_body",  "automobiles_lib:wheel"},
 		}
 	})
-	minetest.register_craft({
+	--[[minetest.register_craft({
 		output = "automobiles_trans_am:trans_am_body",
 		recipe = {
             {"default:glass" ,"default:mese_crystal","default:steel_ingot"},
 			{"default:steel_ingot","default:steelblock","default:steel_ingot"},
 			{"default:steelblock","default:steelblock", "default:steelblock"},
 		}
-	})
+	})]]--
 end
