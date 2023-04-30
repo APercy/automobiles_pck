@@ -95,7 +95,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
                     acc = longit_speed * -1
                 end
             end
-            if math.abs(longit_speed) < 0.2 then
+            if math.abs(longit_speed) < 1 then
                 stop = true
             end
         end
