@@ -727,7 +727,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         self._last_ground_check = self._last_ground_check + dtime
         if self._last_ground_check > 0.18 then
             self._last_ground_check = 0
-            automobiles_lib.ground_get_distances(self, 0.372, 3.0)
+            automobiles_lib.ground_get_distances(self, 0.372, 2.7)
         end
 		local newpitch = self._pitch --velocity.y * math.rad(6)
 

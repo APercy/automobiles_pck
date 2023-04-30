@@ -12,7 +12,7 @@ trans_am.trunk_slots = 12
 trans_am.ideal_step = 0.2
 trans_am.engine_sound = "automobiles_engine"
 
-trans_am_GAUGE_FUEL_POSITION =  {x=-4.47,y=8.50,z=20.5}
+trans_am_GAUGE_FUEL_POSITION =  {x=-4,y=6.8,z=16.6}
 
 trans_am.front_wheel_xpos = 9.5
 trans_am.rear_wheel_xpos = 9.5
