@@ -623,7 +623,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
                 if (later_speed > min_later_speed or later_speed < -min_later_speed) and
                         self._last_time_drift_snd >= 2.0 then
                     self._last_time_drift_snd = 0
-                    minetest.sound_play("drifting", {
+                    minetest.sound_play("automobiles_drifting", {
                         pos = curr_pos,
                         max_hear_distance = 5,
                         gain = 1.0,
