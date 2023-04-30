@@ -58,8 +58,8 @@ if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_trans_am:trans_am_body",
 		recipe = {
-            {"default:glass" ,"default:steel_ingot","default:steel_ingot"},
-			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
+            {"default:glass" ,"default:mese_crystal","default:steel_ingot"},
+			{"default:steel_ingot","default:steelblock","default:steel_ingot"},
 			{"default:steelblock","default:steelblock", "default:steelblock"},
 		}
 	})
