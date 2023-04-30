@@ -407,18 +407,39 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
 end
 
 --painting
-function automobiles_lib.paint(self, colstr)
+function automobiles_lib.paint(self, colstr, target_texture, second_painting_texture)
+    target_texture = target_texture or "automobiles_painting.png"
+    second_painting_texture = second_painting_texture or "'automobiles_painting2.png"
     if colstr then
         self._color = colstr
         local l_textures = self.initial_properties.textures
         for _, texture in ipairs(l_textures) do
-            local indx = texture:find('automobiles_painting.png')
+            local indx = texture:find(target_texture)
             if indx then
-                l_textures[_] = "automobiles_painting.png^[multiply:".. colstr
+                l_textures[_] = target_texture.."^[multiply:".. colstr
             end
-            indx = texture:find('automobiles_painting2.png')
+            indx = texture:find(second_painting_texture)
             if indx then
-                l_textures[_] = "automobiles_painting2.png^[multiply:".. colstr
+                l_textures[_] = second_painting_texture.."^[multiply:".. colstr
+            end
+        end
+	    self.object:set_properties({textures=l_textures})
+    end
+end
+
+function automobiles_lib.paint_with_mask(self, colstr, mask_colstr, target_texture, mask_texture)
+    --"("..steampunk_blimp.canvas_texture.."^[mask:steampunk_blimp_rotor_mask2.png)^(default_wood.png^[mask:steampunk_blimp_rotor_mask.png)"
+
+    target_texture = target_texture or "automobiles_painting.png"
+    if colstr then
+        self._color = colstr
+        self._det_color = mask_colstr
+        local l_textures = self.initial_properties.textures
+        for _, texture in ipairs(l_textures) do
+            local indx = texture:find(target_texture)
+            if indx then
+                --"("..target_texture.."^[mask:"..mask_texture..")"
+                l_textures[_] = "("..target_texture.."^[multiply:".. colstr..")^("..target_texture.."^[multiply:".. mask_colstr.."^[mask:"..mask_texture..")"
             end
         end
 	    self.object:set_properties({textures=l_textures})
