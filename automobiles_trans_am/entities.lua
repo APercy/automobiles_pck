@@ -233,6 +233,62 @@ initial_properties = {
     end,
 })
 
+local function paint(self, colstr)
+    automobiles_lib.paint_with_mask(self, colstr, self._det_color, "automobiles_trans_am_painting.png", "automobiles_trans_am_marks.png")
+    local l_textures = self.initial_properties.textures
+
+    --paint details
+    local target_texture = "automobiles_painting.png"
+    local accessorie_texture = "automobiles_painting2.png"
+    for _, texture in ipairs(l_textures) do
+        local indx = texture:find(target_texture)
+        if indx then
+            l_textures[_] = target_texture.."^[multiply:".. self._det_color
+        end
+        local indx = texture:find(accessorie_texture)
+        if indx then
+            l_textures[_] = accessorie_texture.."^[multiply:".. colstr
+        end
+    end
+    self.object:set_properties({textures=l_textures})
+end
+
+function set_paint(self, puncher, itmstck)
+    local item_name = ""
+    if itmstck then item_name = itmstck:get_name() end
+
+    if item_name == "bike:painter" then
+        --painting with bike painter
+        local meta = itmstck:get_meta()
+	    local colstr = meta:get_string("paint_color")
+        automobiles_lib.paint(self, colstr)
+        return true
+    else
+        --painting with dyes
+        local split = string.split(item_name, ":")
+        local color, indx, _
+        if split[1] then _,indx = split[1]:find('dye') end
+        if indx then
+            for clr,_ in pairs(automobiles_lib.colors) do
+                local _,x = split[2]:find(clr)
+                if x then color = clr end
+            end
+            --lets paint!!!!
+	        --local color = item_name:sub(indx+1)
+	        local colstr = automobiles_lib.colors[color]
+            --minetest.chat_send_all(color ..' '.. dump(colstr))
+	        if colstr then
+                paint(self, colstr)
+		        itmstck:set_count(itmstck:get_count()-1)
+		        puncher:set_wielded_item(itmstck)
+                return true
+	        end
+            -- end painting
+        end
+    end
+    return false
+end
+
 minetest.register_entity("automobiles_trans_am:trans_am", {
 	initial_properties = {
 	    physical = true,
@@ -246,7 +302,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         --backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos
-            "automobiles_black.png", -- scoop
+            "automobiles_painting2.png", -- scoop
             "automobiles_black.png", --lights
             "automobiles_trans_am_glasses.png", --vidros
             "automobiles_trans_am_painting.png", --pintura grade frontal
@@ -260,7 +316,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
             "automobiles_black.png", --forração portas e volante
             "automobiles_metal.png", --espelhos
             "automobiles_trans_am_painting.png", --spoilers
-            "automobiles_black.png", --tomadas de ar laterais
+            "automobiles_painting2.png", --tomadas de ar laterais
             "automobiles_black.png", --assoalho
             "automobiles_red.png", --bancos
             "automobiles_trans_am_painting.png", --pintura
@@ -301,7 +357,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
     _turn_light_timer = 0,
     _inv = nil,
     _inv_id = "",
-    _change_color = automobiles_lib.paint,
+    _change_color = paint,
     _intensity = 4,
     _car_gravity = -automobiles_lib.gravity,
     --acc control
@@ -358,23 +414,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         end
 
         self.object:set_animation({x = 1, y = 8}, 0, 0, true)
-
-        automobiles_lib.paint_with_mask(self, self._color, self._det_color, "automobiles_trans_am_painting.png", "automobiles_trans_am_marks.png")
-        local l_textures = self.initial_properties.textures
-
-        --paint details
-        local target_texture = "automobiles_painting.png"
-        for _, texture in ipairs(l_textures) do
-            local indx = texture:find(target_texture)
-            if indx then
-                l_textures[_] = target_texture.."^[multiply:".. self._det_color
-            end
-        end
-	    self.object:set_properties({textures=l_textures})
-
-
-        --automobiles_lib.paint(self, self._color, "automobiles_trans_am_painting.png")
-        --automobiles_lib.paint(self, self._det_color, "automobiles_painting.png")
+        paint(self, self._color)
         local pos = self.object:get_pos()
 
         local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_trans_am:front_suspension')
@@ -802,7 +842,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
                     return
                 end
 
-                if automobiles_lib.set_paint(self, puncher, itmstck) == false then
+                if set_paint(self, puncher, itmstck) == false then
                     local is_admin = false
                     is_admin = minetest.check_player_privs(puncher, {server=true})
                     --minetest.chat_send_all('owner '.. self.owner ..' - name '.. name)

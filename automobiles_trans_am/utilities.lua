@@ -35,6 +35,7 @@ function trans_am.destroy(self, puncher)
     if self.r_lights then self.r_lights:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
+    if self.reverse_lights then self.reverse_lights:remove() end
 
     automobiles_lib.destroy_inventory(self)
     self.object:remove()
