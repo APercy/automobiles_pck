@@ -577,7 +577,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
 
             --control
             local steering_angle_max = 40
-            local steering_speed = 80
+            local steering_speed = 40
             if math.abs(longit_speed) > 3 then
                 local mid_speed = (steering_speed/2)
                 steering_speed = mid_speed + mid_speed / math.abs(longit_speed*0.25)
