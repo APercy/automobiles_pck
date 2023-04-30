@@ -257,8 +257,8 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
             "automobiles_trans_am_fuel.png", --combustivel
             "automobiles_trans_am_painting.png", --pintura do carro
             "automobiles_trans_am_painting.png", --pintura das portas
-            "automobiles_metal.png", --espelhos
             "automobiles_black.png", --forração portas e volante
+            "automobiles_metal.png", --espelhos
             "automobiles_trans_am_painting.png", --spoilers
             "automobiles_black.png", --tomadas de ar laterais
             "automobiles_black.png", --assoalho
