@@ -663,7 +663,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.5}))
         if (noded and noded.drawtype ~= 'airlike') then
             if noded.drawtype ~= 'liquid' then
-                local min_later_speed = 2.5
+                local min_later_speed = 4.5
                 if (later_speed > min_later_speed or later_speed < -min_later_speed) and
                         self._last_time_drift_snd >= 2.0 then
                     self._last_time_drift_snd = 0
