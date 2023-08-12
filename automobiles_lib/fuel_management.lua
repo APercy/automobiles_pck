@@ -25,7 +25,9 @@ function automobiles_lib.loadFuel(self, player_name, free, max_fuel)
     if fuel or free == true then
         local stack = ItemStack(item_name .. " 1")
         if self._energy < max_fuel then
-            if free == false then inv:remove_item("main", stack) end
+            itmstck:set_count(1)
+
+            if free == false then inv:remove_item("main", itmstck) end
             if fuel then
                 self._energy = self._energy + fuel
             end
