@@ -4,7 +4,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 automobiles_lib = {}
 
 automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
-                ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10}
+                ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10,
+                ['airutils:biofuel'] = 1,}
 
 automobiles_lib.gravity = 9.8
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
