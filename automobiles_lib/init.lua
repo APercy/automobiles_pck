@@ -594,3 +594,8 @@ initial_properties = {
     end,
 
 })
+
+minetest.register_privilege("valet_parking", {
+    description = "Gives a valet parking priv for a player",
+    give_to_singleplayer = true
+})

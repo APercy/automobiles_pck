@@ -15,7 +15,10 @@ function automobiles_lib.on_rightclick (self, clicker)
         if self._formspec_function then formspec_f = self._formspec_function end
         formspec_f(name)
 	else
-        if name == self.owner then
+        if name == self.owner or
+            (self.driver_name == nil and
+            ( minetest.check_player_privs(clicker, "valet_parking") or minetest.check_player_privs(clicker, {server=true}) )
+            ) then
             if clicker:get_player_control().aux1 == true then
                 automobiles_lib.show_vehicle_trunk_formspec(self, clicker, self._trunk_slots)
             else
