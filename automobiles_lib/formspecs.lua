@@ -1,9 +1,6 @@
 
---------------
--- Manual --
---------------
 
-function coupe.getCarFromPlayer(player)
+function automobiles_lib.getCarFromPlayer(player)
     local seat = player:get_attach()
     if seat then
         local car = seat:get_attach()
@@ -12,43 +9,46 @@ function coupe.getCarFromPlayer(player)
     return nil
 end
 
-function coupe.driver_formspec(name)
+function automobiles_lib.driver_formspec(name)
     local player = minetest.get_player_by_name(name)
-    local vehicle_obj = coupe.getCarFromPlayer(player)
-    if vehicle_obj == nil then
-        return
+    if player then
+        local vehicle_obj = automobiles_lib.getCarFromPlayer(player)
+        if vehicle_obj == nil then
+            return
+        end
+        local ent = vehicle_obj:get_luaentity()
+
+        if ent then
+            local yaw = "false"
+            if ent._yaw_by_mouse then yaw = "true" end
+
+            local basic_form = table.concat({
+                "formspec_version[3]",
+                "size[6,7]",
+	        }, "")
+
+	        basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
+            basic_form = basic_form.."button[1,2.5;4,1;lights;Lights]"
+            basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
+
+            minetest.show_formspec(name, "automobiles_lib:driver_main", basic_form)
+        end
     end
-    local ent = vehicle_obj:get_luaentity()
-
-    local yaw = "false"
-    if ent._yaw_by_mouse then yaw = "true" end
-
-    local basic_form = table.concat({
-        "formspec_version[3]",
-        "size[6,7]",
-	}, "")
-
-	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
-    basic_form = basic_form.."button[1,2.5;4,1;lights;Lights]"
-    basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
-
-    minetest.show_formspec(name, "coupe:driver_main", basic_form)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == "coupe:driver_main" then
+	if formname == "automobiles_lib:driver_main" then
         local name = player:get_player_name()
-        local car_obj = coupe.getCarFromPlayer(player)
+        local car_obj = automobiles_lib.getCarFromPlayer(player)
         if car_obj then
             local ent = car_obj:get_luaentity()
             if ent then
 		        if fields.go_out then
-
                     if ent._passenger then --any pax?
                         local pax_obj = minetest.get_player_by_name(ent._passenger)
                         automobiles_lib.dettach_pax(ent, pax_obj)
                     end
-
+                    ent._is_flying = 0
                     automobiles_lib.dettach_driver(ent, player)
 		        end
                 if fields.lights then
@@ -67,6 +67,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                 end
             end
         end
-        minetest.close_formspec(name, "coupe:driver_main")
+        minetest.close_formspec(name, "automobiles_lib:driver_main")
     end
 end)
