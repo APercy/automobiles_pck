@@ -35,7 +35,7 @@ minetest.register_craftitem("automobiles_delorean:delorean", {
 		        itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
                 automobiles_lib.setText(ent, "Delorean")
-                automobiles_lib.create_inventory(ent, delorean.trunk_slots, owner)
+                automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end
 
@@ -69,7 +69,7 @@ minetest.register_craftitem("automobiles_delorean:time_machine", {
 		        itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
                 automobiles_lib.setText(ent, "Delorean")
-                automobiles_lib.create_inventory(ent, delorean.trunk_slots, owner)
+                automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end
 

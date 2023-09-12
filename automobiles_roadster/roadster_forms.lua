@@ -1,20 +1,7 @@
 
---------------
--- Manual --
---------------
-
-function roadster.getCarFromPlayer(player)
-    local seat = player:get_attach()
-    if seat then
-        local car = seat:get_attach()
-        return car
-    end
-    return nil
-end
-
 function roadster.driver_formspec(name)
     local player = minetest.get_player_by_name(name)
-    local vehicle_obj = roadster.getCarFromPlayer(player)
+    local vehicle_obj = automobiles_lib.getCarFromPlayer(player)
     if vehicle_obj == nil then
         return
     end
@@ -39,7 +26,7 @@ end
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "roadster:driver_main" then
         local name = player:get_player_name()
-        local car_obj = roadster.getCarFromPlayer(player)
+        local car_obj = automobiles_lib.getCarFromPlayer(player)
         if car_obj then
             local ent = car_obj:get_luaentity()
             if ent then

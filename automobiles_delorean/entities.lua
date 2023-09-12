@@ -423,6 +423,11 @@ minetest.register_entity("automobiles_delorean:delorean", {
     _delorean_type = 0,
     _car_gravity = -automobiles_lib.gravity,
     _is_flying = 0,
+    _trunk_slots = 8,
+    _engine_sound = "delorean_engine",
+    _max_fuel = 10,
+    _formspec_function = delorean.driver_formspec,
+    _destroy_function = delorean.destroy,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -556,7 +561,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
 		local inv = minetest.get_inventory({type = "detached", name = self._inv_id})
 		-- if the game was closed the inventories have to be made anew, instead of just reattached
 		if not inv then
-            automobiles_lib.create_inventory(self, delorean.trunk_slots)
+            automobiles_lib.create_inventory(self, self._trunk_slots)
 		else
 		    self.inv = inv
         end
@@ -664,7 +669,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
                 --self.damage = self.damage + impact --sum the impact value directly to damage meter
                 if self._last_time_collision_snd > 0.3 then
                     self._last_time_collision_snd = 0
-                    minetest.sound_play("collision", {
+                    minetest.sound_play("automobiles_collision", {
                         to_player = self.driver_name,
 	                    --pos = curr_pos,
 	                    --max_hear_distance = 5,
@@ -792,7 +797,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
             self._last_engine_sound_update = self._last_engine_sound_update + dtime
             if self._last_engine_sound_update > 0.300 then
                 self._last_engine_sound_update = 0
-                delorean.engine_set_sound_and_animation(self, longit_speed)
+                automobiles_lib.engine_set_sound_and_animation(self, longit_speed)
             end
         end
 
@@ -850,121 +855,8 @@ minetest.register_entity("automobiles_delorean:delorean", {
 
 	end,
 
-	on_punch = function(self, puncher, ttime, toolcaps, dir, damage)
-		if not puncher or not puncher:is_player() then
-			return
-		end
-
-		local name = puncher:get_player_name()
-        --[[if self.owner and self.owner ~= name and self.owner ~= "" then return end]]--
-        if self.owner == nil then
-            self.owner = name
-        end
-        	
-        if self.driver_name and self.driver_name ~= name then
-			-- do not allow other players to remove the object while there is a driver
-			return
-		end
-        
-        local is_attached = false
-        if puncher:get_attach() == self.driver_seat then is_attached = true end
-
-        local itmstck=puncher:get_wielded_item()
-        local item_name = ""
-        if itmstck then item_name = itmstck:get_name() end
-
-        --refuel procedure
-        --[[
-        refuel works it car is stopped and engine is off
-        ]]--
-        local velocity = self.object:get_velocity()
-        local speed = automobiles_lib.get_hipotenuse_value(vector.new(), velocity)
-        if math.abs(speed) <= 0.1 then
-            if automobiles_lib.loadFuel(self, puncher:get_player_name(), false, delorean.max_fuel) then return end
-        end
-        -- end refuel
-
-        if is_attached == false then
-
-            -- deal with painting or destroying
-		    if itmstck then
-                --race status restart
-                if item_name == "checkpoints:status_restarter" and self._engine_running == false then
-                    --restart race current status
-                    self._last_checkpoint = ""
-                    self._total_laps = -1
-                    self._race_id = ""
-                    return
-                end
-
-                if automobiles_lib.set_paint(self, puncher, itmstck) == false then
-                    local is_admin = false
-                    is_admin = minetest.check_player_privs(puncher, {server=true})
-                    --minetest.chat_send_all('owner '.. self.owner ..' - name '.. name)
-				    if not self.driver and (self.owner == name or is_admin == true) and toolcaps and
-                            toolcaps.damage_groups and toolcaps.damage_groups.fleshy then
-                        self.hp = self.hp - 10
-                        minetest.sound_play("collision", {
-	                        object = self.object,
-	                        max_hear_distance = 5,
-	                        gain = 1.0,
-                            fade = 0.0,
-                            pitch = 1.0,
-                        })
-				    end
-			    end
-            end
-
-            if self.hp <= 0 then
-                delorean.destroy(self)
-            end
-
-        end
-        
-	end,
-
-	on_rightclick = function(self, clicker)
-		if not clicker or not clicker:is_player() then
-			return
-		end
-
-		local name = clicker:get_player_name()
-        --[[if self.owner and self.owner ~= name and self.owner ~= "" then return end]]--
-        if self.owner == "" then
-            self.owner = name
-        end
-
-		if name == self.driver_name then
-            delorean.driver_formspec(name)
-		else
-            if name == self.owner then
-                if clicker:get_player_control().aux1 == true then
-                    automobiles_lib.show_vehicle_trunk_formspec(self, clicker, delorean.trunk_slots)
-                else
-                    --is the owner, okay, lets attach
-                    automobiles_lib.attach_driver(self, clicker)
-                    -- sound
-                    self.sound_handle = minetest.sound_play({name = delorean.engine_sound},
-                            {object = self.object, gain = 1.5, pitch = 1, max_hear_distance = 30, loop = true,})
-                end
-            else
-                --minetest.chat_send_all("clicou")
-                --a passenger
-                if self._passenger == nil then
-                    --there is no passenger, so lets attach
-                    if self.driver_name then
-                        automobiles_lib.attach_pax(self, clicker, true)
-                    end
-                else
-                    --there is a passeger
-                    if self._passenger == name then
-                        --if you are the psenger, so deattach
-                        automobiles_lib.dettach_pax(self, clicker)
-                    end
-                end
-            end
-		end
-	end,
+	on_punch = automobiles_lib.on_punch,
+	on_rightclick = automobiles_lib.on_rightclick,
 })
 
 

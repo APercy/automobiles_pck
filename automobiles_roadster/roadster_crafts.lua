@@ -38,7 +38,7 @@ minetest.register_craftitem("automobiles_roadster:roadster", {
 			    itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
                 automobiles_lib.setText(ent, "Roadster")
-                automobiles_lib.create_inventory(ent, roadster.trunk_slots, owner)
+                automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end
 
