@@ -11,7 +11,9 @@ function automobiles_lib.on_rightclick (self, clicker)
     end
 
 	if name == self.driver_name then
-        automobiles_lib.driver_formspec(name)
+        local formspec_f = automobiles_lib.driver_formspec
+        if self._formspec_function then formspec_f = self._formspec_function end
+        formspec_f(name)
 	else
         if name == self.owner then
             if clicker:get_player_control().aux1 == true then
@@ -110,7 +112,9 @@ function automobiles_lib.on_punch (self, puncher, ttime, toolcaps, dir, damage)
         end
 
         if self.hp <= 0 then
-            automobiles_lib.destroy(self)
+            local destroy_f = automobiles_lib.destroy
+            if self._destroy_function then destroy_f = self._destroy_function end
+            destroy_f(self)
         end
 
     end

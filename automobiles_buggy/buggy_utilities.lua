@@ -53,24 +53,3 @@ function buggy.destroy(self, puncher)
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_buggy:wheel')
 end
 
-function buggy.engine_set_sound_and_animation(self, _longit_speed)
-    --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
-    if self.sound_handle then
-        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.08) or (math.abs(self._longit_speed) + 0.08 < math.abs(_longit_speed)) then
-            --minetest.chat_send_all('test2')
-            buggy.engineSoundPlay(self)
-        end
-    end
-end
-
-function buggy.engineSoundPlay(self)
-    --sound
-    if self.sound_handle then minetest.sound_stop(self.sound_handle) end
-    if self.object then
-        self.sound_handle = minetest.sound_play({name = "buggy_engine"},
-            {object = self.object, gain = 8,
-                pitch = 1 + ((self._longit_speed/10)/2),
-                max_hear_distance = 10,
-                loop = true,})
-    end
-end

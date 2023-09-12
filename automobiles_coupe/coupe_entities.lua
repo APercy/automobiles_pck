@@ -686,7 +686,6 @@ minetest.register_entity("automobiles_coupe:coupe", {
 	end,
 
 	on_punch = automobiles_lib.on_punch,
-
 	on_rightclick = automobiles_lib.on_rightclick,
 })
 
