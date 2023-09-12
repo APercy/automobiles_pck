@@ -603,3 +603,36 @@ minetest.register_privilege("valet_parking", {
     description = "Gives a valet parking priv for a player",
     give_to_singleplayer = true
 })
+
+minetest.register_chatcommand("transfer_vehicle", {
+    params = "<new_owner>",
+    description = "Transfer the property of a vehicle to another player",
+    privs = {interact=true},
+	func = function(name, param)
+        local player = minetest.get_player_by_name(name)
+        local target_player = minetest.get_player_by_name(param)
+        local attached_to = player:get_attach()
+
+		if attached_to ~= nil then
+            if target_player ~= nil then
+                local seat = attached_to:get_attach()
+                if seat ~= nil then
+                    local entity = seat:get_luaentity()
+                    if entity then
+                        if entity.owner == name or minetest.check_player_privs(name, {protection_bypass=true}) then
+                            entity.owner = param
+                            minetest.chat_send_player(name,core.colorize('#00ff00', " >>> This vehicle now is property of: "..param))
+                            automobiles_lib.setText(entity, "vehicle")
+                        else
+                            minetest.chat_send_player(name,core.colorize('#ff0000', " >>> only the owner or moderators can transfer this vehicle"))
+                        end
+                    end
+                end
+            else
+                minetest.chat_send_player(name,core.colorize('#ff0000', " >>> the target player must be logged in"))
+            end
+		else
+			minetest.chat_send_player(name,core.colorize('#ff0000', " >>> you are not inside a vehicle to perform the command"))
+		end
+	end
+})
