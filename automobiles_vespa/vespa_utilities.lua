@@ -43,24 +43,3 @@ function vespa.destroy(self, puncher)
     minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_vespa:wheel')
 end
 
-function vespa.engine_set_sound_and_animation(self, _longit_speed)
-    --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
-    if self.sound_handle then
-        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.03) or (math.abs(self._longit_speed) + 0.03 < math.abs(_longit_speed)) then
-            --minetest.chat_send_all('test2')
-            vespa.engineSoundPlay(self)
-        end
-    end
-end
-
-function vespa.engineSoundPlay(self)
-    --sound
-    if self.sound_handle then minetest.sound_stop(self.sound_handle) end
-    if self.object then
-        self.sound_handle = minetest.sound_play({name = "vespa_engine"},
-            {object = self.object, gain = 0.3,
-                pitch = 0.7 + ((self._longit_speed/10)/2),
-                max_hear_distance = 30,
-                loop = true,})
-    end
-end

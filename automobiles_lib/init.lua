@@ -421,7 +421,10 @@ function automobiles_lib.engineSoundPlay(self)
     --sound
     if self.sound_handle then minetest.sound_stop(self.sound_handle) end
     if self.object then
-        local snd_pitch = 1 + ((self._longit_speed/10)/2)
+        local base_pitch = 1
+        if self._base_pitch then base_pitch = self._base_pitch end
+
+        local snd_pitch = base_pitch + ((self._longit_speed/10)/2)
         if self._transmission_state == 1 then
             snd_pitch = 1 + (self._longit_speed/10)
         end
@@ -541,6 +544,7 @@ dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "painter.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "inventory_management.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "formspecs.lua")
+dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "entities.lua")
 
 -- engine
 minetest.register_craftitem("automobiles_lib:engine",{

@@ -46,10 +46,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		        if fields.go_out then
                     if ent._passenger then --any pax?
                         local pax_obj = minetest.get_player_by_name(ent._passenger)
-                        automobiles_lib.dettach_pax(ent, pax_obj)
+
+                        local dettach_pax_f = automobiles_lib.dettach_pax
+                        if ent._dettach_pax then attach_driver_f = ent._dettach_pax end
+                        dettach_pax_f(ent, pax_obj)                        
                     end
                     ent._is_flying = 0
-                    automobiles_lib.dettach_driver(ent, player)
+
+                    local dettach_f = automobiles_lib.dettach_driver
+                    if ent._dettach then dettach_f = ent._dettach end
+                    dettach_f(ent, player) 
 		        end
                 if fields.lights then
                     if ent._show_lights == true then

@@ -1,7 +1,7 @@
 
 function automobiles_lib.on_rightclick (self, clicker)
 	if not clicker or not clicker:is_player() then
-		return
+		--return
 	end
 
 	local name = clicker:get_player_name()
@@ -9,7 +9,7 @@ function automobiles_lib.on_rightclick (self, clicker)
     if self.owner == "" then
         self.owner = name
     end
-
+    
 	if name == self.driver_name then
         local formspec_f = automobiles_lib.driver_formspec
         if self._formspec_function then formspec_f = self._formspec_function end
@@ -23,10 +23,14 @@ function automobiles_lib.on_rightclick (self, clicker)
                 automobiles_lib.show_vehicle_trunk_formspec(self, clicker, self._trunk_slots)
             else
                 --is the owner, okay, lets attach
-                automobiles_lib.attach_driver(self, clicker)
+                local attach_driver_f = automobiles_lib.attach_driver
+                if self._attach then attach_driver_f = self._attach end
+                attach_driver_f(self, clicker)
                 -- sound
+                local base_pitch = 1
+                if self._base_pitch then base_pitch = self._base_pitch end
                 self.sound_handle = minetest.sound_play({name = self._engine_sound},
-                        {object = self.object, gain = 1.5, pitch = 1, max_hear_distance = 30, loop = true,})
+                        {object = self.object, gain = 1, pitch = base_pitch, max_hear_distance = 30, loop = true,})
             end
         else
             --minetest.chat_send_all("clicou")
@@ -34,13 +38,17 @@ function automobiles_lib.on_rightclick (self, clicker)
             if self._passenger == nil then
                 --there is no passenger, so lets attach
                 if self.driver_name then
-                    automobiles_lib.attach_pax(self, clicker, true)
+                    local attach_pax_f = automobiles_lib.attach_pax
+                    if self._attach_pax then attach_pax_f = self._attach_pax end
+                    attach_pax_f(self, clicker, true)
                 end
             else
                 --there is a passeger
                 if self._passenger == name then
                     --if you are the psenger, so deattach
-                    automobiles_lib.dettach_pax(self, clicker)
+                    local dettach_pax_f = automobiles_lib.dettach_pax
+                    if self._dettach_pax then dettach_pax_f = self._dettach_pax end
+                    dettach_pax_f(self, clicker)
                 end
             end
         end
