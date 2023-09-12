@@ -216,7 +216,7 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
         collide_with_objects = true,
 	    collisionbox = {-0.1, -0.4, -0.1, 0.1, 1.8, 0.1},
 	    selectionbox = {-2.0, 0.0, -2.0, 2.0, 2, 2.0},
-        stepheight = 0.65,
+        stepheight = 0.65 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_catrelle_body.b3d",
         --use_texture_alpha = true,

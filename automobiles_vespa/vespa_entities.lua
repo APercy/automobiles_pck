@@ -98,7 +98,7 @@ minetest.register_entity("automobiles_vespa:vespa", {
         collide_with_objects = true,
 	    collisionbox = {-0.1, -0.24, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1, 1, -1, 1, -1, 1},
-        stepheight = 0.8,
+        stepheight = 0.8 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_vespa_body.b3d",
         --use_texture_alpha = true,

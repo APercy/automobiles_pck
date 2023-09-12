@@ -239,7 +239,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
         collide_with_objects = true,
 	    collisionbox = {-0.1, -0.45, -0.1, 0.1, 1, 0.1},
 	    selectionbox = {-1.5, 0.0, -1.5, 1.5, 2, 1.5},
-        stepheight = 0.7,
+        stepheight = 0.7 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_buggy_body.b3d",
         --use_texture_alpha = true,

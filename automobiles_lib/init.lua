@@ -3,12 +3,24 @@
 local S = minetest.get_translator(minetest.get_current_modname())
 automobiles_lib = {}
 
+local storage = minetest.get_mod_storage()
+
 automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
                 ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10,
                 ['airutils:biofuel'] = 1,}
 
 automobiles_lib.gravity = 9.8
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
+
+
+local load_noob_mode = storage:get_int("noob_mode")
+automobiles_lib.noob_mode = false
+automobiles_lib.extra_stepheight = 0
+-- 1 == true ---- 2 == false
+if load_noob_mode == 1 then
+    automobiles_lib.load_noob_mode = true
+    automobiles_lib.extra_stepheight = 1
+end
 
 --cars colors
 automobiles_lib.colors ={
@@ -635,4 +647,26 @@ minetest.register_chatcommand("transfer_vehicle", {
 			minetest.chat_send_player(name,core.colorize('#ff0000', " >>> you are not inside a vehicle to perform the command"))
 		end
 	end
+})
+
+minetest.register_chatcommand("noobfy_the_vehicles", {
+    params = "<true/false>",
+    description = "Enable/disable the NOOB mode for the vehicles",
+    privs = {server=true},
+    func = function(name, param)
+        local command = param
+
+        if command == "false" then
+            automobiles_lib.noob_mode = false
+            automobiles_lib.extra_stepheight = 0
+            minetest.chat_send_player(name, ">>> Noob mode is disabled - A restart is required to changes take full effect")
+        else
+            automobiles_lib.noob_mode = true
+            automobiles_lib.extra_stepheight = 1
+            minetest.chat_send_player(name, ">>> Noob mode is enabled - A restart is required to changes take full effect")
+        end
+        local save = 2
+        if automobiles_lib.noob_mode == true then save = 1 end
+        storage:set_int("noob_mode", save)
+    end,
 })
