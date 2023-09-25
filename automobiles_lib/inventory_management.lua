@@ -1,4 +1,4 @@
-local storage = minetest.get_mod_storage()
+local storage = automobiles_lib.storage
 automobiles_lib.modname = minetest.get_current_modname()
 
 local function get_formspec_by_size(self, size)
@@ -94,8 +94,8 @@ function automobiles_lib.remove_inventory(self)
                 local pos = self.object:get_pos()
                 for k, v in pairs(inv_content) do
                     local count = 0
-                    for i = 0,v:get_count()-1,1 
-                    do 
+                    for i = 0,v:get_count()-1,1
+                    do
                         minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},v:get_name())
                         count = count + 1
                         if count >= 5 then break end
@@ -177,7 +177,7 @@ function automobiles_lib.list_inventory(self)
     local inventory = automobiles_lib.get_inventory(self)
     if inventory then
         local list = inventory.get_list("main")
-        
+
         minetest.chat_send_all(dump(list))
     end
 end

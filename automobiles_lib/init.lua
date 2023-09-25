@@ -1,9 +1,11 @@
 -- Minetest 5.4.1 : automobiles
 
 local S = minetest.get_translator(minetest.get_current_modname())
-automobiles_lib = {}
+automobiles_lib = {
+    storage = minetest.get_mod_storage()
+}
 
-local storage = minetest.get_mod_storage()
+local storage = automobiles_lib.storage
 
 automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
                 ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10,
