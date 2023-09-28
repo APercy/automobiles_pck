@@ -468,6 +468,12 @@ minetest.register_node("automobiles_lib:light", {
 })
 
 function automobiles_lib.set_paint(self, puncher, itmstck)
+    local is_admin = false
+    is_admin = minetest.check_player_privs(puncher, {server=true})
+    if not (self.owner == puncher:get_player_name() or is_admin == true) then
+        return
+    end
+
     local item_name = ""
     if itmstck then item_name = itmstck:get_name() end
 
