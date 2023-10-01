@@ -98,7 +98,8 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
                 self._last_front_detection = rear_obstacle_level.y
                 --here we need to set the collision effect
                 self.object:set_acceleration({x=0,y=0,z=0})
-                self.object:set_velocity({x=0,y=0,z=0})
+		local oldvel = self.object:get_velocity()
+                self.object:add_velocity(vector.subtract(vector.new(), oldvel))
             end
         end
 
