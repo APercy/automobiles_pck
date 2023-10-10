@@ -8,7 +8,7 @@ function automobiles_lib.physics(self)
 	if self.isonground and not self.isinliquid then
         --minetest.chat_send_all('okay')
 		self.object:add_velocity({x=vel.x*friction-vel.x,
-					  y=vel.y,
+					  y=0,
 					  z=vel.z*friction-vel.z})
 	end
 	
