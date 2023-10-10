@@ -7,9 +7,9 @@ function automobiles_lib.physics(self)
 		-- dumb friction
 	if self.isonground and not self.isinliquid then
         --minetest.chat_send_all('okay')
-		self.object:add_velocity({x=vel.x - vel.x*friction,
-					  y=0,
-					  z=vel.z - vel.z*friction})
+		self.object:add_velocity({x=vel.x*friction-vel.x,
+					  y=vel.y,
+					  z=vel.z*friction-vel.z})
 	end
 	
 	-- bounciness
