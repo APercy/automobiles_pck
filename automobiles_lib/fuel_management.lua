@@ -13,7 +13,6 @@ end
 
 function automobiles_lib.loadFuel(self, player_name, free, max_fuel)
     free = free or false
-
     local player = minetest.get_player_by_name(player_name)
     local inv = player:get_inventory()
 
@@ -22,6 +21,7 @@ function automobiles_lib.loadFuel(self, player_name, free, max_fuel)
     if itmstck then item_name = itmstck:get_name() end
 
     local fuel = automobiles_lib.contains(automobiles_lib.fuel, item_name)
+    --minetest.chat_send_all(dump(fuel))
     if fuel or free == true then
         local stack = ItemStack(item_name .. " 1")
         if self._energy < max_fuel then

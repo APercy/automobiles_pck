@@ -817,7 +817,8 @@ minetest.register_entity("automobiles_delorean:delorean", {
 
         if stop ~= true then
             --self.object:set_velocity(velocity)
-            self.object:set_acceleration(accel)
+            self.object:add_velocity(vector.multiply(accel,dtime))
+            --self.object:set_acceleration(accel)
         else
             if stop == true then
                 self.object:set_acceleration({x=0,y=0,z=0})

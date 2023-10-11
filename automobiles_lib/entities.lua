@@ -84,9 +84,12 @@ function automobiles_lib.on_punch (self, puncher, ttime, toolcaps, dir, damage)
     ]]--
     local velocity = self.object:get_velocity()
     local speed = automobiles_lib.get_hipotenuse_value(vector.new(), velocity)
-    if math.abs(speed) <= 0.1 then
-        if automobiles_lib.loadFuel(self, puncher:get_player_name(), false, self._max_fuel) then return end
+    --if math.abs(speed) <= 0.1 then
+    local was_refueled = automobiles_lib.loadFuel(self, puncher:get_player_name(), false, self._max_fuel)
+    if was_refueled then
+        return
     end
+    --end
     -- end refuel
 
     if is_attached == false then
