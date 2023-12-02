@@ -678,3 +678,25 @@ minetest.register_chatcommand("noobfy_the_vehicles", {
         storage:set_int("noob_mode", save)
     end,
 })
+
+
+local old_entities = {
+    "automobiles_buggy:pivot_mesh",
+    "automobiles_buggy:pointer",
+    "automobiles_catrelle:pivot_mesh",
+    "automobiles_catrelle:pointer",
+    "automobiles_coupe:pivot_mesh",
+    "automobiles_coupe:pointer",
+    "automobiles_delorean:pivot_mesh",
+    "automobiles_delorean:pointer",
+    "automobiles_roadster:pivot_mesh",
+    "automobiles_trans_am:pivot_mesh",
+    "automobiles_trans_am:pointer",
+}
+for _,entity_name in ipairs(old_entities) do
+    minetest.register_entity(":"..entity_name, {
+        on_activate = function(self, staticdata)
+            self.object:remove()
+        end,
+    })
+end

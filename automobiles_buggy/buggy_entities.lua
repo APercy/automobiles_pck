@@ -167,28 +167,6 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_buggy:pivot_mesh',{
-initial_properties = {
-	physical = false,
-	collide_with_objects=false,
-	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
-    textures = {"automobiles_black.png",},
-	},
-	
-    on_activate = function(self,std)
-	    self.sdata = minetest.deserialize(std) or {}
-	    if self.sdata.remove then self.object:remove() end
-    end,
-	    
-    get_staticdata=function(self)
-      self.sdata.remove=true
-      return minetest.serialize(self.sdata)
-    end,
-	
-})
-
 minetest.register_entity('automobiles_buggy:steering',{
 initial_properties = {
 	physical = false,
@@ -209,28 +187,6 @@ initial_properties = {
       return minetest.serialize(self.sdata)
     end,
 	
-})
-
-minetest.register_entity('automobiles_buggy:pointer',{
-initial_properties = {
-	physical = false,
-	collide_with_objects=false,
-	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pointer.b3d",
-    visual_size = {x = 0.8, y = 0.8, z = 0.8},
-	textures = {"automobiles_white.png"},
-	},
-	
-    on_activate = function(self,std)
-	    self.sdata = minetest.deserialize(std) or {}
-	    if self.sdata.remove then self.object:remove() end
-    end,
-	    
-    get_staticdata=function(self)
-      self.sdata.remove=true
-      return minetest.serialize(self.sdata)
-    end,
 })
 
 minetest.register_entity("automobiles_buggy:buggy", {

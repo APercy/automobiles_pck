@@ -143,28 +143,6 @@ initial_properties = {
 	
 })
 
-minetest.register_entity('automobiles_roadster:pivot_mesh',{
-initial_properties = {
-	physical = false,
-	collide_with_objects=false,
-	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
-    textures = {"automobiles_black.png",},
-	},
-	
-    on_activate = function(self,std)
-	    self.sdata = minetest.deserialize(std) or {}
-	    if self.sdata.remove then self.object:remove() end
-    end,
-	    
-    get_staticdata=function(self)
-      self.sdata.remove=true
-      return minetest.serialize(self.sdata)
-    end,
-	
-})
-
 minetest.register_entity('automobiles_roadster:steering',{
 initial_properties = {
 	physical = false,
