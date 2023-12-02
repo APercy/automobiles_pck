@@ -8,11 +8,6 @@ roadster.gravity = automobiles_lib.gravity
 roadster.max_speed = 12
 roadster.max_acc_factor = 5
 
-ROADSTER_GAUGE_FUEL_POSITION =  {x=0,y=8.04,z=17.84}
-
-roadster.front_wheel_xpos = 10.26
-roadster.rear_wheel_xpos = 10.26
-
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")

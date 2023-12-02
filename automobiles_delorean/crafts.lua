@@ -29,7 +29,7 @@ minetest.register_craftitem("automobiles_delorean:delorean", {
             local owner = placer:get_player_name()
             if ent then
                 ent.owner = owner
-                ent._delorean_type = 0
+                ent._car_type = 0
                 --minetest.chat_send_all("owner: " .. ent.owner)
 		        car:set_yaw(placer:get_look_horizontal())
 		        itemstack:take_item()
@@ -62,8 +62,8 @@ minetest.register_craftitem("automobiles_delorean:time_machine", {
             local owner = placer:get_player_name()
             if ent then
                 ent.owner = owner
-                ent._delorean_type = 1
-                --minetest.chat_send_all("delorean: " .. ent._delorean_type)
+                ent._car_type = 1
+                --minetest.chat_send_all("delorean: " .. ent._car_type)
                 --minetest.chat_send_all("owner: " .. ent.owner)
 		        car:set_yaw(placer:get_look_horizontal())
 		        itemstack:take_item()

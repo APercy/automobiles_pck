@@ -9,11 +9,6 @@ delorean.max_speed = 30
 delorean.max_acc_factor = 8
 delorean.ideal_step = 0.2
 
-DELOREAN_GAUGE_FUEL_POSITION =  {x=-4.66,y=6.2,z=17.9}
-
-delorean.front_wheel_xpos = 9.5
-delorean.rear_wheel_xpos = 9.5
-
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "ground_detection.lua")

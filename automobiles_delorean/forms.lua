@@ -33,7 +33,7 @@ function delorean.driver_formspec(name)
 
 	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
     basic_form = basic_form.."button[1,2.5;4,1;lights;Lights]"
-    if ent._delorean_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;Flight Mode;"..flight.."]" end
+    if ent._car_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;Flight Mode;"..flight.."]" end
     basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
 
     minetest.show_formspec(name, "delorean:driver_main", basic_form)

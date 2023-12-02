@@ -282,138 +282,35 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
     _engine_sound = "automobiles_engine",
     _max_fuel = 10,
 
-    get_staticdata = function(self) -- unloaded/unloads ... is now saved
-        return minetest.serialize({
-            stored_owner = self.owner,
-            stored_hp = self.hp,
-            stored_color = self._color,
-            stored_steering = self._steering_angle,
-            stored_energy = self._energy,
-            --race data
-            stored_last_checkpoint = self._last_checkpoint,
-            stored_total_laps = self._total_laps,
-            stored_race_id = self._race_id,
-            stored_rag = self._show_rag,
-            stored_pitch = self._pitch,
-            stored_light_old_pos = self._light_old_pos,
-            stored_inv_id = self._inv_id,
-            stored_catrelle_type = self._catrelle_type,
-            stored_car_gravity = self._car_gravity,
-        })
-    end,
+    _vehicle_name = "Catrelle",
+    _drive_wheel_pos = {x=-4.0, y=8.00, z=21},
+    _drive_wheel_angle = 15,
+    _seat_pos = {{x=-4.0,y=3,z=15},{x=4.0,y=3,z=15}},
+
+    _front_suspension_ent = 'automobiles_catrelle:front_suspension',
+    _front_suspension_pos = {x=0,y=-0.2,z=30.5},
+    _front_wheel_ent = 'automobiles_catrelle:wheel',
+    _front_wheel_xpos = 7.5,
+    _front_wheel_frames = {x = 1, y = 49},
+    _rear_suspension_ent = 'automobiles_catrelle:rear_suspension',
+    _rear_suspension_pos = {x=0,y=-0.2,z=0},
+    _rear_wheel_ent = 'automobiles_catrelle:wheel',
+    _rear_wheel_xpos = 7.5,
+    _rear_wheel_frames = {x = 1, y = 49},
+
+    _fuel_gauge_pos = {x=-4.47,y=8.50,z=20.5},
+    _front_lights = 'automobiles_catrelle:f_lights',
+    _rear_lights = 'automobiles_catrelle:r_lights',
+    _turn_left_lights = 'automobiles_catrelle:turn_left_light',
+    _turn_right_lights = 'automobiles_catrelle:turn_right_light',
+
+    get_staticdata = automobiles_lib.get_staticdata,
 
 	on_deactivate = function(self)
         automobiles_lib.save_inventory(self)
 	end,
 
-	on_activate = function(self, staticdata, dtime_s)
-        if staticdata ~= "" and staticdata ~= nil then
-            local data = minetest.deserialize(staticdata) or {}
-            self.owner = data.stored_owner
-            self.hp = data.stored_hp
-            self._color = data.stored_color
-            self._steering_angle = data.stored_steering
-            self._energy = data.stored_energy
-            --minetest.debug("loaded: ", self.energy)
-            --race data
-            self._last_checkpoint = data.stored_last_checkpoint
-            self._total_laps = data.stored_total_laps
-            self._race_id = data.stored_race_id
-            self._show_rag = data.stored_rag
-            self._pitch = data.stored_pitch
-            self._light_old_pos = data.stored_light_old_pos
-            self._inv_id = data.stored_inv_id
-
-            self._catrelle_type = data.stored_catrelle_type
-            self._car_gravity = data.stored_car_gravity or -automobiles_lib.gravity
-
-            automobiles_lib.setText(self, "catrelle")
-        end
-
-        self.object:set_animation({x = 1, y = 8}, 0, 0, true)
-
-        automobiles_lib.paint(self, self._color)
-        local pos = self.object:get_pos()
-
-        local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_catrelle:front_suspension')
-	    front_suspension:set_attach(self.object,'',{x=0,y=-0.2,z=30.5},{x=0,y=0,z=0})
-	    self.front_suspension = front_suspension
-
-	    local lf_wheel=minetest.add_entity(pos,'automobiles_catrelle:wheel')
-	    lf_wheel:set_attach(self.front_suspension,'',{x=-catrelle.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        lf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
-	    self.lf_wheel = lf_wheel
-
-	    local rf_wheel=minetest.add_entity(pos,'automobiles_catrelle:wheel')
-	    rf_wheel:set_attach(self.front_suspension,'',{x=catrelle.front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
-		-- set the animation once and later only change the speed
-        rf_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
-	    self.rf_wheel = rf_wheel
-
-        local rear_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_catrelle:rear_suspension')
-	    rear_suspension:set_attach(self.object,'',{x=0,y=-0.2,z=0},{x=0,y=0,z=0})
-	    self.rear_suspension = rear_suspension
-
-	    local lr_wheel=minetest.add_entity(pos,'automobiles_catrelle:wheel')
-	    lr_wheel:set_attach(self.rear_suspension,'',{x=-catrelle.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        lr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
-	    self.lr_wheel = lr_wheel
-
-	    local rr_wheel=minetest.add_entity(pos,'automobiles_catrelle:wheel')
-	    rr_wheel:set_attach(self.rear_suspension,'',{x=catrelle.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
-		-- set the animation once and later only change the speed
-        rr_wheel:set_animation({x = 1, y = 49}, 0, 0, true)
-	    self.rr_wheel = rr_wheel
-
-        self.object:set_bone_position("drive_adjust", {x=-4.0, y=8.00, z=21}, {x=15, y=0, z=0}) 
-
-	    local driver_seat=minetest.add_entity(pos,'automobiles_catrelle:pivot_mesh')
-        driver_seat:set_attach(self.object,'',{x=-4.0,y=3,z=15},{x=0,y=0,z=0})
-	    self.driver_seat = driver_seat
-
-	    local passenger_seat=minetest.add_entity(pos,'automobiles_catrelle:pivot_mesh')
-        passenger_seat:set_attach(self.object,'',{x=4.0,y=3,z=15},{x=0,y=0,z=0})
-	    self.passenger_seat = passenger_seat
-
-        local fuel_gauge=minetest.add_entity(pos,'automobiles_catrelle:pointer')
-        fuel_gauge:set_attach(self.object,'',catrelle_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
-        self.fuel_gauge = fuel_gauge
-
-        local lights = minetest.add_entity(pos,'automobiles_catrelle:f_lights')
-	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.lights = lights
-        self.lights:set_properties({is_visible=true})
-
-        local r_lights = minetest.add_entity(pos,'automobiles_catrelle:r_lights')
-	    r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.r_lights = r_lights
-        self.r_lights:set_properties({is_visible=true})
-
-        local turn_l_light = minetest.add_entity(pos,'automobiles_catrelle:turn_left_light')
-	    turn_l_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.turn_l_light = turn_l_light
-        self.turn_l_light:set_properties({is_visible=true})
-
-        local turn_r_light = minetest.add_entity(pos,'automobiles_catrelle:turn_right_light')
-	    turn_r_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.turn_r_light = turn_r_light
-        self.turn_r_light:set_properties({is_visible=true})
-
-		self.object:set_armor_groups({immortal=1})
-
-		local inv = minetest.get_inventory({type = "detached", name = self._inv_id})
-		-- if the game was closed the inventories have to be made anew, instead of just reattached
-		if not inv then
-            automobiles_lib.create_inventory(self, self._trunk_slots)
-		else
-		    self.inv = inv
-        end
-
-
-        automobiles_lib.actfunc(self, staticdata, dtime_s)
-	end,
+    on_activate = automobiles_lib.on_activate,
 
 	on_step = function(self, dtime)
         automobiles_lib.stepfunc(self, dtime)
@@ -539,10 +436,10 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
         local angle_factor = self._steering_angle / 10
 
         --whell turn
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=-catrelle.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=catrelle.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
-        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-catrelle.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-        self.rr_wheel:set_attach(self.rear_suspension,'',{x=catrelle.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
+        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
 
         --check if the tyres is touching the pavement
         local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.5}))
@@ -638,7 +535,7 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
         end
 
         local energy_indicator_angle = automobiles_lib.get_gauge_angle(self._energy)
-        self.fuel_gauge:set_attach(self.object,'',catrelle_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
+        self.fuel_gauge:set_attach(self.object,'',self._fuel_gauge_pos,{x=0,y=0,z=energy_indicator_angle})
         ----------------------------
         -- end energy consumption --
 

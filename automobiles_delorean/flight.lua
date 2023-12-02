@@ -2,12 +2,12 @@ function delorean.set_kit(self)
     local normal_kit = nil
     if self.normal_kit then self.normal_kit:remove() end
     local pos = self.object:get_pos()
-    if self._delorean_type == 0 or self._delorean_type == nil then
+    if self._car_type == 0 or self._car_type == nil then
         normal_kit = minetest.add_entity(pos,'automobiles_delorean:normal_kit')
         normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
         self.normal_kit = normal_kit
         self.normal_kit:set_properties({is_visible=true})
-    elseif self._delorean_type == 1 then
+    elseif self._car_type == 1 then
         --time machine
         normal_kit = minetest.add_entity(pos,'automobiles_delorean:time_machine_kit')
         normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
@@ -71,16 +71,16 @@ end
 function delorean.set_wheels_mode(self, angle_factor)
     if not self._is_flying or self._is_flying == 0 then
         --whell turn
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=-delorean.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=delorean.front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
-        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-delorean.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-        self.rr_wheel:set_attach(self.rear_suspension,'',{x=delorean.rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
+        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
     else
         local extra_space = 0.5
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=-delorean.front_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=delorean.front_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
-        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-delorean.rear_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
-        self.rr_wheel:set_attach(self.rear_suspension,'',{x=delorean.rear_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
+        self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos+extra_space,y=0,z=0},{x=0,y=180,z=-90})
     end
 end
 
@@ -95,7 +95,7 @@ function delorean.turn_flight_mode(self)
 end
 
 function delorean.set_mode(self, is_attached, curr_pos, velocity, player, dtime)
-    if self._delorean_type == 1 then
+    if self._car_type == 1 then
         local ent_propertioes = self.normal_kit:get_properties()
         if ent_propertioes.mesh ~= "automobiles_delorean_time_machine_accessories.b3d" then
             delorean.set_kit(self)

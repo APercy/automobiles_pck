@@ -283,131 +283,36 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _formspec_function = roadster.driver_formspec,
     _destroy_function = roadster.destroy,
 
-    get_staticdata = function(self) -- unloaded/unloads ... is now saved
-        return minetest.serialize({
-            stored_owner = self.owner,
-            stored_hp = self.hp,
-            stored_color = self._color,
-            stored_steering = self._steering_angle,
-            stored_energy = self._energy,
-            --race data
-            stored_last_checkpoint = self._last_checkpoint,
-            stored_total_laps = self._total_laps,
-            stored_race_id = self._race_id,
-            stored_rag = self._show_rag,
-            stored_pitch = self._pitch,
-            stored_light_old_pos = self._light_old_pos,
-            stored_inv_id = self._inv_id,
-        })
-    end,
+    _vehicle_name = "Roadster",
+    _drive_wheel_pos = {x=-4.25,y=12,z=14},
+    _drive_wheel_angle = 70,
+    _steering_ent = 'automobiles_roadster:steering',
+    _rag_extended_ent = 'automobiles_roadster:top1',
+    _rag_retracted_ent = 'automobiles_roadster:top2',
+    _seat_pos = {{x=-4.25,y=7.12,z=9.5},{x=4.25,y=7.12,z=9.5}},
+
+    _front_suspension_ent = 'automobiles_roadster:front_suspension',
+    _front_suspension_pos = {x=0,y=0,z=24.22},
+    _front_wheel_ent = 'automobiles_roadster:wheel',
+    _front_wheel_xpos = 10.26,
+    _front_wheel_frames = {x = 2, y = 13},
+    _rear_suspension_ent = 'automobiles_trans_am:rear_suspension',
+    _rear_suspension_pos = {x=0,y=0,z=0},
+    _rear_wheel_ent = 'automobiles_roadster:wheel',
+    _rear_wheel_xpos = 10.26,
+    _rear_wheel_frames = {x = 2, y = 13},
+
+    _fuel_gauge_pos = {x=0,y=8.04,z=17.84},
+    _gauge_pointer_ent = 'automobiles_roadster:pointer',
+    _front_lights = 'automobiles_roadster:lights',
+
+    get_staticdata = automobiles_lib.get_staticdata,
 
 	on_deactivate = function(self)
         automobiles_lib.save_inventory(self)
 	end,
 
-	on_activate = function(self, staticdata, dtime_s)
-        if staticdata ~= "" and staticdata ~= nil then
-            local data = minetest.deserialize(staticdata) or {}
-            self.owner = data.stored_owner
-            self.hp = data.stored_hp
-            self._color = data.stored_color
-            self._steering_angle = data.stored_steering
-            self._energy = data.stored_energy
-            --minetest.debug("loaded: ", self.energy)
-            --race data
-            self._last_checkpoint = data.stored_last_checkpoint
-            self._total_laps = data.stored_total_laps
-            self._race_id = data.stored_race_id
-            self._show_rag = data.stored_rag
-            self._pitch = data.stored_pitch
-            self._light_old_pos = data.stored_light_old_pos
-            self._inv_id = data.stored_inv_id
-            automobiles_lib.setText(self, "Roadster")
-        end
-
-        self.object:set_animation({x = 1, y = 8}, 0, 0, true)
-
-        automobiles_lib.paint(self, self._color)
-        local pos = self.object:get_pos()
-
-        local top1=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:top1')
-	    top1:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.top1 = top1
-
-        local top2=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:top2')
-	    top2:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.top2 = top2
-        self.top2:set_properties({is_visible=false})
-
-        local front_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:front_suspension')
-	    front_suspension:set_attach(self.object,'',{x=0,y=0,z=24.22},{x=0,y=0,z=0})
-	    self.front_suspension = front_suspension
-
-	    local lf_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    lf_wheel:set_attach(self.front_suspension,'',{x=-roadster.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        lf_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
-	    self.lf_wheel = lf_wheel
-
-	    local rf_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    rf_wheel:set_attach(self.front_suspension,'',{x=roadster.front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        rf_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
-	    self.rf_wheel = rf_wheel
-
-        local rear_suspension=minetest.add_entity(self.object:get_pos(),'automobiles_roadster:rear_suspension')
-	    rear_suspension:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.rear_suspension = rear_suspension
-
-	    local lr_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    lr_wheel:set_attach(self.rear_suspension,'',{x=-roadster.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        lr_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
-	    self.lr_wheel = lr_wheel
-
-	    local rr_wheel=minetest.add_entity(pos,'automobiles_roadster:wheel')
-	    rr_wheel:set_attach(self.rear_suspension,'',{x=roadster.rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-		-- set the animation once and later only change the speed
-        rr_wheel:set_animation({x = 2, y = 13}, 0, 0, true)
-	    self.rr_wheel = rr_wheel
-
-	    local steering_axis=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        steering_axis:set_attach(self.object,'',{x=-4.25,y=12,z=14},{x=70,y=0,z=0})
-	    self.steering_axis = steering_axis
-
-	    local steering=minetest.add_entity(self.steering_axis:get_pos(),'automobiles_roadster:steering')
-        steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.steering = steering
-
-	    local driver_seat=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        driver_seat:set_attach(self.object,'',{x=-4.25,y=7.12,z=9.5},{x=0,y=0,z=0})
-	    self.driver_seat = driver_seat
-
-	    local passenger_seat=minetest.add_entity(pos,'automobiles_roadster:pivot_mesh')
-        passenger_seat:set_attach(self.object,'',{x=4.25,y=7.12,z=9.5},{x=0,y=0,z=0})
-	    self.passenger_seat = passenger_seat
-
-        local fuel_gauge=minetest.add_entity(pos,'automobiles_roadster:pointer')
-        fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=0})
-        self.fuel_gauge = fuel_gauge
-
-        local lights = minetest.add_entity(pos,'automobiles_roadster:lights')
-	    lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.lights = lights
-        self.lights:set_properties({is_visible=false})
-
-		self.object:set_armor_groups({immortal=1})
-
-		local inv = minetest.get_inventory({type = "detached", name = self._inv_id})
-		-- if the game was closed the inventories have to be made anew, instead of just reattached
-		if not inv then
-            automobiles_lib.create_inventory(self, self._trunk_slots)
-		else
-		    self.inv = inv
-        end
-
-        automobiles_lib.actfunc(self, staticdata, dtime_s)
-	end,
+    on_activate = automobiles_lib.on_activate,
 
 	on_step = function(self, dtime)
         automobiles_lib.stepfunc(self, dtime)
@@ -441,12 +346,12 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
         if self._show_rag == true then
             self.object:set_bone_position("windshield", {x=0, z=15.8317, y=15.0394}, {x=145, y=0, z=0})
-            self.top2:set_properties({is_visible=true})
-            self.top1:set_properties({is_visible=false})
+            self.rag_rect:set_properties({is_visible=true})
+            self.rag:set_properties({is_visible=false})
         else
             self.object:set_bone_position("windshield", {x=0, z=15.8317, y=15.0394}, {x=0, y=0, z=0})
-            self.top2:set_properties({is_visible=false})
-            self.top1:set_properties({is_visible=true})
+            self.rag_rect:set_properties({is_visible=false})
+            self.rag:set_properties({is_visible=true})
         end
 
         local player = nil
@@ -548,8 +453,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
 
         --whell turn
         self.steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=self._steering_angle*2})
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=roadster.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
-        self.rf_wheel:set_attach(self.front_suspension,'',{x=-roadster.front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle+angle_factor,z=0})
+        self.lf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        self.rf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle+angle_factor,z=0})
 
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)
@@ -592,7 +497,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
         end
 
         local energy_indicator_angle = automobiles_lib.get_gauge_angle(self._energy)
-        self.fuel_gauge:set_attach(self.object,'',ROADSTER_GAUGE_FUEL_POSITION,{x=0,y=0,z=energy_indicator_angle})
+        self.fuel_gauge:set_attach(self.object,'',self._fuel_gauge_pos,{x=0,y=0,z=energy_indicator_angle})
         ----------------------------
         -- end energy consumption --
 
