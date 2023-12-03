@@ -81,6 +81,12 @@ minetest.register_craftitem("automobiles_catrelle:catrelle_tl", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
+		output = "automobiles_catrelle:catrelle_tl",
+		recipe = {
+			{"automobiles_catrelle:catrelle", "default:glass", "default:steelblock"},
+		}
+	})
+	minetest.register_craft({
 		output = "automobiles_catrelle:catrelle",
 		recipe = {
 			{"automobiles_lib:wheel", "automobiles_lib:engine", "automobiles_lib:wheel"},

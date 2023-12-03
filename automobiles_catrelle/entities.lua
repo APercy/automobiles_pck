@@ -632,7 +632,7 @@ catrelle.car_properties2.initial_properties.textures[9] = "automobiles_alpha.png
 catrelle.car_properties2.initial_properties.textures[10] = "automobiles_catrelle_lat_glass.png"
 catrelle.car_properties2._seat_pos = {{x=-4.0,y=3,z=15},{x=4.0,y=3,z=15}, {x=-4.0,y=3,z=7},{x=4.0,y=3,z=7}}
 catrelle.car_properties2._color = "#0063b0"
-catrelle.car_properties2._trunk_slots = 24
+catrelle.car_properties2._trunk_slots = 16
 catrelle.car_properties2._extra_items_function = catrelle.extra_parts
 catrelle.car_properties2._destroy_function = catrelle.destroy
 
