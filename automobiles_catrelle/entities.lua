@@ -186,6 +186,8 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
             "automobiles_painting.png", --interior 1
             "automobiles_dark_grey.png", --interior 2
             "automobiles_black.png", --painel1
+            "automobiles_painting.png", --lat glass interno
+            "automobiles_painting.png", --lat glass externo
             "automobiles_catrelle_fuel.png", --combustivel
             "automobiles_catrelle_glass.png", --parabrisa
             "automobiles_metal.png", --para choques
@@ -244,7 +246,7 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
     _seat_pos = {{x=-4.0,y=3,z=15},{x=4.0,y=3,z=15}},
 
     _front_suspension_ent = 'automobiles_catrelle:front_suspension',
-    _front_suspension_pos = {x=0,y=-0.2,z=30.5},
+    _front_suspension_pos = {x=0,y=-0.2,z=29},
     _front_wheel_ent = 'automobiles_catrelle:wheel',
     _front_wheel_xpos = 7.5,
     _front_wheel_frames = {x = 1, y = 49},
