@@ -1,3 +1,61 @@
+function catrelle.extra_parts(self)
+    local pos = self.object:get_pos()
+    local back_seat = minetest.add_entity(pos,'automobiles_catrelle:back_seat')
+    back_seat:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+    self.back_seat = back_seat
+end
+
+-- destroy the delorean
+function catrelle.destroy(self, puncher)
+    automobiles_lib.remove_light(self)
+    if self.sound_handle then
+        minetest.sound_stop(self.sound_handle)
+        self.sound_handle = nil
+    end
+
+    if self.driver_name then
+        -- detach the driver first (puncher must be driver)
+        if puncher then
+            puncher:set_detach()
+            puncher:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+            if minetest.global_exists("player_api") then
+                player_api.player_attached[self.driver_name] = nil
+                -- player should stand again
+                player_api.set_animation(puncher, "stand")
+            end
+        end
+        self.driver_name = nil
+    end
+
+    local pos = self.object:get_pos()
+
+    if self.front_suspension then self.front_suspension:remove() end
+    if self.lf_wheel then self.lf_wheel:remove() end
+    if self.rf_wheel then self.rf_wheel:remove() end
+    if self.rear_suspension then self.rear_suspension:remove() end
+    if self.lr_wheel then self.lr_wheel:remove() end
+    if self.rr_wheel then self.rr_wheel:remove() end
+    if self.fuel_gauge then self.fuel_gauge:remove() end
+    if self.lights then self.lights:remove() end
+    if self.r_lights then self.r_lights:remove() end
+    if self.reverse_lights then self.reverse_lights:remove() end
+    if self.turn_l_light then self.turn_l_light:remove() end
+    if self.turn_r_light then self.turn_r_light:remove() end
+    if self.back_seat then self.back_seat:remove() end
+
+    automobiles_lib.seats_destroy(self)
+
+    automobiles_lib.destroy_inventory(self)
+    self.object:remove()
+
+    pos.y=pos.y+2
+
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+end
 --
 -- entity
 --
@@ -166,7 +224,34 @@ initial_properties = {
 	
 })
 
-minetest.register_entity("automobiles_catrelle:catrelle", {
+minetest.register_entity('automobiles_catrelle:back_seat',{
+initial_properties = {
+	physical = true,
+	collide_with_objects=true,
+    collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
+	pointable=false,
+	visual = "mesh",
+	mesh = "automobiles_catrelle_seat.b3d",
+    textures = {"automobiles_black.png",},
+	},
+
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+
+    --[[on_step = function(self, dtime, moveresult)
+        minetest.chat_send_all(dump(moveresult))
+    end,]]--
+	
+})
+
+catrelle.car_properties1 = {
 	initial_properties = {
 	    physical = true,
         collide_with_objects = true,
@@ -210,7 +295,7 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
     lastvelocity = vector.new(),
     time_total = 0,
     _passenger = nil,
-    _color = "#0063b0",
+    _color = "#07B6BC",
     _steering_angle = 0,
     _engine_running = false,
     _last_checkpoint = "",
@@ -535,6 +620,21 @@ minetest.register_entity("automobiles_catrelle:catrelle", {
 
 	on_punch = automobiles_lib.on_punch,
 	on_rightclick = automobiles_lib.on_rightclick,
-})
+}
 
+minetest.register_entity("automobiles_catrelle:catrelle", catrelle.car_properties1)
+
+catrelle.car_properties2 = automobiles_lib.properties_copy(catrelle.car_properties1)
+catrelle.car_properties2._vehicle_name = "Catrelle TL"
+catrelle.car_properties2.initial_properties = automobiles_lib.properties_copy(catrelle.car_properties1.initial_properties)
+catrelle.car_properties2.initial_properties.textures = automobiles_lib.properties_copy(catrelle.car_properties1.initial_properties.textures)
+catrelle.car_properties2.initial_properties.textures[9] = "automobiles_alpha.png"
+catrelle.car_properties2.initial_properties.textures[10] = "automobiles_catrelle_lat_glass.png"
+catrelle.car_properties2._seat_pos = {{x=-4.0,y=3,z=15},{x=4.0,y=3,z=15}, {x=-4.0,y=3,z=7},{x=4.0,y=3,z=7}}
+catrelle.car_properties2._color = "#0063b0"
+catrelle.car_properties2._trunk_slots = 24
+catrelle.car_properties2._extra_items_function = catrelle.extra_parts
+catrelle.car_properties2._destroy_function = catrelle.destroy
+
+minetest.register_entity("automobiles_catrelle:catrelle_tl", catrelle.car_properties2)
 

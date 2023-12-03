@@ -1,26 +1,3 @@
-function delorean.set_kit(self)
-    local normal_kit = nil
-    if self.normal_kit then self.normal_kit:remove() end
-    local pos = self.object:get_pos()
-    if self._car_type == 0 or self._car_type == nil then
-        normal_kit = minetest.add_entity(pos,'automobiles_delorean:normal_kit')
-        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.normal_kit = normal_kit
-        self.normal_kit:set_properties({is_visible=true})
-    elseif self._car_type == 1 then
-        --time machine
-        normal_kit = minetest.add_entity(pos,'automobiles_delorean:time_machine_kit')
-        normal_kit:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.normal_kit = normal_kit
-        self.normal_kit:set_properties({is_visible=true})
-
-        local instruments = minetest.add_entity(pos,'automobiles_delorean:time_machine_kit_instruments')
-        instruments:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.instruments = instruments
-        self.instruments:set_properties({is_visible=true})
-    end
-end
-
 function delorean.gravity_auto_correction(self, dtime)
     local factor = 1
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._car_gravity)

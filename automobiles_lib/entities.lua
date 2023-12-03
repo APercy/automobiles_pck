@@ -78,7 +78,7 @@ function automobiles_lib.on_rightclick (self, clicker)
         else
             --minetest.chat_send_all("clicou")
             --a passenger
-            if self._passenger == nil then
+            if not player_api.player_attached[name] then
                 --there is no passenger, so lets attach
                 if self.driver_name then
                     local attach_pax_f = automobiles_lib.attach_pax
@@ -87,12 +87,10 @@ function automobiles_lib.on_rightclick (self, clicker)
                 end
             else
                 --there is a passeger
-                if self._passenger == name then
-                    --if you are the psenger, so deattach
-                    local dettach_pax_f = automobiles_lib.dettach_pax
-                    if self._dettach_pax then dettach_pax_f = self._dettach_pax end
-                    dettach_pax_f(self, clicker)
-                end
+                --if you are the psenger, so deattach
+                local dettach_pax_f = automobiles_lib.dettach_pax
+                if self._dettach_pax then dettach_pax_f = self._dettach_pax end
+                dettach_pax_f(self, clicker)
             end
         end
 	end
@@ -288,13 +286,15 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 	    self.rag = rag
     end
 
-    local driver_seat=minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
+    automobiles_lib.seats_create(self)
+
+    --[[local driver_seat=minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
     driver_seat:set_attach(self.object,'',self._seat_pos[1],{x=0,y=0,z=0})
     self.driver_seat = driver_seat
 
     local passenger_seat=minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
     passenger_seat:set_attach(self.object,'',self._seat_pos[2],{x=0,y=0,z=0})
-    self.passenger_seat = passenger_seat
+    self.passenger_seat = passenger_seat]]--
 
     local pointer_entity = 'automobiles_lib:pointer'
     if self._gauge_pointer_ent then pointer_entity = self._gauge_pointer_ent end

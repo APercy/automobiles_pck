@@ -63,6 +63,14 @@ function automobiles_lib.minmax(v,m)
 	return math.min(math.abs(v),m)*minekart.sign(v)
 end
 
+function automobiles_lib.properties_copy(origin_table)
+    local tablecopy = {}
+    for k, v in pairs(origin_table) do
+      tablecopy[k] = v
+    end
+    return tablecopy
+end
+
 --returns 0 for old, 1 for new
 function automobiles_lib.detect_player_api(player)
     local player_proterties = player:get_properties()
@@ -81,6 +89,28 @@ function automobiles_lib.detect_player_api(player)
     end
 
     return 0
+end
+
+function automobiles_lib.seats_create(self)
+    if self.object then
+        local pos = self.object:get_pos()
+        self._passengers_base = {}
+        self._passengers = {}
+        if self._seat_pos then 
+            local max_seats = table.getn(self._seat_pos)
+            for i=1, max_seats do
+                self._passengers_base[i] = minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
+                if not self._seats_rot then
+                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=0,z=0})
+                else
+                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=self._seats_rot[i],z=0})
+                end
+            end
+
+            self.driver_seat = self._passengers_base[1] --sets pilot seat reference
+            self.passenger_seat = self._passengers_base[2] --sets copilot seat reference
+        end
+    end
 end
 
 -- attach player
@@ -156,103 +186,112 @@ function automobiles_lib.attach_pax(self, player, onside)
     local onside = onside or false
     local name = player:get_player_name()
 
-    if onside == true then
-        if self._passenger == nil then
-            self._passenger = name
+    local eye_y = -4
+    if airutils.detect_player_api(player) == 1 then
+        eye_y = 2.5
+    end
 
-            -- attach the driver
-            player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-            local eye_y = -4
-            if automobiles_lib.detect_player_api(player) == 1 then
-                eye_y = 2.5
-            end
-            player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
-            player_api.player_attached[name] = true
-            -- make the pax sit
+    if self._passenger == nil then
+        self._passenger = name
 
-            minetest.after(0.2, function()
-                player = minetest.get_player_by_name(name)
-                if player then
-                    local speed = 30.01
-                    local mesh = player:get_properties().mesh
-                    if mesh then
-                        local character = player_api.registered_models[mesh]
-                        if character and character.animation_speed then
-                            speed = character.animation_speed + 0.01
-                        end
+        -- attach the driver
+        player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+        player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
+        player_api.player_attached[name] = true
+        -- make the pax sit
+
+        minetest.after(0.2, function()
+            player = minetest.get_player_by_name(name)
+            if player then
+                local speed = 30.01
+                local mesh = player:get_properties().mesh
+                if mesh then
+                    local character = player_api.registered_models[mesh]
+                    if character and character.animation_speed then
+                        speed = character.animation_speed + 0.01
                     end
-                    player_api.set_animation(player, "sit", speed)
-                    if emote then emote.start(player:get_player_name(), "sit") end
                 end
-            end)
-
-
-        end
+                player_api.set_animation(player, "sit", speed)
+                if emote then emote.start(player:get_player_name(), "sit") end
+            end
+        end)
     else
         --randomize the seat
-        --[[local t = {1,2,3,4,5,6,7,8,9,10}
+        local max_seats = table.getn(self._seat_pos) --driver and front passenger
+
+        t = {}    -- new array
+        for i=1, max_seats do --(the first are for the driver
+            t[i] = i
+        end
+
         for i = 1, #t*2 do
             local a = math.random(#t)
             local b = math.random(#t)
             t[a],t[b] = t[b],t[a]
         end
 
-        --for i = 1,10,1 do
         for k,v in ipairs(t) do
             i = t[k]
-            if self._passengers[i] == nil then
+            if self._passengers[i] == nil and i > 2 then
                 --minetest.chat_send_all(self.driver_name)
                 self._passengers[i] = name
                 player:set_attach(self._passengers_base[i], "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-                if i > 2 then
-                    player:set_eye_offset({x = 0, y = -4, z = 2}, {x = 0, y = 3, z = -30})
-                else
-                    player:set_eye_offset({x = 0, y = -4, z = 0}, {x = 0, y = 3, z = -30})
-                end
+                player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = 3, z = -30})
                 player_api.player_attached[name] = true
-                -- make the driver sit
+                -- make the pax sit
+
                 minetest.after(0.2, function()
                     player = minetest.get_player_by_name(name)
                     if player then
-	                    player_api.set_animation(player, "sit")
-                        --apply_physics_override(player, {speed=0,gravity=0,jump=0})
+                        local speed = 30.01
+                        local mesh = player:get_properties().mesh
+                        if mesh then
+                            local character = player_api.registered_models[mesh]
+                            if character and character.animation_speed then
+                                speed = character.animation_speed + 0.01
+                            end
+                        end
+                        player_api.set_animation(player, "sit", speed)
+                        if emote then emote.start(player:get_player_name(), "sit") end
                     end
                 end)
+
                 break
             end
-        end]]--
+        end
 
     end
 end
 
 function automobiles_lib.dettach_pax(self, player)
-    if player then
-        local name = player:get_player_name() --self._passenger
+    if not player then return end
+    local name = player:get_player_name() --self._passenger
 
-        -- passenger clicked the object => driver gets off the vehicle
-        if self._passenger == name then
-            self._passenger = nil
-        else
-            --[[for i = 10,1,-1
-            do
-                if self._passengers[i] == name then
-                    self._passengers[i] = nil
-                    break
-                end
-            end]]--
-        end
-
-        -- detach the player
-        if player then
-            --player:set_properties({physical=true})
-            player:set_detach()
-            player_api.player_attached[name] = nil
-            player_api.set_animation(player, "stand")
-            player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-            --remove_physics_override(player, {speed=1,gravity=1,jump=1})
-        end
-    else
+    -- passenger clicked the object => driver gets off the vehicle
+    if self._passenger == name then
         self._passenger = nil
+        self._passengers[2] = nil
+    else
+        local max_seats = table.getn(self._seat_pos)
+        for i = max_seats,1,-1
+        do 
+            if self._passengers[i] == name then
+                self._passengers[i] = nil
+                break
+            end
+        end
+    end
+
+    -- detach the player
+    if player then
+        local pos = player:get_pos()
+        player:set_detach()
+
+        player_api.player_attached[name] = nil
+        player_api.set_animation(player, "stand")
+
+        player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
+        --remove_physics_override(player, {speed=1,gravity=1,jump=1})
     end
 end
 
@@ -369,6 +408,13 @@ function automobiles_lib.put_light(self)
 
 end
 
+function automobiles_lib.seats_destroy(self)
+    local max_seats = table.getn(self._passengers_base)
+    for i=1, max_seats do
+        if self._passengers_base[i] then self._passengers_base[i]:remove() end
+    end
+end
+
 function automobiles_lib.destroy(self, puncher)
     automobiles_lib.remove_light(self)
     if self.sound_handle then
@@ -408,6 +454,8 @@ function automobiles_lib.destroy(self, puncher)
     if self.reverse_lights then self.reverse_lights:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
+
+    automobiles_lib.seats_destroy(self)
 
     automobiles_lib.destroy_inventory(self)
     self.object:remove()

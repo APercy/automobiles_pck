@@ -1,50 +1,72 @@
 local storage = automobiles_lib.storage
 automobiles_lib.modname = minetest.get_current_modname()
 
+--function to format formspec for mineclone. In case of minetest, just returns an empty string
+local function get_itemslot_bg(a, b, c, d)
+    if mcl_formspec then
+        return mcl_formspec.get_itemslot_bg(a,b,c,d)
+    end
+    return ""
+end
+
 local function get_formspec_by_size(self, size)
-    local background = default.gui_bg .. default.gui_bg_img .. default.gui_slots
+    local background = ""
+    local hotbar = ""
+    local is_minetest_game = false
+    if is_minetest_game then
+        background = background .. default.gui_bg .. default.gui_bg_img .. default.gui_slots
+        hotbar = default.get_hotbar_bg(0,4.85)
+    end
     local default_inventory_formspecs = {
+	    ["2"]="size[8,6]".. background ..
+	    "list[detached:" .. self._inv_id .. ";main;3.0,0;3,1;]" .. get_itemslot_bg(3.0, 0, 2, 1) ..
+	    "list[current_player;main;0,2;8,4;]" .. get_itemslot_bg(0, 2, 8, 4) ..
+	    "listring[]",
+
+	    ["3"]="size[8,6]".. background ..
+	    "list[detached:" .. self._inv_id .. ";main;2.5,0;3,1;]" .. get_itemslot_bg(2.5, 0, 3, 1) ..
+	    "list[current_player;main;0,2;8,4;]" .. get_itemslot_bg(0, 2, 8, 4) ..
+	    "listring[]",
+
 	    ["4"]="size[8,6]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;2,0;4,1;]" ..
-	    "list[current_player;main;0,2;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;2,0;4,1;]" .. get_itemslot_bg(2.0, 0, 4, 1) ..
+	    "list[current_player;main;0,2;8,4;]" .. get_itemslot_bg(0, 2, 8, 4) ..
 	    "listring[]",
 
 	    ["6"]="size[8,6]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;1,0;6,1;]"..
-	    "list[current_player;main;0,2;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;1,0;6,1;]".. get_itemslot_bg(1.0, 0, 6, 1) ..
+	    "list[current_player;main;0,2;8,4;]" .. get_itemslot_bg(0, 2, 8, 4) ..
 	    "listring[]",
 
 	    ["8"]="size[8,6]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;0,0;8,1;]"..
-	    "list[current_player;main;0,2;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;0,0;8,1;]".. get_itemslot_bg(0, 0, 8, 1) ..
+	    "list[current_player;main;0,2;8,4;]" .. get_itemslot_bg(0, 2, 8, 4) ..
 	    "listring[]",
 
 	    ["12"]="size[8,7]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;1,0;6,2;]"..
-	    "list[current_player;main;0,3;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;1,0;6,2;]".. get_itemslot_bg(1, 0, 6, 2) ..
+	    "list[current_player;main;0,3;8,4;]" .. get_itemslot_bg(0, 3, 8, 4) ..
 	    "listring[]",
 
 	    ["16"]="size[8,7]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;0,0;8,2;]"..
-	    "list[current_player;main;0,3;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;0,0;8,2;]".. get_itemslot_bg(0, 0, 8, 2) ..
+	    "list[current_player;main;0,3;8,4;]" .. get_itemslot_bg(0, 3, 8, 4) ..
 	    "listring[]",
 
 	    ["24"]="size[8,8]".. background ..
-	    "list[context:" .. self._inv_id .. ";main;0,0;8,3;]"..
-	    "list[current_player;main;0,4;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;0,0;8,3;]"..  get_itemslot_bg(0, 0, 8, 3) ..
+	    "list[current_player;main;0,4;8,4;]" .. get_itemslot_bg(0, 4, 8, 4) ..
 	    "listring[]",
 
 	    ["32"]="size[8,9]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;0,0.3;8,4;]"..
-	    "list[current_player;main;0,4.85;8,1;]"..
-	    "list[current_player;main;0,6.08;8,3;8]"..
-	    "listring[context;main]" ..
-	    "listring[current_player;main]" ..
-	    default.get_hotbar_bg(0,4.85),
+	    "list[detached:" .. self._inv_id .. ";main;0,0.3;8,4;]".. get_itemslot_bg(0, 0.3, 8, 4) ..
+	    "list[current_player;main;0,5;8,4;]".. get_itemslot_bg(0, 5, 8, 4) ..
+	    "listring[]" ..
+	    hotbar,
 
 	    ["50"]="size[10,10]".. background ..
-	    "list[detached:" .. self._inv_id .. ";main;0,0;10,5;]"..
-	    "list[current_player;main;1,6;8,4;]" ..
+	    "list[detached:" .. self._inv_id .. ";main;0,0;10,5;]".. get_itemslot_bg(0, 0, 10, 5) ..
+	    "list[current_player;main;1,6;8,4;]" .. get_itemslot_bg(1, 6, 8, 4) ..
 	    "listring[]",
     }
 

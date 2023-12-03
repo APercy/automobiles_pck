@@ -274,7 +274,7 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _front_wheel_ent = 'automobiles_roadster:wheel',
     _front_wheel_xpos = 10.26,
     _front_wheel_frames = {x = 2, y = 13},
-    _rear_suspension_ent = 'automobiles_trans_am:rear_suspension',
+    _rear_suspension_ent = 'automobiles_roadster:rear_suspension',
     _rear_suspension_pos = {x=0,y=0,z=0},
     _rear_wheel_ent = 'automobiles_roadster:wheel',
     _rear_wheel_xpos = 10.26,
