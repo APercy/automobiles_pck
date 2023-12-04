@@ -625,7 +625,7 @@ catrelle.car_properties1 = {
 minetest.register_entity("automobiles_catrelle:catrelle", catrelle.car_properties1)
 
 catrelle.car_properties2 = automobiles_lib.properties_copy(catrelle.car_properties1)
-catrelle.car_properties2._vehicle_name = "Catrelle TL"
+catrelle.car_properties2._vehicle_name = "Catrelle 4F"
 catrelle.car_properties2.initial_properties = automobiles_lib.properties_copy(catrelle.car_properties1.initial_properties)
 catrelle.car_properties2.initial_properties.textures = automobiles_lib.properties_copy(catrelle.car_properties1.initial_properties.textures)
 catrelle.car_properties2.initial_properties.textures[9] = "automobiles_alpha.png"
@@ -636,5 +636,5 @@ catrelle.car_properties2._trunk_slots = 16
 catrelle.car_properties2._extra_items_function = catrelle.extra_parts
 catrelle.car_properties2._destroy_function = catrelle.destroy
 
-minetest.register_entity("automobiles_catrelle:catrelle_tl", catrelle.car_properties2)
+minetest.register_entity("automobiles_catrelle:catrelle_4f", catrelle.car_properties2)
 

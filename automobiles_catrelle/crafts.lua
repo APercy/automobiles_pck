@@ -44,8 +44,8 @@ minetest.register_craftitem("automobiles_catrelle:catrelle", {
 })
 
 -- catrelle TL
-minetest.register_craftitem("automobiles_catrelle:catrelle_tl", {
-	description = S("Catrelle TL"),
+minetest.register_craftitem("automobiles_catrelle:catrelle_4f", {
+	description = S("Catrelle 4F"),
 	inventory_image = "automobiles_catrelle.png",
     liquids_pointable = false,
 
@@ -56,7 +56,7 @@ minetest.register_craftitem("automobiles_catrelle:catrelle_tl", {
 
         local pointed_pos = pointed_thing.above
 		--pointed_pos.y=pointed_pos.y+0.2
-		local car = minetest.add_entity(pointed_pos, "automobiles_catrelle:catrelle_tl")
+		local car = minetest.add_entity(pointed_pos, "automobiles_catrelle:catrelle_4f")
 		if car and placer then
             local ent = car:get_luaentity()
             local owner = placer:get_player_name()
@@ -67,7 +67,7 @@ minetest.register_craftitem("automobiles_catrelle:catrelle_tl", {
 		        car:set_yaw(placer:get_look_horizontal())
 		        itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
-                automobiles_lib.setText(ent, "Catrelle TL")
+                automobiles_lib.setText(ent, "Catrelle 4F")
                 automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end
@@ -81,7 +81,7 @@ minetest.register_craftitem("automobiles_catrelle:catrelle_tl", {
 --
 if minetest.get_modpath("default") then
 	minetest.register_craft({
-		output = "automobiles_catrelle:catrelle_tl",
+		output = "automobiles_catrelle:catrelle_4f",
 		recipe = {
 			{"automobiles_catrelle:catrelle", "default:glass", "default:steelblock"},
 		}

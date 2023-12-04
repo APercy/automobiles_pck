@@ -733,6 +733,7 @@ local old_entities = {
     "automobiles_buggy:pointer",
     "automobiles_catrelle:pivot_mesh",
     "automobiles_catrelle:pointer",
+    "automobiles_catrelle:catrelle_tl",
     "automobiles_coupe:pivot_mesh",
     "automobiles_coupe:pointer",
     "automobiles_delorean:pivot_mesh",
