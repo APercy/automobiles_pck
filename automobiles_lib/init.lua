@@ -187,7 +187,7 @@ function automobiles_lib.attach_pax(self, player, onside)
     local name = player:get_player_name()
 
     local eye_y = -4
-    if airutils.detect_player_api(player) == 1 then
+    if automobiles_lib.detect_player_api(player) == 1 then
         eye_y = 2.5
     end
 
