@@ -2,12 +2,7 @@
 -- constants
 --
 trans_am={}
-trans_am.LONGIT_DRAG_FACTOR = 0.12*0.12
-trans_am.LATER_DRAG_FACTOR = 6.0
 trans_am.gravity = automobiles_lib.gravity
-trans_am.max_speed = 40
-trans_am.max_acc_factor = 12
-trans_am.ideal_step = 0.2
 
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")

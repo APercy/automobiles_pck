@@ -12,6 +12,7 @@ automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
                 ['airutils:biofuel'] = 1,}
 
 automobiles_lib.gravity = 9.8
+automobiles_lib.ideal_step = 0.2
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
 
 
@@ -601,6 +602,7 @@ end
 function automobiles_lib.get_transmission_state(curr_speed, max_speed)
     local retVal = 1
     if curr_speed >= (max_speed/4) then retVal = 2 end
+    if curr_speed >= (max_speed/2) then retVal = 3 end
     return retVal
 end
 
@@ -741,6 +743,7 @@ local old_entities = {
     "automobiles_roadster:pivot_mesh",
     "automobiles_trans_am:pivot_mesh",
     "automobiles_trans_am:pointer",
+    "automobiles_buggy:steering",
 }
 for _,entity_name in ipairs(old_entities) do
     minetest.register_entity(":"..entity_name, {

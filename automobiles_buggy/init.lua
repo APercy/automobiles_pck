@@ -2,11 +2,7 @@
 -- constants
 --
 buggy={}
-buggy.LONGIT_DRAG_FACTOR = 0.14*0.14
-buggy.LATER_DRAG_FACTOR = 25.0
 buggy.gravity = automobiles_lib.gravity
-buggy.max_speed = 15
-buggy.max_acc_factor = 5
 
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
