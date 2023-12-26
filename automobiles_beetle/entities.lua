@@ -376,7 +376,7 @@ auto_beetle.car_properties1 = {
     _max_fuel = 10,
 
     _vehicle_name = "Beetle",
-    _drive_wheel_pos = {x=-4.0, y=7.00, z=21},
+    _drive_wheel_pos = {x=-4.42, y=7.00, z=21},
     _drive_wheel_angle = 12,
     _seat_pos = {{x=-4.0,y=2,z=13.8},{x=4.0,y=2,z=13.8}, {x=-4.0,y=2,z=7},{x=4.0,y=2,z=7}},
 
@@ -392,7 +392,7 @@ auto_beetle.car_properties1 = {
     _rear_wheel_frames = {x = 1, y = 24},
     _wheel_compensation = 0.9,
 
-    _fuel_gauge_pos = {x=-4.47,y=8.50,z=20.5},
+    _fuel_gauge_pos = {x=-4.42,y=8.70,z=20.2},
     _front_lights = 'automobiles_beetle:f_lights',
     _rear_lights = 'automobiles_beetle:r_lights',
     _reverse_lights = 'automobiles_beetle:reverse_lights',
