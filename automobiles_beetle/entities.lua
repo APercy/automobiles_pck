@@ -406,6 +406,8 @@ auto_beetle.car_properties1 = {
     _painting_load = auto_beetle.paint,
     _transmission_state = 1,
 
+    _horn_sound = 'beetle_horn',
+
     _LONGIT_DRAG_FACTOR = 0.12*0.12,
     _LATER_DRAG_FACTOR = 6.0,
     _max_acc_factor = 5,

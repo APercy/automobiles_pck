@@ -285,6 +285,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _gauge_pointer_ent = 'automobiles_roadster:pointer',
     _front_lights = 'automobiles_roadster:lights',
 
+    _horn_sound = 'roadster_horn',
+
     _LONGIT_DRAG_FACTOR = 0.16*0.16,
     _LATER_DRAG_FACTOR = 20.0,
     _max_acc_factor = 5,

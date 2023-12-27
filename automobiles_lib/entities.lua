@@ -414,7 +414,9 @@ function automobiles_lib.on_step(self, dtime)
             --sets the engine running - but sets a delay also, cause keypress
             if self._last_time_command > 0.8 then
                 self._last_time_command = 0
-                minetest.sound_play({name = "automobiles_horn"},
+                local horn_sound = "automobiles_horn"
+                if self._horn_sound then horn_sound = self._horn_sound end
+                minetest.sound_play({name = horn_sound},
                         {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})
             end
         end
