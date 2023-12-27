@@ -7,7 +7,7 @@ local S = minetest.get_translator(minetest.get_current_modname())
 -- body
 minetest.register_craftitem("automobiles_beetle:beetle_body",{
 	description = S("Beetle Body"),
-	inventory_image = "automobiles_beetle_body.png",
+	inventory_image = "beetle_body.png",
 })
 
 -- beetle
@@ -56,7 +56,7 @@ if minetest.get_modpath("default") then
 	minetest.register_craft({
 		output = "automobiles_beetle:beetle_body",
 		recipe = {
-            {"default:glass" ,"default:steel_ingot","default:steel_ingot"},
+            {"default:glass" ,"default:steel_ingot","default:glass"},
 			{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
 			{"default:steelblock","default:steelblock", "default:steelblock"},
 		}

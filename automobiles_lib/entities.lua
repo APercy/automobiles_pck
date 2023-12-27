@@ -560,18 +560,20 @@ function automobiles_lib.on_step(self, dtime)
             self._turn_light_timer = 0
             --set turn light
             --minetest.chat_send_all(self._steering_angle)
+            local textures_l = self._textures_turn_lights_on or {"automobiles_rear_lights_full.png"}
             if self._steering_angle < 0 then
                 --minetest.chat_send_all("direita")
-                self.turn_r_light:set_properties({textures={"automobiles_rear_lights_full.png"}, glow=20})
+                self.turn_r_light:set_properties({textures=textures_l, glow=20})
             end
             if self._steering_angle > 0 then
                 --minetest.chat_send_all("esquerda")
-                self.turn_l_light:set_properties({textures={"automobiles_rear_lights_full.png"}, glow=20})
+                self.turn_l_light:set_properties({textures=textures_l, glow=20})
             end
         end
         if self._turn_light_timer > 0.5 then
-            self.turn_l_light:set_properties({textures={"automobiles_rear_lights_off.png"}, glow=0})
-            self.turn_r_light:set_properties({textures={"automobiles_rear_lights_off.png"}, glow=0})
+            local textures_l = self._textures_turn_lights_off or {"automobiles_rear_lights_off.png"}
+            self.turn_l_light:set_properties({textures=textures_l, glow=0})
+            self.turn_r_light:set_properties({textures=textures_l, glow=0})
         end
         if self._turn_light_timer > 1 then
             self._turn_light_timer = 1

@@ -179,7 +179,7 @@ initial_properties = {
     glow = 0,
 	visual = "mesh",
 	mesh = "beetle_turn_l_light.b3d",
-    textures = {"automobiles_turn.png",},
+    textures = {"automobiles_rear_lights.png", "automobiles_turn.png", },
 	},
 
     on_activate = function(self,std)
@@ -202,7 +202,7 @@ initial_properties = {
     glow = 0,
 	visual = "mesh",
 	mesh = "beetle_turn_r_light.b3d",
-    textures = {"automobiles_turn.png",},
+    textures = {"automobiles_rear_lights.png", "automobiles_turn.png", },
 	},
 
     on_activate = function(self,std)
@@ -378,7 +378,7 @@ auto_beetle.car_properties1 = {
     _vehicle_name = "Beetle",
     _drive_wheel_pos = {x=-4.42, y=7.00, z=21},
     _drive_wheel_angle = 12,
-    _seat_pos = {{x=-4.0,y=2,z=13.8},{x=4.0,y=2,z=13.8}, {x=-4.0,y=2,z=7},{x=4.0,y=2,z=7}},
+    _seat_pos = {{x=-4.0,y=2,z=13.8},{x=4.0,y=2,z=13.8}, {x=-3.5,y=2,z=5},{x=3.5,y=2,z=5}},
 
     _front_suspension_ent = 'automobiles_beetle:front_suspension',
     _front_suspension_pos = {x=0,y=1.8,z=27.6},
@@ -398,6 +398,8 @@ auto_beetle.car_properties1 = {
     _reverse_lights = 'automobiles_beetle:reverse_lights',
     _turn_left_lights = 'automobiles_beetle:turn_left_light',
     _turn_right_lights = 'automobiles_beetle:turn_right_light',
+    _textures_turn_lights_off = {"automobiles_rear_lights.png", "automobiles_turn.png", },
+    _textures_turn_lights_on = {"automobiles_rear_lights_full.png", "automobiles_turn_on.png", },
 
     _change_color = auto_beetle.paint,
     _painting_function = auto_beetle.set_paint,
