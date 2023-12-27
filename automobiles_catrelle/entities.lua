@@ -346,6 +346,8 @@ catrelle.car_properties1 = {
     _rear_lights = 'automobiles_catrelle:r_lights',
     _turn_left_lights = 'automobiles_catrelle:turn_left_light',
     _turn_right_lights = 'automobiles_catrelle:turn_right_light',
+    _textures_turn_lights_off = {"automobiles_turn.png", },
+    _textures_turn_lights_on = { "automobiles_turn_on.png", },
 
     _LONGIT_DRAG_FACTOR = 0.12*0.12,
     _LATER_DRAG_FACTOR = 10.0,
