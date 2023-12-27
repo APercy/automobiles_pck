@@ -262,7 +262,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _LATER_DRAG_FACTOR = 6.0,
     _max_acc_factor = 5,
     _max_speed = 15,
-    _min_later_speed = 2.5,
+    _min_later_speed = 4.0,
 
     get_staticdata = automobiles_lib.get_staticdata,
 
