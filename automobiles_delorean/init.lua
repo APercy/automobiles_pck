@@ -2,12 +2,7 @@
 -- constants
 --
 delorean={}
-delorean.LONGIT_DRAG_FACTOR = 0.12*0.12
-delorean.LATER_DRAG_FACTOR = 8.0
 delorean.gravity = automobiles_lib.gravity
-delorean.max_speed = 30
-delorean.max_acc_factor = 8
-delorean.ideal_step = 0.2
 
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")

@@ -430,7 +430,18 @@ minetest.register_entity("automobiles_delorean:delorean", {
     _reverse_lights = 'automobiles_delorean:reverse_lights',
     _turn_left_lights = 'automobiles_delorean:turn_left_light',
     _turn_right_lights = 'automobiles_delorean:turn_right_light',
+    _textures_turn_lights_off = {"automobiles_turn.png", },
+    _textures_turn_lights_on = { "automobiles_turn_on.png", },
     _extra_items_function = delorean.set_kit, --uses _car_type do change "skin"
+
+    _setmode = delorean.set_mode,
+    _control_function = delorean.control,
+
+    _LONGIT_DRAG_FACTOR = 0.12*0.12,
+    _LATER_DRAG_FACTOR = 8.0,
+    _max_acc_factor = 8.0,
+    _max_speed = 30,
+    _min_later_speed = 4.5,
 
     get_staticdata = automobiles_lib.get_staticdata,
 
@@ -440,14 +451,15 @@ minetest.register_entity("automobiles_delorean:delorean", {
 
     on_activate = automobiles_lib.on_activate,
 
-	on_step = function(self, dtime)
+    on_step = automobiles_lib.on_step,
+	--[[on_step = function(self, dtime)
         automobiles_lib.stepfunc(self, dtime)
-        --[[sound play control]]--
+        --sound play control--
         self._last_time_collision_snd = self._last_time_collision_snd + dtime
         if self._last_time_collision_snd > 1 then self._last_time_collision_snd = 1 end
         self._last_time_drift_snd = self._last_time_drift_snd + dtime
         if self._last_time_drift_snd > 1 then self._last_time_drift_snd = 1 end
-        --[[end sound control]]--
+        --end sound control--
 
         local rotation = self.object:get_rotation()
         local yaw = rotation.y
@@ -548,9 +560,6 @@ minetest.register_entity("automobiles_delorean:delorean", {
                         pitch = 1.0,
                     })
                 end
-                --[[if self.damage > 100 then --if acumulated damage is greater than 100, adieu
-                    automobiles_lib.destroy(self)
-                end]]--
             end
 
             --control
@@ -636,11 +645,9 @@ minetest.register_entity("automobiles_delorean:delorean", {
             self._turn_light_timer = 1
         end
         
-        --[[
-        accell correction
-        under some circunstances the acceleration exceeds the max value accepted by set_acceleration and
-        the game crashes with an overflow, so limiting the max acceleration in each axis prevents the crash
-        ]]--
+        --accell correction
+        --under some circunstances the acceleration exceeds the max value accepted by set_acceleration and
+        --the game crashes with an overflow, so limiting the max acceleration in each axis prevents the crash
         local max_factor = 25
         local acc_adjusted = 10
         if accel.x > max_factor then accel.x = acc_adjusted end
@@ -724,7 +731,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
         self.lastvelocity = self.object:get_velocity()
         self._longit_speed = longit_speed
 
-	end,
+	end,]]--
 
 	on_punch = automobiles_lib.on_punch,
 	on_rightclick = automobiles_lib.on_rightclick,

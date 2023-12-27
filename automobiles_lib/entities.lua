@@ -389,6 +389,20 @@ function automobiles_lib.on_step(self, dtime)
     local stop = nil
     local curr_pos = self.object:get_pos()
 
+    if self._show_rag == true then
+        if self._windshield_pos and self._windshield_ext_rotation then
+            self.object:set_bone_position("windshield", self._windshield_pos, self._windshield_ext_rotation) --extended
+        end
+        if self.rag_rect then self.rag_rect:set_properties({is_visible=true}) end
+        if self.rag then self.rag:set_properties({is_visible=false}) end
+    else
+        if self._windshield_pos then
+            self.object:set_bone_position("windshield", self._windshield_pos, {x=0, y=0, z=0}) --retracted
+        end
+        if self.rag_rect then self.rag_rect:set_properties({is_visible=false}) end
+        if self.rag then self.rag:set_properties({is_visible=true}) end
+    end
+
     local player = nil
     local is_attached = false
     if self.driver_name then
@@ -402,6 +416,11 @@ function automobiles_lib.on_step(self, dtime)
                 end
             end
         end
+    end
+
+    --for flying
+    if self._setmode then
+        self._setmode(self, is_attached, curr_pos, velocity, player, dtime)
     end
 
     local is_breaking = false
@@ -500,7 +519,11 @@ function automobiles_lib.on_step(self, dtime)
         --minetest.chat_send_all(transmission_state)
 
         --control
-		accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, target_acc_factor, self._max_speed, steering_angle_max, steering_speed)
+        local control = automobiles_lib.control
+        if self._control_function then
+            control = self._control_function
+        end
+		accel, stop = control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, target_acc_factor, self._max_speed, steering_angle_max, steering_speed)
     else
         self._show_lights = false
         if self.sound_handle ~= nil then
@@ -512,7 +535,7 @@ function automobiles_lib.on_step(self, dtime)
     local angle_factor = self._steering_angle / 10
 
     --whell turn
-    if self.lf_wheel and self.rf_wheel and self.lr_wheel and self.rr_wheel then
+    if self.lf_wheel and self.rf_wheel and self.lr_wheel and self.rr_wheel and self._is_flying ~= 1 then
         self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
         self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
         self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
@@ -543,13 +566,19 @@ function automobiles_lib.on_step(self, dtime)
             if self.lr_wheel then self.lr_wheel:set_animation_frame_speed( wheel_compensation * (12 - angle_factor)) end
             if self.rr_wheel then self.rr_wheel:set_animation_frame_speed(-wheel_compensation * (12 + angle_factor)) end
         end
+    else
+        --is flying
+        if self.lf_wheel then self.lf_wheel:set_animation_frame_speed(0) end
+        if self.rf_wheel then self.rf_wheel:set_animation_frame_speed(0) end
+        if self.lr_wheel then self.lr_wheel:set_animation_frame_speed(0) end
+        if self.rr_wheel then self.rr_wheel:set_animation_frame_speed(0) end
     end
 
     --drive wheel turn
     if self._steering_ent then
         self.steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=self._steering_angle*2})
     else
-        self.object:set_bone_position("drive_wheel", {x=-0, y=0, z=0}, {x=0, y=0, z=-self._steering_angle*2}) 
+        self.object:set_bone_position("drive_wheel", {x=-0, y=0, z=0}, {x=0, y=0, z=-self._steering_angle*2})
     end
 
 
@@ -656,6 +685,20 @@ function automobiles_lib.on_step(self, dtime)
 	local newpitch = self._pitch --velocity.y * math.rad(6)
 
     local newroll = 0
+    if self._is_flying == 1 then
+        local turn_effect_speed = longit_speed
+        if turn_effect_speed > 10 then turn_effect_speed = 10 end
+        newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
+        if math.abs(self._steering_angle) < 1 then newroll = 0 end
+
+        --pitch
+        local max_pitch = 6
+        local h_vel_compensation = (((longit_speed * 2) * 100)/max_pitch)/100
+        if h_vel_compensation < 0 then h_vel_compensation = 0 end
+        if h_vel_compensation > max_pitch then h_vel_compensation = max_pitch end
+        newpitch = newpitch + (velocity.y * math.rad(max_pitch - h_vel_compensation))
+    end
+
 	self.object:set_rotation({x=newpitch,y=newyaw,z=newroll})
 
     --saves last velocity for collision detection (abrupt stop)

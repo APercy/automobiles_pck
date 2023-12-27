@@ -48,10 +48,10 @@ end
 function delorean.set_wheels_mode(self, angle_factor)
     if not self._is_flying or self._is_flying == 0 then
         --whell turn
-        self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
+        --[[self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=-self._steering_angle-angle_factor,z=0})
         self.rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=(-self._steering_angle+angle_factor)+180,z=0})
         self.lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+        self.rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})]]--
     else
         local extra_space = 0.5
         self.lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos-extra_space,y=0,z=0},{x=0,y=0,z=90})
@@ -133,6 +133,7 @@ function delorean.set_mode(self, is_attached, curr_pos, velocity, player, dtime)
                 end
             end
         end
+        delorean.set_wheels_mode(self, 0)
     end
 end
 
