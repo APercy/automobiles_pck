@@ -2,7 +2,7 @@ function delorean.gravity_auto_correction(self, dtime)
     local factor = 1
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._car_gravity)
     if self._car_gravity > 0 then factor = -1 end
-    local time_correction = (dtime/delorean.ideal_step)
+    local time_correction = (dtime/automobiles_lib.ideal_step)
     local intensity = 1
     local correction = (intensity*factor) * time_correction
     --minetest.chat_send_player(self.driver_name, correction)
