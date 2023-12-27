@@ -412,7 +412,7 @@ auto_beetle.car_properties1 = {
     _LATER_DRAG_FACTOR = 6.0,
     _max_acc_factor = 5,
     _max_speed = 14,
-    _min_later_speed = 2,
+    _min_later_speed = 3,
     
 
     get_staticdata = automobiles_lib.get_staticdata,
