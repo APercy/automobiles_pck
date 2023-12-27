@@ -267,6 +267,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _steering_ent = 'automobiles_roadster:steering',
     _rag_extended_ent = 'automobiles_roadster:top1',
     _rag_retracted_ent = 'automobiles_roadster:top2',
+    _windshield_pos = {x=0, z=15.8317, y=15.0394},
+    _windshield_ext_rotation = {x=145, y=0, z=0},
     _seat_pos = {{x=-4.25,y=7.12,z=9.5},{x=4.25,y=7.12,z=9.5}},
 
     _front_suspension_ent = 'automobiles_roadster:front_suspension',
