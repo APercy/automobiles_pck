@@ -76,7 +76,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
         end
 
         --break
-        if ctrl.down then
+        if ctrl.down or ctrl.jump then
             --[[if math.abs(longit_speed) > 0 then
                 acc = -5 / (longit_speed / 2) -- lets set a brake efficience based on speed
             end]]--

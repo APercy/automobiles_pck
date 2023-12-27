@@ -381,6 +381,7 @@ function automobiles_lib.on_step(self, dtime)
     local dynamic_later_drag = self._LATER_DRAG_FACTOR
     if longit_speed > 2 then dynamic_later_drag = 2.0 end
     if longit_speed > 8 then dynamic_later_drag = 0.5 end
+
     local later_drag = vector.multiply(nhdir,later_speed*
         later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))
 
@@ -406,6 +407,9 @@ function automobiles_lib.on_step(self, dtime)
     local is_breaking = false
     if is_attached then
 		local ctrl = player:get_player_control()
+        if ctrl.jump then
+            dynamic_later_drag = 0.2
+        end
         if ctrl.aux1 then
             --sets the engine running - but sets a delay also, cause keypress
             if self._last_time_command > 0.8 then
