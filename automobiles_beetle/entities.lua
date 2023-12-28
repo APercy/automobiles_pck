@@ -282,12 +282,12 @@ function auto_beetle.set_paint(self, puncher, itmstck)
         local color, indx, _
         if split[1] then _,indx = split[1]:find('dye') end
         if indx then
-            for clr,_ in pairs(automobiles_lib.colors) do
+            --[[for clr,_ in pairs(automobiles_lib.colors) do
                 local _,x = split[2]:find(clr)
                 if x then color = clr end
-            end
+            end]]--
             --lets paint!!!!
-	        --local color = item_name:sub(indx+1)
+	        local color = (item_name:sub(indx+1)):gsub(":", "")
 	        local colstr = automobiles_lib.colors[color]
             --minetest.chat_send_all(color ..' '.. dump(colstr))
 	        if colstr then
