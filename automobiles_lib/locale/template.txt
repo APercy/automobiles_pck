@@ -1,5 +1,8 @@
 # textdomain: automobiles_lib
 ### init.lua ###
+Go Offboard=
+Lights=
+Direction by mouse=
  Current hp: =
 Nice @1 of @2.@3=
 Car Engine=

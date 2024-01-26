@@ -1,5 +1,8 @@
 # textdomain: automobiles_lib
 ### init.lua ###
+Go Offboard=Aussteigen
+Lights=Lichter
+Direction by mouse=Lenken mit Maus
  Current hp: = Aktuelle Lp:
 Nice @1 of @2.@3=Schöne(r) @1 von @2.@3
 Car Engine=Motor
