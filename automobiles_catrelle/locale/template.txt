@@ -1,5 +1,5 @@
-# textdomain: automobiles_coupe
-
-### coupe_crafts.lua ###
-Coupe Body=
-Coupe=
+# textdomain: automobiles_catrelle
+### crafts.lua ###
+Catrelle Body=
+Catrelle=
+Catrelle 4F=

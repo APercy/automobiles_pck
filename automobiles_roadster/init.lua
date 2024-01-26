@@ -8,6 +8,18 @@ roadster.gravity = automobiles_lib.gravity
 roadster.max_speed = 12
 roadster.max_acc_factor = 5
 
+roadster.S = nil
+
+if(minetest.get_translator ~= nil) then
+    roadster.S = minetest.get_translator(minetest.get_current_modname())
+
+else
+    roadster.S = function ( s ) return s end
+
+end
+
+local S = roadster.S
+
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "custom_physics.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "fuel_management.lua")

@@ -1,6 +1,9 @@
 # textdomain: automobiles_roadster
-
 ### roadster_crafts.lua ###
 Roadster Body=
 Roadster Wheel=
 Roadster=
+Go Offboard=
+Close/Open Ragtop=
+Lights=
+Direction by mouse=

@@ -1,4 +1,4 @@
-
+local S = delorean.S
 --------------
 -- Manual --
 --------------
@@ -31,10 +31,10 @@ function delorean.driver_formspec(name)
         "size[6,7]",
 	}, "")
 
-	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
-    basic_form = basic_form.."button[1,2.5;4,1;lights;Lights]"
-    if ent._car_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;Flight Mode;"..flight.."]" end
-    basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
+	basic_form = basic_form.."button[1,1.0;4,1;go_out;" .. S("Go Offboard") .. "]"
+    basic_form = basic_form.."button[1,2.5;4,1;lights;" .. S("Lights") .. "]"
+    if ent._car_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;" .. S("Flight Mode") .. ";"..flight.."]" end
+    basic_form = basic_form.."checkbox[1,5.5;yaw;" .. S("Direction by mouse") .. ";"..yaw.."]"
 
     minetest.show_formspec(name, "delorean:driver_main", basic_form)
 end

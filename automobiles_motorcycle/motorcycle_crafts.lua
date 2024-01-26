@@ -1,5 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-
+local S = motorcycle.S
 --
 -- items
 --

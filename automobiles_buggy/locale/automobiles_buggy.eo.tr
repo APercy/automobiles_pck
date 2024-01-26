@@ -1,6 +1,9 @@
 # textdomain: automobiles_buggy
-
 ### buggy_crafts.lua ###
 Buggy Body=Korpo de Buggy
 Buggy Wheel=Rado de Buggy
 Buggy=Buggy
+Go Offboard=
+Close/Open Rag=
+Lights=
+Direction by mouse=

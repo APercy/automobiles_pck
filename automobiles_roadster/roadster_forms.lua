@@ -1,3 +1,4 @@
+local S = roadster.S
 
 function roadster.driver_formspec(name)
     local player = minetest.get_player_by_name(name)
@@ -15,10 +16,10 @@ function roadster.driver_formspec(name)
         "size[6,7]",
 	}, "")
 
-	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
-	basic_form = basic_form.."button[1,2.5;4,1;top;Close/Open Ragtop]"
-    basic_form = basic_form.."button[1,4.0;4,1;lights;Lights]"
-    basic_form = basic_form.."checkbox[1,5.5;yaw;Direction by mouse;"..yaw.."]"
+	basic_form = basic_form.."button[1,1.0;4,1;go_out;" .. S("Go Offboard") .. "]"
+	basic_form = basic_form.."button[1,2.5;4,1;top;" .. S("Close/Open Ragtop") .. "]"
+    basic_form = basic_form.."button[1,4.0;4,1;lights;" .. S("Lights") .. "]"
+    basic_form = basic_form.."checkbox[1,5.5;yaw;" .. S("Direction by mouse") .. ";"..yaw.."]"
 
     minetest.show_formspec(name, "roadster:driver_main", basic_form)
 end

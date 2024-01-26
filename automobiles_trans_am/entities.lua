@@ -1,6 +1,7 @@
 --
 -- entity
 --
+local S = trans_am.S
 
 minetest.register_entity('automobiles_trans_am:wheel',{
 initial_properties = {
@@ -292,7 +293,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
 	sound_handle = nil,
     owner = "",
     static_save = true,
-    infotext = "A very nice Trans Am!",
+    infotext = S("A very nice Trans Am!"),
     hp = 50,
     buoyancy = 2,
     physics = automobiles_lib.physics,

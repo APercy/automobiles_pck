@@ -1,6 +1,7 @@
 --
 -- entity
 --
+local S = vespa.S
 
 minetest.register_entity('automobiles_vespa:lights',{
 initial_properties = {
@@ -120,7 +121,7 @@ minetest.register_entity("automobiles_vespa:vespa", {
 	sound_handle = nil,
     owner = "",
     static_save = true,
-    infotext = "A very nice vespa!",
+    infotext = S("A very nice vespa!"),
     hp = 50,
     buoyancy = 2,
     physics = automobiles_lib.physics,
@@ -430,7 +431,7 @@ minetest.register_entity("automobiles_vespa:vespa", {
         if self._energy <= 0 then
             self._engine_running = false
             if self.sound_handle then minetest.sound_stop(self.sound_handle) end
-            minetest.chat_send_player(self.driver_name, "Out of fuel")
+            minetest.chat_send_player(self.driver_name, S("Out of fuel"))
         else
             self._last_engine_sound_update = self._last_engine_sound_update + dtime
             if self._last_engine_sound_update > 0.300 then

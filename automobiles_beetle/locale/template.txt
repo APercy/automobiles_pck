@@ -1,0 +1,3 @@
+# textdomain: automobiles_beetle
+Beetle Body=
+Beetle=

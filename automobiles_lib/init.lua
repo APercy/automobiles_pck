@@ -1,10 +1,20 @@
 -- Minetest 5.4.1 : automobiles
 
-local S = minetest.get_translator(minetest.get_current_modname())
 automobiles_lib = {
     storage = minetest.get_mod_storage()
 }
 
+automobiles_lib.S = nil
+
+if(minetest.get_translator ~= nil) then
+    automobiles_lib.S = minetest.get_translator(minetest.get_current_modname())
+
+else
+    automobiles_lib.S = function ( s ) return s end
+
+end
+
+local S = automobiles_lib.S
 local storage = automobiles_lib.storage
 
 automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
@@ -308,12 +318,12 @@ function automobiles_lib.setText(self, vehicle_name)
     local properties = self.object:get_properties()
     local formatted = ""
     if self.hp_max then
-        formatted = " Current hp: " .. string.format(
+        formatted = S(" Current hp: ") .. string.format(
            "%.2f", self.hp_max
         )
     end
     if properties then
-        properties.infotext = "Nice ".. vehicle_name .." of " .. self.owner .. "." .. formatted
+        properties.infotext = S("Nice @1 of @2.@3", vehicle_name, self.owner, formatted)
         self.object:set_properties(properties)
     end
 end
@@ -670,13 +680,13 @@ initial_properties = {
 })
 
 minetest.register_privilege("valet_parking", {
-    description = "Gives a valet parking priv for a player",
+    description = S("Gives a valet parking priv for a player"),
     give_to_singleplayer = true
 })
 
 minetest.register_chatcommand("transfer_vehicle", {
     params = "<new_owner>",
-    description = "Transfer the property of a vehicle to another player",
+    description = S("Transfer the property of a vehicle to another player"),
     privs = {interact=true},
 	func = function(name, param)
         local player = minetest.get_player_by_name(name)
@@ -691,25 +701,25 @@ minetest.register_chatcommand("transfer_vehicle", {
                     if entity then
                         if entity.owner == name or minetest.check_player_privs(name, {protection_bypass=true}) then
                             entity.owner = param
-                            minetest.chat_send_player(name,core.colorize('#00ff00', " >>> This vehicle now is property of: "..param))
+                            minetest.chat_send_player(name,core.colorize('#00ff00', S(" >>> This vehicle now is property of: ")..param))
                             automobiles_lib.setText(entity, "vehicle")
                         else
-                            minetest.chat_send_player(name,core.colorize('#ff0000', " >>> only the owner or moderators can transfer this vehicle"))
+                            minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> only the owner or moderators can transfer this vehicle")))
                         end
                     end
                 end
             else
-                minetest.chat_send_player(name,core.colorize('#ff0000', " >>> the target player must be logged in"))
+                minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> the target player must be logged in")))
             end
 		else
-			minetest.chat_send_player(name,core.colorize('#ff0000', " >>> you are not inside a vehicle to perform the command"))
+			minetest.chat_send_player(name,core.colorize('#ff0000', S(" >>> you are not inside a vehicle to perform the command")))
 		end
 	end
 })
 
 minetest.register_chatcommand("noobfy_the_vehicles", {
     params = "<true/false>",
-    description = "Enable/disable the NOOB mode for the vehicles",
+    description = S("Enable/disable the NOOB mode for the vehicles"),
     privs = {server=true},
     func = function(name, param)
         local command = param
@@ -717,11 +727,11 @@ minetest.register_chatcommand("noobfy_the_vehicles", {
         if command == "false" then
             automobiles_lib.noob_mode = false
             automobiles_lib.extra_stepheight = 0
-            minetest.chat_send_player(name, ">>> Noob mode is disabled - A restart is required to changes take full effect")
+            minetest.chat_send_player(name, S(">>> Noob mode is disabled - A restart is required to changes take full effect"))
         else
             automobiles_lib.noob_mode = true
             automobiles_lib.extra_stepheight = 1
-            minetest.chat_send_player(name, ">>> Noob mode is enabled - A restart is required to changes take full effect")
+            minetest.chat_send_player(name, S(">>> Noob mode is enabled - A restart is required to changes take full effect"))
         end
         local save = 2
         if automobiles_lib.noob_mode == true then save = 1 end

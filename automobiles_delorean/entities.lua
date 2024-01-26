@@ -368,7 +368,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
 	sound_handle = nil,
     owner = "",
     static_save = true,
-    infotext = "A very nice delorean!",
+    infotext = S("A very nice delorean!"),
     hp = 50,
     buoyancy = 2,
     physics = automobiles_lib.physics,
@@ -408,7 +408,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
     _formspec_function = delorean.driver_formspec,
     _destroy_function = delorean.destroy,
 
-    _vehicle_name = "Delorean",
+    _vehicle_name = S("Delorean"),
     _drive_wheel_pos = {x=-4.66, y=6.31, z=15.69},
     _drive_wheel_angle = 15,
     _seat_pos = {{x=-4.65,y=0.48,z=9.5},{x=4.65,y=0.48,z=9.5}},
