@@ -639,7 +639,6 @@ minetest.register_craftitem("automobiles_lib:wheel",{
 })
 
 if minetest.get_modpath("default") then
---[[
     minetest.register_craft({
 		output = "automobiles_lib:engine",
 		recipe = {
@@ -647,7 +646,6 @@ if minetest.get_modpath("default") then
 			{"default:steelblock","default:mese_block", "default:steelblock"},
 		}
 	})
-]]
 	minetest.register_craft({
 		output = "automobiles_lib:wheel",
 		recipe = {
