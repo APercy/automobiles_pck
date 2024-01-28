@@ -1,6 +1,7 @@
 --
 -- entity
 --
+local S = motorcycle.S
 
 minetest.register_entity('automobiles_motorcycle:lights',{
 initial_properties = {
@@ -125,7 +126,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 	sound_handle = nil,
     owner = "",
     static_save = true,
-    infotext = "A very nice motorcycle!",
+    infotext = S("A very nice motorcycle!"),
     hp = 50,
     buoyancy = 2,
     physics = automobiles_lib.physics,

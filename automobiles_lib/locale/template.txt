@@ -1,8 +1,25 @@
 # textdomain: automobiles_lib
-
 ### init.lua ###
+Go Offboard=
+Lights=
+Direction by mouse=
+ Current hp: =
+Nice @1 of @2.@3=
 Car Engine=
 Car Wheel=
-
+Gives a valet parking priv for a player=
+Transfer the property of a vehicle to another player=
+ >>> This vehicle now is property of: =
+ >>> only the owner or moderators can transfer this vehicle=
+ >>> the target player must be logged in=
+ >>> you are not inside a vehicle to perform the command=
+Enable/disable the NOOB mode for the vehicles=
+>>> Noob mode is disabled - A restart is required to changes take full effect=
+>>> Noob mode is enabled - A restart is required to changes take full effect=
+Preview=
+Set Hex=
+Set Color=
+Cancel=
 ### painter.lua ###
 Automobiles Painter=
+Only the owner can paint this entity.=

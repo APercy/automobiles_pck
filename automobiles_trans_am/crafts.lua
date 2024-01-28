@@ -1,4 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = trans_am.S
 
 --
 -- items
@@ -34,7 +34,7 @@ minetest.register_craftitem("automobiles_trans_am:trans_am", {
 		        car:set_yaw(placer:get_look_horizontal())
 		        itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
-                automobiles_lib.setText(ent, "Trans Am")
+                automobiles_lib.setText(ent, S("Trans Am"))
                 automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end

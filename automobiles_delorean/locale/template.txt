@@ -1,5 +1,10 @@
-# textdomain: automobiles_coupe
-
+# textdomain: automobiles_delorean
 ### coupe_crafts.lua ###
-Coupe Body=
-Coupe=
+Delorean Body=
+Time Machine=
+Delorean=
+A very nice delorean!=
+Go Offboard=
+Lights=
+Flight Mode=
+Direction by mouse=

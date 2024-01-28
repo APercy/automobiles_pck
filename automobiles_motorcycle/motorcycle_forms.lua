@@ -1,4 +1,4 @@
-
+local S = motorcycle.S
 
 function motorcycle.driver_formspec(name)
     local player = minetest.get_player_by_name(name)
@@ -16,8 +16,8 @@ function motorcycle.driver_formspec(name)
     local yaw = "false"
     if ent._yaw_by_mouse then yaw = "true" end
 
-	basic_form = basic_form.."button[1,1.0;4,1;go_out;Go Offboard]"
-    basic_form = basic_form.."checkbox[1,3.0;yaw;Direction by mouse;"..yaw.."]"
+	basic_form = basic_form.."button[1,1.0;4,1;go_out;" .. S("Go Offboard") .. "]"
+    basic_form = basic_form.."checkbox[1,3.0;yaw;" .. S("Direction by mouse") .. ";" ..yaw.."]"
 
     minetest.show_formspec(name, "motorcycle:driver_main", basic_form)
 end

@@ -21,7 +21,7 @@ Copyright (C) 2018 Hume2
  THE SOFTWARE.
 ]]--
 
-local S = minetest.get_translator(minetest.get_current_modname())
+local S = automobiles_lib.S
 
 local function is_hex(color)
     if not color or color:len() ~= 7 then return end
@@ -54,12 +54,12 @@ local function painter_form(player, rgb)
 
         -- Color preview
         "image[0.2,0.2;2,2;automobiles_painting.png^[colorize:" .. color .. ":255]" ..
-        "label[0.3,1.2;Preview]" ..
+        "label[0.3,1.2;" .. S("Preview") .. "]" ..
 
         -- Hex field
         "field_close_on_enter[hex;false]" ..
         "field[2.4,0.2;3,0.8;hex;;" .. color .. "]" ..
-        "button[2.4,1;3,0.8;set_hex;Set Hex]" ..
+        "button[2.4,1;3,0.8;set_hex;" .. S("Set Hex") .. "]" ..
 
         -- RGB sliders
         "container[0,2.4]" ..
@@ -83,8 +83,8 @@ local function painter_form(player, rgb)
         "container_end[]" ..
 
         -- Bottom buttons
-        "button_exit[0.2,4.2;2.8,0.8;set_color;Set Color]" ..
-        "button_exit[3.2,4.2;2.2,0.8;quit;Cancel]"
+        "button_exit[0.2,4.2;2.8,0.8;set_color;" .. S("Set Color") .. "]" ..
+        "button_exit[3.2,4.2;2.2,0.8;quit;" .. S("Cancel") .. "]"
     )
 end
 
@@ -160,7 +160,7 @@ minetest.register_tool("automobiles_lib:painter", {
                     local rgb = is_hex(color) and hex_to_rgb(color) or {r = 0, g = 0, b = 0}
                     painter_form(user, rgb)
                 else
-                    minetest.chat_send_player(player_name, "Only the owner can paint this entity.")
+                    minetest.chat_send_player(player_name, S("Only the owner can paint this entity."))
                 end
             end
         end

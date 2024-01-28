@@ -1,0 +1,25 @@
+# textdomain: automobiles_lib
+### init.lua ###
+Go Offboard=Aussteigen
+Lights=Lichter
+Direction by mouse=Lenken mit Maus
+ Current hp: = Aktuelle Lp:
+Nice @1 of @2.@3=Schöne(r) @1 von @2.@3
+Car Engine=Motor
+Car Wheel=Autoreifen
+Gives a valet parking priv for a player=Gibt einen Parkservice für einen Spieler
+Transfer the property of a vehicle to another player=Überträgt das Eigentum des Fahrzeuges an einem anderen Spieler
+ >>> This vehicle now is property of: = >>> Dieses Fahrzeug ist nun Eigentum von:
+ >>> only the owner or moderators can transfer this vehicle= >>> Nur der Eigentümer oder Moderator kann das Eigentum des Fahrzeuges übertragen
+ >>> the target player must be logged in= >>> der Zielspieler muß dafür eingeloggt sein.
+ >>> you are not inside a vehicle to perform the command= >>> du sitzt in keinem Fahrzeug um das Kommando auszuführen
+Enable/disable the NOOB mode for the vehicles=Ein/Ausschalten des NOOB Moduses für die Fahrzeuge
+>>> Noob mode is disabled - A restart is required to changes take full effect= >>> Noob Modus ist ausgeschalten - Ein Neustart für die Änderungen ist erforderlich
+>>> Noob mode is enabled - A restart is required to changes take full effect= >>>  Noob Modus ist eingeschalten - Ein Neustart für die Änderungen ist erforderlich
+Preview=Vorschau
+Set Hex=Gib Hexzahl
+Set Color=Gib Farbe
+Cancel=Abbrechen
+### painter.lua ###
+Automobiles Painter= Automobil Pinsel
+Only the owner can paint this entity.=Nur der Eigentümer kann dieses Objekt einfärben.

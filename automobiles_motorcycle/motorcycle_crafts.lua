@@ -1,5 +1,4 @@
-local S = minetest.get_translator(minetest.get_current_modname())
-
+local S = motorcycle.S
 --
 -- items
 --
@@ -37,7 +36,7 @@ minetest.register_craftitem("automobiles_motorcycle:motorcycle", {
 			    car:set_yaw(placer:get_look_horizontal())
 			    itemstack:take_item()
                 ent.object:set_acceleration({x=0,y=-automobiles_lib.gravity,z=0})
-                automobiles_lib.setText(ent, "motorcycle")
+                automobiles_lib.setText(ent, S("Motorcycle"))
                 automobiles_lib.create_inventory(ent, ent._trunk_slots, owner)
             end
 		end
