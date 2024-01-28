@@ -1,3 +1,5 @@
+local S = delorean.S
+
 function delorean.set_kit(self)
     local normal_kit = nil
     if self.normal_kit then self.normal_kit:remove() end
