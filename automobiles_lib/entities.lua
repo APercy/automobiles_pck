@@ -219,6 +219,10 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
         self._car_gravity = data.stored_car_gravity or -automobiles_lib.gravity
 
         automobiles_lib.setText(self, self._vehicle_name)
+        if data.remove then
+            self.object:remove()
+            return
+        end
     end
 
     if self._painting_load then
