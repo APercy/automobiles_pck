@@ -220,6 +220,7 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 
         automobiles_lib.setText(self, self._vehicle_name)
         if data.remove then
+            automobiles_lib.destroy_inventory(self)
             self.object:remove()
             return
         end
