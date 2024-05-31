@@ -25,6 +25,12 @@ automobiles_lib.gravity = 9.8
 automobiles_lib.ideal_step = 0.2
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
 
+automobiles_lib.is_drift_game = false
+automobiles_lib.extra_drift = false
+if minetest.registered_nodes["dg_mapgen:stone"] then
+    automobiles_lib.is_drift_game = true
+    automobiles_lib.extra_drift = true
+end
 
 local load_noob_mode = storage:get_int("noob_mode")
 automobiles_lib.noob_mode = false
@@ -80,6 +86,20 @@ function automobiles_lib.properties_copy(origin_table)
       tablecopy[k] = v
     end
     return tablecopy
+end
+
+function automobiles_lib.add_smoke(pos)
+	minetest.add_particle({
+		pos = pos,
+		velocity = {x = 0, y = 0, z = 0},
+		acceleration = {x = 0, y = 0, z = 0},
+		expirationtime = 0.25,
+		size = 2.8,
+		collisiondetection = false,
+		collision_removal = false,
+		vertical = false,
+		texture = "automobiles_smoke.png",
+	})
 end
 
 --returns 0 for old, 1 for new

@@ -363,6 +363,8 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
     _max_speed = 40,
     _min_later_speed = 4.5,
 
+    _wheel_compensation = 0.8,
+
     get_staticdata = automobiles_lib.get_staticdata,
 
 	on_deactivate = function(self)

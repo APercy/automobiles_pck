@@ -430,8 +430,12 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
             local zero_reference = vector.new()
             local acceleration = automobiles_lib.get_hipotenuse_value(accel, zero_reference)
             --minetest.chat_send_all(acceleration)
-            local consumed_power = acceleration/100000
-            self._energy = self._energy - consumed_power;
+            if automobiles_lib.is_drift_game == false then
+                local consumed_power = acceleration/100000
+                self._energy = self._energy - consumed_power;
+            else
+                self._energy = 5
+            end
         end
         if self._energy <= 0 then
             self._engine_running = false
