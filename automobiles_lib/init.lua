@@ -759,6 +759,19 @@ minetest.register_chatcommand("noobfy_the_vehicles", {
     end,
 })
 
+-- Give to new player
+if automobiles_lib.is_drift_game == true then
+    minetest.register_on_joinplayer(function(player)
+	    local inv = player:get_inventory()
+	    inv:add_item("main", "automobiles_beetle:beetle")
+        inv:add_item("main", "automobiles_buggy:buggy")
+        inv:add_item("main", "automobiles_catrelle:catrelle_4f")
+        inv:add_item("main", "automobiles_coupe:coupe")
+        inv:add_item("main", "automobiles_delorean:delorean")
+        inv:add_item("main", "automobiles_delorean:time_machine")
+        inv:add_item("main", "automobiles_trans_am:trans_am")
+    end)
+end
 
 local old_entities = {
     "automobiles_buggy:pivot_mesh",
