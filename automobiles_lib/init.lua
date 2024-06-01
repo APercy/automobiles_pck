@@ -763,13 +763,20 @@ minetest.register_chatcommand("noobfy_the_vehicles", {
 if automobiles_lib.is_drift_game == true then
     minetest.register_on_joinplayer(function(player)
 	    local inv = player:get_inventory()
-	    inv:add_item("main", "automobiles_beetle:beetle")
-        inv:add_item("main", "automobiles_buggy:buggy")
-        inv:add_item("main", "automobiles_catrelle:catrelle_4f")
-        inv:add_item("main", "automobiles_coupe:coupe")
-        inv:add_item("main", "automobiles_delorean:delorean")
-        inv:add_item("main", "automobiles_delorean:time_machine")
-        inv:add_item("main", "automobiles_trans_am:trans_am")
+        local car = "automobiles_beetle:beetle"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_buggy:buggy"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_catrelle:catrelle_4f"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_coupe:coupe"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_delorean:delorean"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_delorean:time_machine"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_trans_am:trans_am"
+        if not inv:contains_item("main", car) then inv:add_item("main", car) end
     end)
 end
 
