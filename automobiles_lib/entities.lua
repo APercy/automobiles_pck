@@ -556,11 +556,11 @@ function automobiles_lib.on_step(self, dtime)
     if (noded and noded.drawtype ~= 'airlike') then
         if noded.drawtype ~= 'liquid' then
             local min_later_speed = self._min_later_speed or 3
-
-            if (later_speed > min_later_speed or later_speed < -min_later_speed) then
+            local speed_for_smoke = min_later_speed / 2
+            if (later_speed > speed_for_smoke or later_speed < -speed_for_smoke) then
                 automobiles_lib.add_smoke(curr_pos, yaw, self._rear_wheel_xpos)
                 if automobiles_lib.extra_drift == false then  --disables the sound when playing drift game.. it's annoying
-                    if self._last_time_drift_snd >= 2.0 then
+                    if self._last_time_drift_snd >= 2.0 and (later_speed > min_later_speed or later_speed < -min_later_speed) then
                         self._last_time_drift_snd = 0
                         minetest.sound_play("automobiles_drifting", {
                             pos = curr_pos,
