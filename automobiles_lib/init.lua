@@ -88,7 +88,7 @@ function automobiles_lib.properties_copy(origin_table)
     return tablecopy
 end
 
-function automobiles_lib.add_smoke(pos)
+local function smoke_particle(pos)
 	minetest.add_particle({
 		pos = pos,
 		velocity = {x = 0, y = 0, z = 0},
@@ -100,6 +100,26 @@ function automobiles_lib.add_smoke(pos)
 		vertical = false,
 		texture = "automobiles_smoke.png",
 	})
+end
+
+function automobiles_lib.add_smoke(pos, yaw, rear_wheel_xpos)
+    local direction = yaw
+    
+    --right
+    local move = rear_wheel_xpos/10
+    local smk_pos = vector.new(pos)
+    smk_pos.x = smk_pos.x + move * math.cos(direction)
+    smk_pos.z = smk_pos.z + move * math.sin(direction)
+    
+    smoke_particle(smk_pos)
+
+    --left
+    direction = direction - math.rad(180)
+    smk_pos = vector.new(pos)
+    smk_pos.x = smk_pos.x + move * math.cos(direction)
+    smk_pos.z = smk_pos.z + move * math.sin(direction)
+    
+    smoke_particle(smk_pos)
 end
 
 --returns 0 for old, 1 for new
