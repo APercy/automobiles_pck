@@ -45,7 +45,7 @@ function vespa.destroy(self, puncher)
         local lua_ent = self.object:get_luaentity()
         local staticdata = lua_ent:get_staticdata(self)
         local obj_name = lua_ent.name
-        local player = minetest.get_player_by_name(self.owner)
+        local player = puncher
 
         local stack = ItemStack(obj_name)
         local stack_meta = stack:get_meta()
