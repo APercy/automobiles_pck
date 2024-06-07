@@ -24,7 +24,7 @@ automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
 automobiles_lib.gravity = 9.8
 automobiles_lib.ideal_step = 0.2
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
-automobiles_lib.can_collect_car = minetest.settings:get_bool("collect_automobiles", false)
+automobiles_lib.can_collect_car = minetest.settings:get_bool("collect_automobiles", true)
 
 automobiles_lib.is_drift_game = false
 automobiles_lib.extra_drift = false
