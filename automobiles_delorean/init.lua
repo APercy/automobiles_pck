@@ -23,7 +23,6 @@ dofile(minetest.get_modpath("automobiles_lib") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "forms.lua")
 dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "control.lua")
 dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "flight.lua")
-dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "utilities.lua")
 dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "entities.lua")
 dofile(minetest.get_modpath("automobiles_delorean") .. DIR_DELIM .. "crafts.lua")
 

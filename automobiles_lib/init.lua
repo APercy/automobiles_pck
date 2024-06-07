@@ -24,6 +24,7 @@ automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
 automobiles_lib.gravity = 9.8
 automobiles_lib.ideal_step = 0.2
 automobiles_lib.is_creative = minetest.settings:get_bool("creative_mode", false)
+automobiles_lib.can_collect_car = minetest.settings:get_bool("collect_automobiles", false)
 
 automobiles_lib.is_drift_game = false
 automobiles_lib.extra_drift = false
@@ -505,19 +506,49 @@ function automobiles_lib.destroy(self, puncher)
     if self.reverse_lights then self.reverse_lights:remove() end
     if self.turn_l_light then self.turn_l_light:remove() end
     if self.turn_r_light then self.turn_r_light:remove() end
+    if self.rag then self.rag:remove() end --for buggy
+    if self.back_seat then self.back_seat:remove() end --for catrelle
+    if self.instruments then self.instruments:remove() end --for delorean
+    if self.normal_kit then self.normal_kit:remove() end
+    if self.rag_rect then self.rag_rect:remove() end --for roadster
+    
 
     automobiles_lib.seats_destroy(self)
-
     automobiles_lib.destroy_inventory(self)
-    self.object:remove()
 
     pos.y=pos.y+2
 
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
-    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    if automobiles_lib.can_collect_car == false then
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:engine')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+        minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5},'automobiles_lib:wheel')
+    else
+        local lua_ent = self.object:get_luaentity()
+        local staticdata = lua_ent:get_staticdata(self)
+        local obj_name = lua_ent.name
+        local player = minetest.get_player_by_name(self.owner)
+
+        local stack = ItemStack(obj_name)
+        local stack_meta = stack:get_meta()
+        stack_meta:set_string("staticdata", staticdata)
+
+        if player then
+            local inv = player:get_inventory()
+            if inv then
+                if inv:room_for_item("main", stack) then
+                    inv:add_item("main", stack)
+                else
+                    minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5}, stack)
+                end
+            end
+        else
+            minetest.add_item({x=pos.x+math.random()-0.5,y=pos.y,z=pos.z+math.random()-0.5}, stack)
+        end
+    end
+
+    self.object:remove()
 end
 
 function automobiles_lib.engine_set_sound_and_animation(self, _longit_speed)

@@ -235,7 +235,6 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _engine_sound = "buggy_engine",
     _max_fuel = 10,
     _formspec_function = buggy.driver_formspec,
-    _destroy_function = buggy.destroy,
 
     _vehicle_name = "Buggy",
     _drive_wheel_pos = {x=-4.26,y=6.01,z=16},
