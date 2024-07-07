@@ -3,3 +3,4 @@
 
 # make cars collectable
 collect_automobiles (Collect vehicles to inventory) bool true
+noob_mode (make automobiles climb entire blocks) bool false

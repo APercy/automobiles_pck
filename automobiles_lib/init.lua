@@ -33,11 +33,11 @@ if minetest.registered_nodes["dg_mapgen:stone"] then
     automobiles_lib.extra_drift = true
 end
 
-local load_noob_mode = storage:get_int("noob_mode")
+local load_noob_mode = minetest.settings:get_bool("noob_mode", false) -- or storage:get_int("noob_mode")
 automobiles_lib.noob_mode = false
 automobiles_lib.extra_stepheight = 0
 -- 1 == true ---- 2 == false
-if load_noob_mode == 1 then
+if load_noob_mode == true then
     automobiles_lib.load_noob_mode = true
     automobiles_lib.extra_stepheight = 1
 end
@@ -788,7 +788,7 @@ minetest.register_chatcommand("transfer_vehicle", {
 	end
 })
 
-minetest.register_chatcommand("noobfy_the_vehicles", {
+--[[minetest.register_chatcommand("noobfy_the_vehicles", {
     params = "<true/false>",
     description = S("Enable/disable the NOOB mode for the vehicles"),
     privs = {server=true},
@@ -808,7 +808,7 @@ minetest.register_chatcommand("noobfy_the_vehicles", {
         if automobiles_lib.noob_mode == true then save = 1 end
         storage:set_int("noob_mode", save)
     end,
-})
+})]]--
 
 -- Give to new player
 if automobiles_lib.is_drift_game == true then
