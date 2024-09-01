@@ -69,6 +69,7 @@ function delorean.turn_flight_mode(self)
         local curr_pos = self.object:get_pos()
         curr_pos.y = curr_pos.y + 1.5
         self.object:move_to(curr_pos)
+        self._start_flight_semaphore = 1 --semaphore to avoid the grouund detection on first loop
     end
 end
 
@@ -122,7 +123,11 @@ function delorean.set_mode(self, is_attached, curr_pos, velocity, player, dtime)
             local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=-0.6}))
             if (noded and noded.drawtype ~= 'airlike') then
                 if noded.drawtype ~= 'liquid' then
-                    self._is_flying = 0
+                    if not self._start_flight_semaphore then --check if the flight started now
+                        self._is_flying = 0
+                    else
+                        self._start_flight_semaphore = nil --set the deactivation to work normally now
+                    end
                 end
                 --avoid liquids
                 if noded.drawtype == 'liquid' then
