@@ -165,6 +165,8 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
     _dettach = motorcycle.dettach_driver_stand,
     _attach_pax = motorcycle.attach_pax_stand,
     _dettach_pax = motorcycle.dettach_pax_stand,
+    _LONGIT_DRAG_FACTOR = motorcycle._LONGIT_DRAG_FACTOR,
+    _LATER_DRAG_FACTOR = motorcycle._LATER_DRAG_FACTOR,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -249,10 +251,10 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 
 	on_step = function(self, dtime)
         automobiles_lib.stepfunc(self, dtime)
-        --[[sound play control]]--
+        --sound play control--
         self._last_time_collision_snd = self._last_time_collision_snd + dtime
         if self._last_time_collision_snd > 1 then self._last_time_collision_snd = 1 end
-        --[[end sound control]]--
+        --end sound control--
 
         local rotation = self.object:get_rotation()
         local yaw = rotation.y
@@ -266,14 +268,15 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         local longit_speed = automobiles_lib.dot(velocity,hull_direction)
         local fuel_weight_factor = (5 - self._energy)/5000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
-            (motorcycle.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
+            (self._LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
 		local later_speed = automobiles_lib.dot(velocity,nhdir)
         local later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*motorcycle.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
+            later_speed*self._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
         local stop = nil
+        local curr_pos = self.object:get_pos()
 
         local player = nil
         local is_attached = false
@@ -297,8 +300,8 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                 --sets the engine running - but sets a delay also, cause keypress
                 if self._last_time_command > 0.8 then
                     self._last_time_command = 0
-                    --[[minetest.sound_play({name = "automobiles_horn"},
-	                        {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})]]--
+                    --minetest.sound_play({name = "automobiles_horn"},
+	                       -- {object = self.object, gain = 0.6, pitch = 1.0, max_hear_distance = 32, loop = false,})
                 end
 	        end
             if ctrl.down then
@@ -342,7 +345,6 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
             end
         end
 
-        local curr_pos = self.object:get_pos()
         local steering_angle_max = 30
         self.object:move_to(curr_pos)
 		if is_attached then --and self.driver_name == self.owner then
@@ -362,9 +364,9 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                         pitch = 1.0,
                     })
                 end
-                --[[if self.damage > 100 then --if acumulated damage is greater than 100, adieu
-                    automobiles_lib.destroy(self)
-                end]]--
+                --if self.damage > 100 then --if acumulated damage is greater than 100, adieu
+                    --automobiles_lib.destroy(self)
+                --end
             end
 
             --control
@@ -408,14 +410,14 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 		if math.abs(self._steering_angle)>5 then
             local turn_rate = math.rad(40)
 			newyaw = yaw + dtime*(1 - 1 / (math.abs(longit_speed) + 1)) *
-                self._steering_angle / 20 * turn_rate * automobiles_lib.sign(longit_speed)
+                (self._steering_angle / 20) * turn_rate * automobiles_lib.sign(longit_speed)
 		end
 
-        --[[
-        accell correction
-        under some circunstances the acceleration exceeds the max value accepted by set_acceleration and
-        the game crashes with an overflow, so limiting the max acceleration in each axis prevents the crash
-        ]]--
+        --
+        --accell correction
+        --under some circunstances the acceleration exceeds the max value accepted by set_acceleration and
+        --the game crashes with an overflow, so limiting the max acceleration in each axis prevents the crash
+        --
         local max_factor = 25
         local acc_adjusted = 10
         if accel.x > max_factor then accel.x = acc_adjusted end

@@ -2,8 +2,8 @@
 -- constants
 --
 motorcycle={}
-motorcycle.LONGIT_DRAG_FACTOR = 0.14*0.14
-motorcycle.LATER_DRAG_FACTOR = 25.0
+motorcycle._LONGIT_DRAG_FACTOR = 0.14*0.14
+motorcycle._LATER_DRAG_FACTOR = 25.0
 motorcycle.gravity = automobiles_lib.gravity
 motorcycle.max_speed = 20
 motorcycle.max_acc_factor = 8

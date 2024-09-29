@@ -160,6 +160,8 @@ minetest.register_entity("automobiles_vespa:vespa", {
     _dettach = vespa.dettach_driver_stand,
     _attach_pax = vespa.attach_pax_stand,
     _dettach_pax = vespa.dettach_pax_stand,
+    _LONGIT_DRAG_FACTOR = vespa._LONGIT_DRAG_FACTOR,
+    _LATER_DRAG_FACTOR = vespa._LATER_DRAG_FACTOR,
 
     get_staticdata = function(self) -- unloaded/unloads ... is now saved
         return minetest.serialize({
@@ -261,11 +263,11 @@ minetest.register_entity("automobiles_vespa:vespa", {
         local longit_speed = automobiles_lib.dot(velocity,hull_direction)
         local fuel_weight_factor = (5 - self._energy)/5000
         local longit_drag = vector.multiply(hull_direction,(longit_speed*longit_speed) *
-            (vespa.LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
+            (vespa._LONGIT_DRAG_FACTOR - fuel_weight_factor) * -1 * automobiles_lib.sign(longit_speed))
         
 		local later_speed = automobiles_lib.dot(velocity,nhdir)
         local later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*vespa.LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
+            later_speed*vespa._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
 
         local accel = vector.add(longit_drag,later_drag)
         local stop = nil

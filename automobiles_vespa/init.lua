@@ -2,8 +2,8 @@
 -- constants
 --
 vespa={}
-vespa.LONGIT_DRAG_FACTOR = 0.15*0.15
-vespa.LATER_DRAG_FACTOR = 30.0
+vespa._LONGIT_DRAG_FACTOR = 0.15*0.15
+vespa._LATER_DRAG_FACTOR = 30.0
 vespa.gravity = automobiles_lib.gravity
 vespa.max_speed = 20
 vespa.max_acc_factor = 6
