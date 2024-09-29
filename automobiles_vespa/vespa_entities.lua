@@ -370,7 +370,12 @@ minetest.register_entity("automobiles_vespa:vespa", {
                 local mid_speed = (steering_speed/2)
                 steering_speed = mid_speed + mid_speed / math.abs(longit_speed*0.25)
             end
-			accel, stop = automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, vespa.max_acc_factor, vespa.max_speed, steering_angle_max, steering_speed)
+
+            local control = automobiles_lib.control
+            if self._control_function then
+                control = self._control_function
+            end
+		    accel, stop = control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, motorcycle.max_acc_factor, motorcycle.max_speed, steering_angle_max, steering_speed)
         else
             if self.driver_mesh then self.driver_mesh:set_properties({is_visible=false}) end
             self._show_lights = false
