@@ -847,6 +847,7 @@ local old_entities = {
     "automobiles_trans_am:pointer",
     "automobiles_buggy:steering",
     "automobiles_vespa:pivot_mesh",
+    "automobiles_motorcycle:pivot_mesh",
 }
 for _,entity_name in ipairs(old_entities) do
     minetest.register_entity(":"..entity_name, {
