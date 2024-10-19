@@ -9,8 +9,7 @@ initial_properties = {
 	collide_with_objects=true,
     collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
 	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
+	visual = "sprite",
     textures = {"automobiles_alpha.png",},
 	},
 
@@ -35,8 +34,7 @@ initial_properties = {
 	physical = true,
 	collide_with_objects=true,
 	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
+	visual = "sprite",
     textures = {"automobiles_alpha.png",},
 	},
 
@@ -173,7 +171,7 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
     _seat_pos = {{x=0.0,y=-1.1,z=5.5},{x=0.0,y=-0.3,z=0.09}},
 
     _front_suspension_ent = 'automobiles_motorcycle:front_suspension',
-    _front_suspension_pos = {x=0,y=1.5,z=14.5},
+    _front_suspension_pos = {x=0,y=1.5,z=17},
     --_front_wheel_ent = 'automobiles_lib:wheel',
     _front_wheel_xpos = 0,
     _front_wheel_frames = {x = 1, y = 49},

@@ -9,8 +9,7 @@ initial_properties = {
 	collide_with_objects=true,
     collisionbox = {-0.5, 0, -0.5, 0.5, 1, 0.5},
 	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
+	visual = "sprite",
     textures = {"automobiles_alpha.png",},
 	},
 
@@ -35,8 +34,7 @@ initial_properties = {
 	physical = true,
 	collide_with_objects=true,
 	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
+	visual = "sprite",
     textures = {"automobiles_alpha.png",},
 	},
 

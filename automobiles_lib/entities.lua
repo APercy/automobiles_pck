@@ -3,9 +3,9 @@ initial_properties = {
 	physical = false,
 	collide_with_objects=false,
 	pointable=false,
-	visual = "mesh",
-	mesh = "automobiles_pivot_mesh.b3d",
+	visual = "sprite",
     textures = {"automobiles_alpha.png",},
+    use_texture_alpha = true,
 	},
 	
     on_activate = function(self,std)
@@ -705,7 +705,7 @@ function automobiles_lib.on_step(self, dtime)
     self._last_ground_check = self._last_ground_check + dtime
     if self._last_ground_check > 0.18 then
         self._last_ground_check = 0
-        automobiles_lib.ground_get_distances(self, 0.372, 2.7)
+        automobiles_lib.ground_get_distances(self, 0.372, (self._front_suspension_pos.z)/10)
     end
 	local newpitch = self._pitch --velocity.y * math.rad(6)
 

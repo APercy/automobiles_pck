@@ -128,7 +128,7 @@ function motorcycle.attach_pax_stand(self, player)
         player_api.player_attached[name] = true
 
         -- makes it "invisible"
-        player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
+        player:set_properties({mesh = "automobiles_pivot_mesh.b3d", textures = {"automobiles_alpha.png",} })
 
         --create the dummy mesh
         local pos = player:get_pos()
