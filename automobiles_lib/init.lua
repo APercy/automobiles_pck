@@ -682,6 +682,7 @@ end
 -- very basic transmission emulation for the car
 function automobiles_lib.get_transmission_state(curr_speed, max_speed)
     local retVal = 1
+    max_speed = max_speed or 100
     if curr_speed >= (max_speed/4) then retVal = 2 end
     if curr_speed >= (max_speed/2) then retVal = 3 end
     return retVal

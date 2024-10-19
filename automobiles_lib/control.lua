@@ -5,9 +5,9 @@ automobiles_lib.vector_up = vector.new(0, 1, 0)
 function automobiles_lib.check_road_is_ok(obj, max_acc_factor)
 	local pos_below = obj:get_pos()
 	pos_below.y = pos_below.y - 0.1
-	local node_below = minetest.get_node(pos_below).name
-    --minetest.chat_send_all(node_below)
-    local nodedef = minetest.registered_nodes[node_below]
+	local node_below = core.get_node(pos_below).name
+    --core.chat_send_all(node_below)
+    local nodedef = core.registered_nodes[node_below]
     if nodedef.liquidtype == "none" then
         local slow_nodes = {
                             ['default:ice '] = 0.01,
@@ -37,18 +37,27 @@ function automobiles_lib.set_yaw_by_mouse(self, dir, steering_limit)
     local command = (rot_y - dir) * intensity
     if command < -90 then command = -90 
     elseif command > 90 then command = 90 end
-    --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..(rot_y - dir))
+    --core.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..(rot_y - dir))
 
-    --minetest.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..command)
+    --core.chat_send_all("rotation y: "..rot_y.." - dir: "..dir.." - command: "..command)
 
 	return (-command * steering_limit)/90
 end
 
 function automobiles_lib.control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, max_acc_factor, max_speed, steering_limit, steering_speed)
     self._last_time_command = self._last_time_command + dtime
+    hull_direction = hull_direction or 0
+    longit_speed = longit_speed or 0
+    longit_drag = longit_drag or 0
+    later_drag = later_drag or 0
+    max_acc_factor = max_acc_factor or 0
+    max_speed = max_speed or 0
+    steering_limit = steering_limit or 0
+    steering_speed = steering_speed or 0
+
     if self._last_time_command > 1 then self._last_time_command = 1 end
 
-	local player = minetest.get_player_by_name(self.driver_name)
+	local player = core.get_player_by_name(self.driver_name)
     local retval_accel = accel;
     local stop = false
     
@@ -61,7 +70,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
             if longit_speed < max_speed and ctrl.up then
                 --get acceleration factor
                 acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
-                --minetest.chat_send_all('engineacc: '.. engineacc)
+                --core.chat_send_all('engineacc: '.. engineacc)
                 if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
                     --improper road will reduce speed
                     acc = -1
@@ -111,7 +120,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
 				    self._engine_running = false
 			        -- sound and animation
                     if self.sound_handle then
-                        minetest.sound_stop(self.sound_handle)
+                        core.sound_stop(self.sound_handle)
                         self.sound_handle = nil
                     end
 			        --self.engine:set_animation_frame_speed(0)
@@ -119,7 +128,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
 			    elseif self._engine_running == false and self._energy > 0 then
 				    self._engine_running = true
 		            -- sound and animation
-	                self.sound_handle = minetest.sound_play({name = "engine"},
+	                self.sound_handle = core.sound_play({name = "engine"},
 			                {object = self.object, gain = 2.0, pitch = 1.0, max_hear_distance = 32, loop = true,})
                     --self.engine:set_animation_frame_speed(30)
 			    end
