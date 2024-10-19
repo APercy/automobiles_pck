@@ -164,32 +164,25 @@ minetest.register_entity("automobiles_vespa:vespa", {
 
     _vehicle_name = "Vespa",
     _drive_wheel_pos = {x=-4.26,y=6.01,z=14.18},
-    _drive_wheel_angle = 15,
+    _drive_wheel_angle = 0,
     _seat_pos = {{x=0.0,y=-1.1,z=5.5},{x=0.0,y=1,z=0.09}},
-    --_seat_pos = {{x=-4.25,y=-1.1,z=5.5},{x=4.25,y=1,z=5.5}},
 
-    _front_suspension_ent = 'automobiles_coupe:front_suspension',
+    _front_suspension_ent = 'automobiles_vespa:front_suspension',
     _front_suspension_pos = {x=0,y=1.5,z=14.5},
     --_front_wheel_ent = 'automobiles_lib:wheel',
     _front_wheel_xpos = 0,
     _front_wheel_frames = {x = 1, y = 49},
-    _rear_suspension_ent = 'automobiles_coupe:rear_suspension',
+    _rear_suspension_ent = 'automobiles_vespa:rear_suspension',
     _rear_suspension_pos = {x=0,y=1.5,z=0},
     --_rear_wheel_ent = 'automobiles_lib:wheel',
     _rear_wheel_xpos = 0,
     _rear_wheel_frames = {x = 1, y = 49},
 
-    --_fuel_gauge_pos = {x=0,y=6.2,z=15.8},
     _front_lights = 'automobiles_vespa:lights',
     _rear_lights = 'automobiles_vespa:r_lights',
-    --_reverse_lights = 'automobiles_coupe:reverse_lights',
-    --_turn_left_lights = 'automobiles_coupe:turn_left_light',
-    --_turn_right_lights = 'automobiles_coupe:turn_right_light',
-    --_textures_turn_lights_off = {"automobiles_turn.png", },
-    --_textures_turn_lights_on = { "automobiles_turn_on.png", },
 
     _LONGIT_DRAG_FACTOR = 0.15*0.15,
-    _LATER_DRAG_FACTOR = 50.0,
+    _LATER_DRAG_FACTOR = 100.0,
     _max_acc_factor = 6,
     _max_speed = 15,
     _min_later_speed = 5,
@@ -200,7 +193,6 @@ minetest.register_entity("automobiles_vespa:vespa", {
     _dettach = vespa.dettach_driver_stand,
     _attach_pax = vespa.attach_pax_stand,
     _dettach_pax = vespa.dettach_pax_stand,
-    _formspec_function = vespa.driver_formspec,
 
     get_staticdata = automobiles_lib.get_staticdata,
 
@@ -240,6 +232,21 @@ minetest.register_entity("automobiles_vespa:vespa", {
                         if player_attach == self.driver_seat then is_attached = true end
                     end
                 end
+
+                local steering_angle_max = 30
+                -- -30 direita -> steering_angle_max
+                -- +30 esquerda
+                local arm_range = 2
+                local range = steering_angle_max * 2
+                local armZ = -((self._steering_angle+steering_angle_max) * arm_range) / 60
+                
+                --player:set_bone_position("Arm_Left", {x=3.0, y=5, z=-arm_range-armZ}, {x=240-(self._steering_angle/2), y=0, z=0})
+                --player:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ}, {x=240+(self._steering_angle/2), y=0, z=0})
+                if self.driver_mesh then
+                    self.driver_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=-armZ-0.5}, {x=76-(self._steering_angle/2), y=0, z=0})
+                    self.driver_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ+1.5}, {x=76+(self._steering_angle/2), y=0, z=0})
+                end
+
             end
         end
 

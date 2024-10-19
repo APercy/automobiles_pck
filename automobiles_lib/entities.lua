@@ -727,6 +727,10 @@ function automobiles_lib.on_step(self, dtime)
             local turn_effect_speed = longit_speed
             if turn_effect_speed > 10 then turn_effect_speed = 10 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
+
+            if is_attached == false and stop == true then
+                newroll = self._stopped_roll
+            end
         end
     end
 

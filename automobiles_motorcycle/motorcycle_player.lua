@@ -34,7 +34,8 @@ function motorcycle.attach_driver_stand(self, player)
     --minetest.chat_send_all(dump(self.driver_properties))
    
     -- attach the driver
-    player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+    local x_pos = -4  --WHY?! because after the 5.9.1 version the motorcycle got an strange shaking. But when I move it from the center, it ceases. Then I use the camera center bug.
+    player:set_attach(self.driver_seat, "", {x = x_pos, y = 0, z = 0}, {x = 0, y = 0, z = 0})
     player:set_eye_offset({x = 0, y = 0, z = 1.5}, {x = 0, y = 3, z = -30})
     player_api.player_attached[name] = true
 
@@ -45,7 +46,7 @@ function motorcycle.attach_driver_stand(self, player)
     --create the dummy mesh
     local pos = player:get_pos()
     local driver_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
-    driver_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
+    driver_mesh:set_attach(player,'',{x=x_pos*-1,y=-0.0,z=0.0},{x=0,y=0,z=0})
     self.driver_mesh = driver_mesh
     self.driver_mesh:set_properties({is_visible=false})
 
@@ -121,7 +122,8 @@ function motorcycle.attach_pax_stand(self, player)
         self._passenger = name
 
         -- attach the driver
-        player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+        local x_pos = -4  --WHY?! because after the 5.9.1 version the motorcycle got an strange shaking. But when I move it from the center, it ceases. Then I use the camera center bug.
+        player:set_attach(self.passenger_seat, "", {x = x_pos, y = 0, z = 0}, {x = 0, y = 0, z = 0})
         player:set_eye_offset({x = 0, y = 3, z = 0}, {x = 0, y = 3, z = -30})
         player_api.player_attached[name] = true
 
@@ -131,7 +133,7 @@ function motorcycle.attach_pax_stand(self, player)
         --create the dummy mesh
         local pos = player:get_pos()
         local pax_mesh=minetest.add_entity(pos,'automobiles_motorcycle:player_mesh')
-        pax_mesh:set_attach(player,'',{x=0.0,y=-0.0,z=0.0},{x=0,y=0,z=0})
+        pax_mesh:set_attach(player,'',{x=x_pos*-1,y=-0.0,z=0.0},{x=0,y=0,z=0})
         self.pax_mesh = pax_mesh
         self.pax_mesh:set_properties({is_visible=false})
 
