@@ -180,7 +180,7 @@ minetest.register_entity("automobiles_vespa:vespa", {
     _rear_lights = 'automobiles_vespa:r_lights',
 
     _LONGIT_DRAG_FACTOR = 0.15*0.15,
-    _LATER_DRAG_FACTOR = 100.0,
+    _LATER_DRAG_FACTOR = 200.0,
     _max_acc_factor = 6,
     _max_speed = 15,
     _min_later_speed = 5,

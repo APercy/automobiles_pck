@@ -1,10 +1,14 @@
 local S = automobiles_lib.S
 
-function automobiles_lib.getCarFromPlayer(player)
+function automobiles_lib.getCarFromPlayer(player, self)
     local seat = player:get_attach()
     if seat then
         local car = seat:get_attach()
-        return car
+        if car then
+            return car
+        else
+            return seat
+        end
     end
     return nil
 end

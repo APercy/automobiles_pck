@@ -86,8 +86,8 @@ function automobiles_lib.on_rightclick (self, clicker)
                     attach_pax_f(self, clicker, true)
                 end
             else
-                --there is a passeger
-                --if you are the psenger, so deattach
+                --there is a passenger
+                --if you are the passenger, so deattach
                 local dettach_pax_f = automobiles_lib.dettach_pax
                 if self._dettach_pax then dettach_pax_f = self._dettach_pax end
                 dettach_pax_f(self, clicker)
@@ -422,7 +422,7 @@ function automobiles_lib.on_step(self, dtime)
             local player_attach = player:get_attach()
             if player_attach then
                 if self.driver_seat then
-                    if player_attach == self.driver_seat then is_attached = true end
+                    if player_attach == self.driver_seat or player_attach == self.object then is_attached = true end
                 end
             end
         end
@@ -725,7 +725,7 @@ function automobiles_lib.on_step(self, dtime)
     else
         if self._is_motorcycle then
             local turn_effect_speed = longit_speed
-            if turn_effect_speed > 10 then turn_effect_speed = 10 end
+            if turn_effect_speed > 20 then turn_effect_speed = 20 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
 
             if is_attached == false and stop == true then
