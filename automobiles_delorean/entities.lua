@@ -441,6 +441,7 @@ minetest.register_entity("automobiles_delorean:delorean", {
     _max_acc_factor = 8.0,
     _max_speed = 30,
     _min_later_speed = 4.5,
+    _consumption_divisor = 40000,
 
     _wheel_compensation = 0.8,
 

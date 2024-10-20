@@ -360,6 +360,7 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
     _max_acc_factor = 12,
     _max_speed = 40,
     _min_later_speed = 4.5,
+    _consumption_divisor = 40000,
 
     _wheel_compensation = 0.8,
 

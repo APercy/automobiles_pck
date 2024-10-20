@@ -186,12 +186,13 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
     _rear_lights = 'automobiles_motorcycle:r_lights',
 
     _LONGIT_DRAG_FACTOR = 0.14*0.14,
-    _LATER_DRAG_FACTOR = 200.0,
+    _LATER_DRAG_FACTOR = 25.0,
     _max_acc_factor = 8,
     _max_speed = 20,
     _min_later_speed = 5,
     _have_transmission = false,
     _is_motorcycle = true,
+    _consumption_divisor = 100000,
 
     _attach = motorcycle.attach_driver_stand,
     _dettach = motorcycle.dettach_driver_stand,

@@ -392,8 +392,14 @@ function automobiles_lib.on_step(self, dtime)
         dynamic_later_drag = dynamic_later_drag/(longit_speed*2)
     end
 
-    local later_drag = vector.multiply(nhdir,later_speed*
+    local later_drag = 0
+    if self._is_motorcycle == true then
+        later_drag = vector.multiply(nhdir,later_speed*
+            later_speed*self._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
+    else
+        later_drag = vector.multiply(nhdir,later_speed*
         later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))
+    end
 
     local accel = vector.add(longit_drag,later_drag)
     local stop = nil
@@ -653,7 +659,11 @@ function automobiles_lib.on_step(self, dtime)
         local acceleration = automobiles_lib.get_hipotenuse_value(accel, zero_reference)
         --minetest.chat_send_all(acceleration)
         if automobiles_lib.is_drift_game == false then
-            local consumed_power = acceleration/40000
+            local consumption = 40000
+            if self._consumption_divisor then
+                consumption = self._consumption_divisor
+            end
+            local consumed_power = acceleration/consumption
             self._energy = self._energy - consumed_power;
         else
             self._energy = 5

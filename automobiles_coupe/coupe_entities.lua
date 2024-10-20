@@ -290,6 +290,7 @@ minetest.register_entity("automobiles_coupe:coupe", {
     _max_acc_factor = 8,
     _max_speed = 22,
     _min_later_speed = 2,
+    _consumption_divisor = 50000,
 
     get_staticdata = automobiles_lib.get_staticdata,
 

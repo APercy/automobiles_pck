@@ -301,6 +301,7 @@ catrelle.car_properties1 = {
     _max_acc_factor = 5,
     _max_speed = 14,
     _min_later_speed = 3,
+    _consumption_divisor = 50000,
 
     get_staticdata = automobiles_lib.get_staticdata,
 

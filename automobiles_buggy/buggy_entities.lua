@@ -262,6 +262,7 @@ minetest.register_entity("automobiles_buggy:buggy", {
     _max_acc_factor = 5,
     _max_speed = 15,
     _min_later_speed = 4.0,
+    _consumption_divisor = 60000,
 
     get_staticdata = automobiles_lib.get_staticdata,
 

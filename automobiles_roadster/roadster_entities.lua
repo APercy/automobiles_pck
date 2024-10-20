@@ -293,7 +293,8 @@ minetest.register_entity("automobiles_roadster:roadster", {
     _LATER_DRAG_FACTOR = 20.0,
     _max_acc_factor = 5,
     _max_speed = 12,
-    _min_later_speed = 2,
+    _min_later_speed = 5,
+    _consumption_divisor = 60000,
 
     get_staticdata = automobiles_lib.get_staticdata,
 
