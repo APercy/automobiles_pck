@@ -298,8 +298,8 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
     automobiles_lib.seats_create(self)
 
     local pointer_entity = 'automobiles_lib:pointer'
-    if self._gauge_pointer_ent then 
-        pointer_entity = self._gauge_pointer_ent
+    if self._gauge_pointer_ent then pointer_entity = self._gauge_pointer_ent end
+    if self._fuel_gauge_pos then
         local fuel_gauge=minetest.add_entity(pos, pointer_entity)
         fuel_gauge:set_attach(self.object,'',self._fuel_gauge_pos,{x=0,y=0,z=0})
         self.fuel_gauge = fuel_gauge
