@@ -98,12 +98,12 @@ function motorcycle.dettach_driver_stand(self, player)
             player:set_properties({mesh = self.driver_properties.mesh})
             self.driver_properties = nil
         end
+    end
 
-        --player:set_properties({visual_size = {x=1, y=1}})
-        if self.driver_mesh then
-            self.driver_mesh:set_properties({is_visible=false})
-            self.driver_mesh:remove()
-        end
+    --player:set_properties({visual_size = {x=1, y=1}})
+    if self.driver_mesh then
+        self.driver_mesh:set_properties({is_visible=false})
+        self.driver_mesh:remove()
     end
     self.driver = nil
 end
@@ -174,12 +174,11 @@ function motorcycle.dettach_pax_stand(self, player)
             player:set_properties({mesh = self.pax_properties.mesh})
             self.pax_properties = nil
         end
-
-        --player:set_properties({visual_size = {x=1, y=1}})
-        if self.pax_mesh then
-            self.pax_mesh:set_properties({is_visible=false})
-            self.pax_mesh:remove()
-        end
+    end
+    --player:set_properties({visual_size = {x=1, y=1}})
+    if self.pax_mesh then
+        self.pax_mesh:set_properties({is_visible=false})
+        self.pax_mesh:remove()
     end
 end
 
