@@ -702,8 +702,15 @@ function automobiles_lib.on_step(self, dtime)
     end
 
     if stop == true then
+        self._last_accel = vector.new() --self.object:get_acceleration()
         self.object:set_acceleration({x=0,y=0,z=0})
         self.object:set_velocity({x=0,y=0,z=0})
+    else
+        self._last_accel = accel
+        self.object:move_to(curr_pos)
+        --airutils.set_acceleration(self.object, new_accel)
+        local limit = (self._max_speed/self.dtime)
+        if accel.y > limit then accel.y = limit end --it isn't a rocket :/
     end
 
     self._last_ground_check = self._last_ground_check + dtime
@@ -742,6 +749,5 @@ function automobiles_lib.on_step(self, dtime)
 
     --saves last velocity for collision detection (abrupt stop)
     self.lastvelocity = self.object:get_velocity()
-    self._last_accel = accel
     self._longit_speed = longit_speed
 end
