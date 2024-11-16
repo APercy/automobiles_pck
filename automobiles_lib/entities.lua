@@ -404,6 +404,7 @@ function automobiles_lib.on_step(self, dtime)
     local accel = vector.add(longit_drag,later_drag)
     local stop = nil
     local curr_pos = self.object:get_pos()
+    self.object:move_to(curr_pos)
 
     if self._show_rag == true then
         if self._windshield_pos and self._windshield_ext_rotation then
@@ -491,7 +492,6 @@ function automobiles_lib.on_step(self, dtime)
     end
 
     -- impacts and control
-    self.object:move_to(curr_pos)
 	if is_attached then --and self.driver_name == self.owner then
         local impact = automobiles_lib.get_hipotenuse_value(velocity, self.lastvelocity)
         if impact > 1 then
@@ -701,15 +701,9 @@ function automobiles_lib.on_step(self, dtime)
         accel.y = y_accel --sets the anti gravity
     end
 
-    if stop ~= true then
-        --self.object:set_velocity(velocity)
-        self.object:add_velocity(vector.multiply(accel,dtime))
-        --self.object:set_acceleration(accel)
-    else
-        if stop == true then
-            self.object:set_acceleration({x=0,y=0,z=0})
-            self.object:set_velocity({x=0,y=0,z=0})
-        end
+    if stop == true then
+        self.object:set_acceleration({x=0,y=0,z=0})
+        self.object:set_velocity({x=0,y=0,z=0})
     end
 
     self._last_ground_check = self._last_ground_check + dtime
@@ -748,5 +742,6 @@ function automobiles_lib.on_step(self, dtime)
 
     --saves last velocity for collision detection (abrupt stop)
     self.lastvelocity = self.object:get_velocity()
+    self._last_accel = accel
     self._longit_speed = longit_speed
 end
