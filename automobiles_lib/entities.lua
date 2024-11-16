@@ -404,7 +404,6 @@ function automobiles_lib.on_step(self, dtime)
     local accel = vector.add(longit_drag,later_drag)
     local stop = nil
     local curr_pos = self.object:get_pos()
-    self.object:move_to(curr_pos)
 
     if self._show_rag == true then
         if self._windshield_pos and self._windshield_ext_rotation then

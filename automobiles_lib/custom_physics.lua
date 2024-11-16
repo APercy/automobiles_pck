@@ -50,12 +50,6 @@ function automobiles_lib.physics(self)
 	else
 		self.isinliquid = false
         new_velocity = vector.multiply(last_accel,self.dtime)
-        --[[if last_accel then
-            last_accel.y = last_accel.y + (automobiles_lib.gravity*-1) --gravity here
-
-            new_velocity = vector.multiply(last_accel,self.dtime)
-        end]]--
-        --self.object:set_acceleration({x=0,y=new_accel.y, z=0})
 	end
 
     if self.isonground and not self.isinliquid then
@@ -87,25 +81,14 @@ function automobiles_lib.physics(self)
             new_velocity = vnew
         end
 
-        --damage if the friction is below .97
-        if self._last_longit_speed then
-            if friction <= 0.97 and self._last_longit_speed > 0 then
-                self.hp_max = self.hp_max - 0.001
-                automobiles_lib.setText(self, self._vehicle_name)
-            end --damage the plane if it have hard friction
-        end
-
-        --self.object:set_velocity(new_velocity)
-        --new_velocity = vector.subtract(new_velocity,vel)
-
-        --fix bug with unexpe3cted moving
+        --fix bug with unexpected moving
         if not self.driver_name and math.abs(vel.x) < 0.2 and math.abs(vel.z) < 0.2 then
             self.object:set_velocity({x=0,y=automobiles_lib.gravity*(-1)*self.dtime,z=0})
             if self.wheels then self.wheels:set_animation_frame_speed(0) end
             return
         end
     end
-
+    
     self.object:add_velocity(new_velocity)
 end
 
