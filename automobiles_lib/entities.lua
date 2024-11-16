@@ -733,13 +733,24 @@ function automobiles_lib.on_step(self, dtime)
         if h_vel_compensation > max_pitch then h_vel_compensation = max_pitch end
         newpitch = newpitch + (velocity.y * math.rad(max_pitch - h_vel_compensation))
     else
+        local turn_effect_speed = longit_speed
         if self._is_motorcycle then
-            local turn_effect_speed = longit_speed
             if turn_effect_speed > 20 then turn_effect_speed = 20 end
             newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
 
             if is_attached == false and stop == true then
                 newroll = self._stopped_roll
+            end
+        else
+            if turn_effect_speed > 10 then turn_effect_speed = 10 end
+            if math.abs(longit_speed) > 0 then
+                local tilt_effect = (-self._steering_angle/100)*(turn_effect_speed/20)
+                newroll = tilt_effect * -1
+                self.front_suspension:set_rotation({x=0,y=0,z=tilt_effect})
+                self.rear_suspension:set_rotation({x=0,y=0,z=tilt_effect})
+            else
+                self.front_suspension:set_rotation({x=0,y=0,z=0})
+                self.rear_suspension:set_rotation({x=0,y=0,z=0})
             end
         end
     end
