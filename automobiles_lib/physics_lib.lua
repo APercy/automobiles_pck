@@ -147,7 +147,7 @@ function automobiles_lib.get_box_height(self)
 end
 
 function automobiles_lib.stepfunc(self,dtime,colinfo)
-	self.dtime = min(dtime,0.2)
+	self.dtime = math.min(dtime,0.2)
 	self.colinfo = colinfo
 	self.height = automobiles_lib.get_box_height(self)
 	
@@ -167,9 +167,7 @@ function automobiles_lib.stepfunc(self,dtime,colinfo)
 	self:physics()
 
 	if self.logic then
-		if self.view_range then self:sensefunc() end
 		self:logic()
-		execute_queues(self)
 	end
 	
 	self.lastvelocity = self.object:get_velocity()
