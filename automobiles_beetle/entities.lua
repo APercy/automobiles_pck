@@ -240,6 +240,52 @@ initial_properties = {
 	
 })
 
+minetest.register_entity('automobiles_beetle:top',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+	visual = "mesh",
+	mesh = "beetle_top.b3d",
+    backface_culling = false,
+	textures = {"automobiles_white.png", "automobiles_black.png", "beetle_glasses.png"},
+	},
+	
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+	
+})
+
+minetest.register_entity('automobiles_beetle:top_retracted',{
+initial_properties = {
+	physical = false,
+	collide_with_objects=false,
+	pointable=false,
+	visual = "mesh",
+	mesh = "beetle_top_retracted.b3d",
+    backface_culling = false,
+	textures = {"automobiles_black.png"},
+	},
+	
+    on_activate = function(self,std)
+	    self.sdata = minetest.deserialize(std) or {}
+	    if self.sdata.remove then self.object:remove() end
+    end,
+	    
+    get_staticdata=function(self)
+      self.sdata.remove=true
+      return minetest.serialize(self.sdata)
+    end,
+	
+})
+
 function auto_beetle.paint(self, colstr)
     local l_textures = self.initial_properties.textures
     self._color = colstr
@@ -432,3 +478,18 @@ auto_beetle.car_properties1 = {
 }
 
 minetest.register_entity("automobiles_beetle:beetle", auto_beetle.car_properties1)
+
+
+auto_beetle.car_properties2 = automobiles_lib.properties_copy(auto_beetle.car_properties1)
+auto_beetle.car_properties2._vehicle_name = "Convertible Beetle"
+auto_beetle.car_properties2.initial_properties = automobiles_lib.properties_copy(auto_beetle.car_properties1.initial_properties)
+auto_beetle.car_properties2.initial_properties.mesh = "beetle_body_convertible.b3d"
+auto_beetle.car_properties2.initial_properties.textures = automobiles_lib.properties_copy(auto_beetle.car_properties1.initial_properties.textures)
+auto_beetle.car_properties2._color = "#FFB82D"
+auto_beetle.car_properties2._formspec_function = auto_beetle.driver_formspec
+auto_beetle.car_properties2._rag_extended_ent = 'automobiles_beetle:top'
+auto_beetle.car_properties2._rag_retracted_ent = 'automobiles_beetle:top_retracted'
+auto_beetle.car_properties2._show_rag = true
+
+minetest.register_entity("automobiles_beetle:beetle_conv", auto_beetle.car_properties2)
+
