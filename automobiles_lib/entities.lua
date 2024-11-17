@@ -564,25 +564,6 @@ function automobiles_lib.on_step(self, dtime)
     local noded = automobiles_lib.nodeatpos(automobiles_lib.pos_shift(curr_pos,{y=self.initial_properties.collisionbox[2]-0.5}))
     if (noded and noded.drawtype ~= 'airlike') then
         if noded.drawtype ~= 'liquid' then
-            local min_later_speed = self._min_later_speed or 3
-            local speed_for_smoke = min_later_speed / 2
-            if (later_speed > speed_for_smoke or later_speed < -speed_for_smoke) and not self._is_motorcycle then
-                automobiles_lib.add_smoke(curr_pos, yaw, self._rear_wheel_xpos)
-                if automobiles_lib.extra_drift == false then  --disables the sound when playing drift game.. it's annoying
-                    if self._last_time_drift_snd >= 2.0 and (later_speed > min_later_speed or later_speed < -min_later_speed) then
-                        self._last_time_drift_snd = 0
-                        minetest.sound_play("automobiles_drifting", {
-                            pos = curr_pos,
-                            max_hear_distance = 20,
-                            gain = 3.0,
-                            fade = 0.0,
-                            pitch = 1.0,
-                            ephemeral = true,
-                        })
-                    end
-                end
-            end
-
             local wheel_compensation = longit_speed * (self._wheel_compensation or 1)
             if self.lf_wheel then self.lf_wheel:set_animation_frame_speed( wheel_compensation * (12 - angle_factor)) end
             if self.rf_wheel then self.rf_wheel:set_animation_frame_speed(-wheel_compensation * (12 + angle_factor)) end
@@ -744,10 +725,45 @@ function automobiles_lib.on_step(self, dtime)
         else
             if turn_effect_speed > 10 then turn_effect_speed = 10 end
             if math.abs(longit_speed) > 0 then
-                local tilt_effect = (-self._steering_angle/100)*(turn_effect_speed/20)
+                --local tilt_effect = (-self._steering_angle/100)*(turn_effect_speed/30)
+                local max_tilt = 10
+                local tilt_effect = (-later_speed/12)*(turn_effect_speed/30)
+                local tire_burn = false
+                if tilt_effect > max_tilt then
+                    tilt_effect = max_tilt
+                end
+                if tilt_effect < -max_tilt then
+                    tilt_effect = -max_tilt
+                end 
                 newroll = tilt_effect * -1
                 self.front_suspension:set_rotation({x=0,y=0,z=tilt_effect})
                 self.rear_suspension:set_rotation({x=0,y=0,z=tilt_effect})
+
+
+                if (noded and noded.drawtype ~= 'airlike') then
+                    if noded.drawtype ~= 'liquid' then
+                        local min_later_speed = self._min_later_speed or 3
+                        local speed_for_smoke = min_later_speed / 2
+                        if (later_speed > speed_for_smoke or later_speed < -speed_for_smoke) and not self._is_motorcycle then
+                            automobiles_lib.add_smoke(curr_pos, yaw, self._rear_wheel_xpos)
+                            if automobiles_lib.extra_drift == false then  --disables the sound when playing drift game.. it's annoying
+                                if self._last_time_drift_snd >= 2.0 and (later_speed > min_later_speed or later_speed < -min_later_speed) then
+                                    self._last_time_drift_snd = 0
+                                    minetest.sound_play("automobiles_drifting", {
+                                        pos = curr_pos,
+                                        max_hear_distance = 20,
+                                        gain = 3.0,
+                                        fade = 0.0,
+                                        pitch = 1.0,
+                                        ephemeral = true,
+                                    })
+                                end
+                            end
+                        end
+                    end
+                end
+
+
             else
                 self.front_suspension:set_rotation({x=0,y=0,z=0})
                 self.rear_suspension:set_rotation({x=0,y=0,z=0})

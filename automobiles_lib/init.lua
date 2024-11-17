@@ -568,9 +568,10 @@ function automobiles_lib.engineSoundPlay(self)
         local base_pitch = 1
         if self._base_pitch then base_pitch = self._base_pitch end
 
-        local snd_pitch = base_pitch + ((self._longit_speed/10)/2)
+        local divisor = 6 --3 states, so 6 to make it more smooth
+        local snd_pitch = base_pitch + ((base_pitch/divisor)*self._transmission_state) + ((self._longit_speed/10)/2)
         if self._transmission_state == 1 then
-            snd_pitch = 1 + (self._longit_speed/10)
+            snd_pitch = base_pitch + (self._longit_speed/10)
         end
 
         self.sound_handle = minetest.sound_play({name = self._engine_sound},

@@ -373,6 +373,7 @@ auto_beetle.car_properties1 = {
     _is_flying = 0,
     _trunk_slots = 12,
     _engine_sound = "beetle_engine",
+    _base_pitch = 0.7,
     _max_fuel = 10,
 
     _vehicle_name = "Beetle",
