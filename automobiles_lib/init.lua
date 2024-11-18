@@ -569,7 +569,8 @@ function automobiles_lib.engineSoundPlay(self)
         if self._base_pitch then base_pitch = self._base_pitch end
 
         local divisor = 6 --3 states, so 6 to make it more smooth
-        local snd_pitch = base_pitch + ((base_pitch/divisor)*self._transmission_state) + ((self._longit_speed/10)/2)
+        local multiplier = self._transmission_state or 1
+        local snd_pitch = base_pitch + ((base_pitch/divisor)*multiplier) + ((self._longit_speed/10)/2)
         if self._transmission_state == 1 then
             snd_pitch = base_pitch + (self._longit_speed/10)
         end
