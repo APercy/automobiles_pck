@@ -57,6 +57,7 @@ function automobiles_lib.physics(self)
         new_velocity = {x=new_velocity.x*friction,
 							    y=new_velocity.y,
 							    z=new_velocity.z*friction}
+        --core.chat_send_all(dump(friction))
 
         -- bounciness
         if self.springiness and self.springiness > 0 and self.buoyancy >= 1 then

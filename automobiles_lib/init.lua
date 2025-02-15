@@ -89,13 +89,13 @@ function automobiles_lib.properties_copy(origin_table)
     return tablecopy
 end
 
-local function smoke_particle(pos)
+local function smoke_particle(self, pos)
 	minetest.add_particle({
 		pos = pos,
 		velocity = {x = 0, y = 0, z = 0},
 		acceleration = {x = 0, y = 0, z = 0},
 		expirationtime = 0.25,
-		size = 2.8,
+		size = 2.8*(self._vehicle_scale or 1),
 		collisiondetection = false,
 		collision_removal = false,
 		vertical = false,
@@ -103,7 +103,7 @@ local function smoke_particle(pos)
 	})
 end
 
-function automobiles_lib.add_smoke(pos, yaw, rear_wheel_xpos)
+function automobiles_lib.add_smoke(self, pos, yaw, rear_wheel_xpos)
     local direction = yaw
     
     --right
@@ -112,7 +112,7 @@ function automobiles_lib.add_smoke(pos, yaw, rear_wheel_xpos)
     smk_pos.x = smk_pos.x + move * math.cos(direction)
     smk_pos.z = smk_pos.z + move * math.sin(direction)
     
-    smoke_particle(smk_pos)
+    smoke_particle(self, smk_pos)
 
     --left
     direction = direction - math.rad(180)
@@ -120,7 +120,7 @@ function automobiles_lib.add_smoke(pos, yaw, rear_wheel_xpos)
     smk_pos.x = smk_pos.x + move * math.cos(direction)
     smk_pos.z = smk_pos.z + move * math.sin(direction)
     
-    smoke_particle(smk_pos)
+    smoke_particle(self, smk_pos)
 end
 
 --returns 0 for old, 1 for new
@@ -176,6 +176,8 @@ function automobiles_lib.attach_driver(self, player)
     if automobiles_lib.detect_player_api(player) == 1 then
         eye_y = 2.5
     end
+    eye_y = eye_y*self._vehicle_scale
+
     player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
     player_api.player_attached[name] = true
 
@@ -242,6 +244,7 @@ function automobiles_lib.attach_pax(self, player, onside)
     if automobiles_lib.detect_player_api(player) == 1 then
         eye_y = 2.5
     end
+    eye_y = eye_y*self._vehicle_scale
 
     if self._passenger == nil then
         self._passenger = name
@@ -553,8 +556,13 @@ end
 
 function automobiles_lib.engine_set_sound_and_animation(self, _longit_speed)
     --minetest.chat_send_all('test1 ' .. dump(self._engine_running) )
+    local abs_curr_long_speed = math.abs(self._longit_speed)
+    local abs_long_speed = math.abs(_longit_speed)
+    local scale = self._vehicle_power_scale
+    local range_spacing = 0.01
     if self.sound_handle then
-        if (math.abs(self._longit_speed) > math.abs(_longit_speed) + 0.03) or (math.abs(self._longit_speed) + 0.03 < math.abs(_longit_speed)) then
+        if (abs_curr_long_speed*scale > (abs_long_speed + range_spacing)*scale)
+            or ((abs_curr_long_speed + range_spacing)*scale < abs_long_speed*scale) then
             --minetest.chat_send_all('test2')
             automobiles_lib.engineSoundPlay(self)
         end
@@ -682,9 +690,11 @@ function automobiles_lib.paint_with_mask(self, colstr, mask_colstr, target_textu
 end
 
 -- very basic transmission emulation for the car
-function automobiles_lib.get_transmission_state(curr_speed, max_speed)
+function automobiles_lib.get_transmission_state(self, curr_speed, max_speed)
     local retVal = 1
     max_speed = max_speed or 100
+    max_speed = max_speed*self._vehicle_scale
+    curr_speed = curr_speed*self._vehicle_scale
     if curr_speed >= (max_speed/4) then retVal = 2 end
     if curr_speed >= (max_speed/2) then retVal = 3 end
     return retVal

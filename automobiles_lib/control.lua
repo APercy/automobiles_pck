@@ -51,7 +51,11 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
     longit_drag = longit_drag or 0
     later_drag = later_drag or 0
     max_acc_factor = max_acc_factor or 0
+    max_acc_factor = max_acc_factor
+
     max_speed = max_speed or 0
+    max_speed = max_speed
+
     steering_limit = steering_limit or 0
     steering_speed = steering_speed or 0
 

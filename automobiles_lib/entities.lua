@@ -189,11 +189,40 @@ function automobiles_lib.get_staticdata(self)
         stored_inv_id = self._inv_id,
         stored_car_type = self._car_type,
         stored_car_gravity = self._car_gravity,
+        stored_scale = self._vehicle_scale or 1,
+        stored_power_scale = self._vehicle_power_scale or 1,
         --race data
         stored_last_checkpoint = self._last_checkpoint,
         stored_total_laps = self._total_laps,
         stored_race_id = self._race_id,
     })
+end
+
+local function scale_entity(self, scale)
+    scale = scale or 1
+    local initial_properties = automobiles_lib.properties_copy(self.initial_properties)
+	local new_properties = automobiles_lib.properties_copy(initial_properties)
+
+	--[[if initial_properties.collisionbox then
+		for i, value in ipairs(initial_properties.collisionbox) do
+			new_properties.collisionbox[i] = value * scale
+            --core.log("action", new_properties.collisionbox[i])
+		end
+	end
+
+	if initial_properties.selectionbox then
+		for i, value in ipairs(initial_properties.selectionbox) do
+			new_properties.selectionbox[i] = value * scale
+		end
+	end]]--
+
+    if initial_properties.stepheight then
+        new_properties.stepheight = initial_properties.stepheight * scale
+    end
+
+	new_properties.visual_size = {x=scale, y=scale}
+
+	self.object:set_properties(new_properties)
 end
 
 function automobiles_lib.on_activate(self, staticdata, dtime_s)
@@ -217,6 +246,8 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 
         self._car_type = data.stored_car_type
         self._car_gravity = data.stored_car_gravity or -automobiles_lib.gravity
+        self._vehicle_scale = data.stored_scale or 1
+        self._vehicle_power_scale = data.stored_power_scale or 1
 
         automobiles_lib.setText(self, self._vehicle_name)
         if data.remove then
@@ -226,11 +257,14 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
         end
     end
 
+    scale_entity(self, self._vehicle_scale)
+
     if self._painting_load then
         self._painting_load(self, self._color)
     else
         automobiles_lib.paint(self, self._color)
     end
+
     local pos = self.object:get_pos()
 
     local front_suspension=minetest.add_entity(self.object:get_pos(),self._front_suspension_ent)
@@ -279,7 +313,12 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
         steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.steering = steering
     else
-        self.object:set_bone_position("drive_adjust", self._drive_wheel_pos, {x=self._drive_wheel_angle, y=0, z=0}) 
+        self.object:set_bone_override("drive_adjust", {
+            position = {self._drive_wheel_pos, absolute = false},
+            rotation = {self._drive_wheel_angle, absolute = false}
+        })
+
+        --self.object:set_bone_position("drive_adjust", self._drive_wheel_pos, {x=self._drive_wheel_angle, y=0, z=0}) 
     end
 
     if self._rag_retracted_ent then
@@ -359,6 +398,7 @@ end
 
 function automobiles_lib.on_step(self, dtime)
     automobiles_lib.stepfunc(self, dtime)
+
     --[[sound play control]]--
     self._last_time_collision_snd = self._last_time_collision_snd + dtime
     if self._last_time_collision_snd > 1 then self._last_time_collision_snd = 1 end
@@ -368,6 +408,8 @@ function automobiles_lib.on_step(self, dtime)
 
     --in case it's not declared
     self._max_acc_factor = self._max_acc_factor or 1
+    self._vehicle_scale = self._vehicle_scale or 1
+    self._vehicle_power_scale = self._vehicle_power_scale or self._vehicle_scale
 
     local rotation = self.object:get_rotation()
     local yaw = rotation.y
@@ -387,18 +429,19 @@ function automobiles_lib.on_step(self, dtime)
     local dynamic_later_drag = self._LATER_DRAG_FACTOR
     if longit_speed > 2 then dynamic_later_drag = 2.0 end
     if longit_speed > 8 then dynamic_later_drag = 0.5 end
+    --core.chat_send_all(dump(longit_speed))
 
-    if automobiles_lib.extra_drift and longit_speed > 4 then
+    if automobiles_lib.extra_drift and longit_speed > (4*self._vehicle_power_scale) then
         dynamic_later_drag = dynamic_later_drag/(longit_speed*2)
     end
 
-    local later_drag = 0
+    local later_drag = vector.new()
     if self._is_motorcycle == true then
         later_drag = vector.multiply(nhdir,later_speed*
             later_speed*self._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
     else
         later_drag = vector.multiply(nhdir,later_speed*
-        later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))
+            later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))
     end
 
     local accel = vector.add(longit_drag,later_drag)
@@ -514,23 +557,23 @@ function automobiles_lib.on_step(self, dtime)
         --control
         local steering_angle_max = 40
         local steering_speed = 40
-        if math.abs(longit_speed) > 3 then
+        if math.abs(longit_speed) > 3*self._vehicle_scale then
             local mid_speed = (steering_speed/2)
-            steering_speed = mid_speed + mid_speed / math.abs(longit_speed*0.25)
+            steering_speed = (mid_speed + (mid_speed / math.abs(longit_speed*0.25))*self._vehicle_scale)
         end
 
         --adjust engine parameter (transmission emulation)
         local acc_factor = self._max_acc_factor
-        local transmission_state = automobiles_lib.get_transmission_state(longit_speed, self._max_speed)
+        local transmission_state = automobiles_lib.get_transmission_state(self, longit_speed, self._max_speed)
 
         local target_acc_factor = acc_factor
 
         if self._have_transmission ~= false then
             if transmission_state == 1 then
-                target_acc_factor = (self._max_acc_factor/3)
+                target_acc_factor = (acc_factor/3)
             end
             if transmission_state == 2 then
-                target_acc_factor = (self._max_acc_factor/2)
+                target_acc_factor = (acc_factor/2)
             end
             self._transmission_state = transmission_state
         end
@@ -542,6 +585,7 @@ function automobiles_lib.on_step(self, dtime)
             control = self._control_function
         end
 		accel, stop = control(self, dtime, hull_direction, longit_speed, longit_drag, later_drag, accel, target_acc_factor, self._max_speed, steering_angle_max, steering_speed)
+        --accel = vector.multiply(accel, self._vehicle_power_scale)
     else
         self._show_lights = false
         if self.sound_handle ~= nil then
@@ -686,17 +730,17 @@ function automobiles_lib.on_step(self, dtime)
         self.object:set_acceleration({x=0,y=0,z=0})
         self.object:set_velocity({x=0,y=0,z=0})
     else
-        self._last_accel = accel
         self.object:move_to(curr_pos)
         --airutils.set_acceleration(self.object, new_accel)
         local limit = (self._max_speed/self.dtime)
         if accel.y > limit then accel.y = limit end --it isn't a rocket :/
+        self._last_accel = accel
     end
 
     self._last_ground_check = self._last_ground_check + dtime
     if self._last_ground_check > 0.18 then
         self._last_ground_check = 0
-        automobiles_lib.ground_get_distances(self, 0.372, (self._front_suspension_pos.z)/10)
+        automobiles_lib.ground_get_distances(self, 0.372*self._vehicle_scale, (self._front_suspension_pos.z*self._vehicle_scale)/10)
     end
 	local newpitch = self._pitch --velocity.y * math.rad(6)
 
@@ -745,7 +789,7 @@ function automobiles_lib.on_step(self, dtime)
                         local min_later_speed = self._min_later_speed or 3
                         local speed_for_smoke = min_later_speed / 2
                         if (later_speed > speed_for_smoke or later_speed < -speed_for_smoke) and not self._is_motorcycle then
-                            automobiles_lib.add_smoke(curr_pos, yaw, self._rear_wheel_xpos)
+                            automobiles_lib.add_smoke(self, curr_pos, yaw, self._rear_wheel_xpos*self._vehicle_scale)
                             if automobiles_lib.extra_drift == false then  --disables the sound when playing drift game.. it's annoying
                                 if self._last_time_drift_snd >= 2.0 and (later_speed > min_later_speed or later_speed < -min_later_speed) then
                                     self._last_time_drift_snd = 0

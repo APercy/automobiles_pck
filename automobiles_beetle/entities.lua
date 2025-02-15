@@ -493,3 +493,15 @@ auto_beetle.car_properties2._show_rag = true
 
 minetest.register_entity("automobiles_beetle:beetle_conv", auto_beetle.car_properties2)
 
+
+auto_beetle.car_properties3 = automobiles_lib.properties_copy(auto_beetle.car_properties1)
+auto_beetle.car_properties3.initial_properties = automobiles_lib.properties_copy(auto_beetle.car_properties1.initial_properties)
+auto_beetle.car_properties3._vehicle_scale = 0.1
+auto_beetle.car_properties3._vehicle_power_scale = 0.12
+auto_beetle.car_properties3._ground_friction = 0.5
+auto_beetle.car_properties3.initial_properties.collisionbox = {-0.01, -0.02, -0.01, 0.01, 0.18, 0.01}
+auto_beetle.car_properties3.initial_properties.selectionbox = {-0.2, 0.0, -0.2, 0.2, 0.2, 0.2}
+auto_beetle.car_properties3._color = "#992222"
+
+minetest.register_entity("automobiles_beetle:rc_beetle", auto_beetle.car_properties3)
+
