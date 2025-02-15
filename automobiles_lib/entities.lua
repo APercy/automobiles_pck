@@ -314,11 +314,11 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 	    self.steering = steering
     else
         self.object:set_bone_override("drive_adjust", {
-            position = {self._drive_wheel_pos, absolute = false},
-            rotation = {self._drive_wheel_angle, absolute = false}
+            position = {self._drive_wheel_pos},
+            rotation = {self._drive_wheel_angle}
         })
 
-        --self.object:set_bone_position("drive_adjust", self._drive_wheel_pos, {x=self._drive_wheel_angle, y=0, z=0}) 
+        --self.object:set_bone_position("drive_adjust", self._drive_wheel_pos, {x=self._drive_wheel_angle, y=0, z=0})
     end
 
     if self._rag_retracted_ent then
