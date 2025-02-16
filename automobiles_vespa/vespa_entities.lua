@@ -251,10 +251,10 @@ minetest.register_entity("automobiles_vespa:vespa", {
 
         if is_attached == false then
             --core.chat_send_all("false")
-            self.object:set_bone_position("descanso", {x=0, y=-0.4, z=6.2}, {x=90, y=0, z=0})
+            self.object:set_bone_position("descanso", {x=0, y=-0.4, z=6.2}, {x=-90, y=0, z=0})
         else
             --core.chat_send_all("true")
-            self.object:set_bone_position("descanso", {x=0, y=-0.4, z=6.2}, {x=180, y=0, z=0})
+            self.object:set_bone_position("descanso", {x=0, y=-0.4, z=6.2}, {x=0, y=0, z=0})
         end
 
     end,
