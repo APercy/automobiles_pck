@@ -54,17 +54,20 @@ function motorcycle.attach_driver_stand(self, player)
 
     --position the dummy arms and legs
     self.driver_mesh:set_properties(self.driver_properties)
-    self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=10})
-    self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-10})
+    --[[self.driver_mesh:set_bone_override("Leg_Left", {
+        position = {vec = {x=1.0, y=0, z=0}, absolute = true},
+        rotation = {vec = {x=math.rad(-12), y=0, z=math.rad(190)}, absolute = true}
+    })
+    self.driver_mesh:set_bone_override("Leg_Right", {
+        position = {vec = {x=-1.0, y=0, z=0}, absolute = true},
+        rotation = {vec = {x=math.rad(-12), y=0, z=math.rad(-190)}, absolute = true}
+    })]]--
+    --self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=12, y=0, z=10})
+    --self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=12, y=0, z=-10})
 
 	self.driver_mesh:set_properties({
         is_visible=true,
 	})
-
-    --[[player:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=10})
-    player:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-10})
-    player:set_bone_position("Arm_Left", {x=3.0, y=5, z=-1}, {x=180+70, y=0, z=0})
-    player:set_bone_position("Arm_Right", {x=-3.0, y=5, z=-1}, {x=180+70, y=0, z=0})]]--
 end
 
 function motorcycle.dettach_driver_stand(self, player)
@@ -144,8 +147,8 @@ function motorcycle.attach_pax_stand(self, player)
 
         --position the dummy arms and legs
         self.pax_mesh:set_properties(self.pax_properties)
-        self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=10})
-        self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-10})
+        --self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=10})
+        --self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-10})
 	    self.pax_mesh:set_properties({
             is_visible=true,
 	    })
