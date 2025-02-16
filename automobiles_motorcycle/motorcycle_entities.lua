@@ -259,9 +259,9 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
 
         if is_attached == false then
             self._stopped_roll = math.rad(-12)
-            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=180-90, y=180, z=0})
+            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=-90, y=0, z=0})
         else
-            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=0, y=180, z=0})
+            self.object:set_bone_position("descanso", {x=0, y=-2.55, z=5.9}, {x=0, y=0, z=0})
         end
 
     end,
