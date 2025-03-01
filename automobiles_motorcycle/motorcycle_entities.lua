@@ -105,7 +105,6 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
         stepheight = 0.8 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_motorcycle_body.b3d",
-        --use_texture_alpha = true,
         backface_culling = false,
         textures = {
                 "automobiles_black.png", --bancos

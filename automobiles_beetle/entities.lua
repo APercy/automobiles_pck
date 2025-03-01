@@ -357,7 +357,6 @@ auto_beetle.car_properties1 = {
         stepheight = 0.65 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "beetle_body.b3d",
-        --use_texture_alpha = true,
         backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos

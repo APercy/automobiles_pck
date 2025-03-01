@@ -261,8 +261,6 @@ minetest.register_entity("automobiles_trans_am:trans_am", {
         stepheight = 0.65 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_trans_am_body.b3d",
-        --use_texture_alpha = true,
-        --backface_culling = false,
         textures = {
             "automobiles_black.png", --bancos
             "automobiles_painting2.png", -- scoop

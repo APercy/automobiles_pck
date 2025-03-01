@@ -338,8 +338,6 @@ minetest.register_entity("automobiles_delorean:delorean", {
         stepheight = 0.65 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_delorean_body.b3d",
-        --use_texture_alpha = true,
-        --backface_culling = false,
         textures = {
             "automobiles_dark_grey.png", --bancos
             "automobiles_painting.png", --pintura portas

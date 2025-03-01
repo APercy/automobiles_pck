@@ -32,7 +32,7 @@ dofile(minetest.get_modpath("automobiles_roadster") .. DIR_DELIM .. "roadster_cr
 --    --minetest.add_entity(e_pos, "automobiles_roadster:target")
 minetest.register_node("automobiles_roadster:display_target", {
 	tiles = {"automobiles_red.png"},
-	use_texture_alpha = true,
+	use_texture_alpha = "true",
 	walkable = false,
 	drawtype = "nodebox",
 	node_box = {

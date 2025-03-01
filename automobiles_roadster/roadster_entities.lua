@@ -196,8 +196,6 @@ minetest.register_entity("automobiles_roadster:roadster", {
         stepheight = 0.6 + automobiles_lib.extra_stepheight,
 	    visual = "mesh",
 	    mesh = "automobiles_roadster.b3d",
-        --use_texture_alpha = true,
-        --backface_culling = false,
         textures = {
             "automobiles_metal2.png", --parabrisa movel
             "automobiles_glass.png", --vidro do parabrisa movel
