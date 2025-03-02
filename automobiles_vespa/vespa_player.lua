@@ -54,8 +54,10 @@ function vespa.attach_driver_stand(self, player)
 
     --position the dummy arms and legs
     self.driver_mesh:set_properties(self.driver_properties)
-    --self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=1, z=0}, {x=180+12, y=0, z=7})
-    --self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=1, z=0}, {x=180+12, y=0, z=-7})
+    if automobiles_lib.mot_anim_mode then
+        self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=1, z=0}, {x=180+12, y=0, z=7})
+        self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=1, z=0}, {x=180+12, y=0, z=-7})
+    end
 	self.driver_mesh:set_properties({
         is_visible=true,
 	})
@@ -138,12 +140,13 @@ function vespa.attach_pax_stand(self, player)
 
         --position the dummy arms and legs
         self.pax_mesh:set_properties(self.pax_properties)
-        --self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=15})
-        --self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-15})
+        if automobiles_lib.mot_anim_mode then
+            self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=15})
+            self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-15})
 
-        --self.pax_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=0}, {x=180+45, y=0, z=0})
-        --self.pax_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=0}, {x=180+45, y=0, z=0})
-
+            self.pax_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=0}, {x=180+45, y=0, z=0})
+            self.pax_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=0}, {x=180+45, y=0, z=0})
+        end
 	    self.pax_mesh:set_properties({
             is_visible=true,
 	    })

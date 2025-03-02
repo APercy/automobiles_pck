@@ -42,6 +42,13 @@ if load_noob_mode == true then
     automobiles_lib.extra_stepheight = 1
 end
 
+local motorcycle_anim_mode = minetest.settings:get_bool("motorcycle_anim_mode", true)
+automobiles_lib.mot_anim_mode = true
+if motorcycle_anim_mode == false then
+    automobiles_lib.mot_anim_mode = false
+end
+
+
 --cars colors
 automobiles_lib.colors ={
     black='#2b2b2b',

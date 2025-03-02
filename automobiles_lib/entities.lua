@@ -312,13 +312,6 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 	    local steering=minetest.add_entity(self.steering_axis:get_pos(), self._steering_ent)
         steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
 	    self.steering = steering
-    else
-        --[[self.object:set_bone_override("drive_adjust", {
-            position = {self._drive_wheel_pos},
-            rotation = {self._drive_wheel_angle}
-        })]]--
-
-        --self.object:set_bone_position("drive_adjust", self._drive_wheel_pos, {x=self._drive_wheel_angle, y=0, z=0})
     end
 
     if self._rag_retracted_ent then

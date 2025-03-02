@@ -4,3 +4,4 @@
 # make cars collectable
 collect_automobiles (Collect vehicles to inventory) bool true
 noob_mode (make automobiles climb entire blocks) bool false
+motorcycle_anim_mode (enable motorcycle pilot animations) bool true

@@ -247,11 +247,9 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                 
                 --player:set_bone_position("Arm_Left", {x=3.0, y=5, z=-arm_range-armZ}, {x=240-(self._steering_angle/2), y=0, z=0})
                 --player:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ}, {x=240+(self._steering_angle/2), y=0, z=0})
-                if self.driver_mesh then
-                    --self.driver_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=-armZ-2}, {x=180+60-(self._steering_angle/2), y=0, z=0})
-                    --old self.driver_mesh:set_bone_override("Arm_Left", { position = {x=3.0, y=5, z=-armZ-2}, rotation = {x=60-(self._steering_angle/2), y=0, z=0}})
-                    --self.driver_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ}, {x=180+60+(self._steering_angle/2), y=0, z=0})
-                    --old self.driver_mesh:set_bone_override("Arm_Right", { position = {x=-3.0, y=5, z=-armZ}, rotation = {x=60+(self._steering_angle/2), y=0, z=0} })
+                if self.driver_mesh and automobiles_lib.mot_anim_mode then
+                    self.driver_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=-armZ-2}, {x=180+60-(self._steering_angle/2), y=0, z=0})
+                    self.driver_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ}, {x=180+60+(self._steering_angle/2), y=0, z=0})
                 end
             end
         end
