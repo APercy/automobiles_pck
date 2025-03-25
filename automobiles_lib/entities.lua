@@ -737,7 +737,7 @@ function automobiles_lib.on_step(self, dtime)
     end
 	local newpitch = self._pitch --velocity.y * math.rad(6)
 
-    local newroll = 0
+    local newroll = self._roll or 0
     if self._is_flying == 1 then
         newpitch = 0
         local turn_effect_speed = longit_speed
