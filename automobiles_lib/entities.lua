@@ -739,6 +739,7 @@ function automobiles_lib.on_step(self, dtime)
 
     local newroll = 0
     if self._is_flying == 1 then
+        newpitch = 0
         local turn_effect_speed = longit_speed
         if turn_effect_speed > 10 then turn_effect_speed = 10 end
         newroll = (-self._steering_angle/100)*(turn_effect_speed/10)
@@ -775,6 +776,7 @@ function automobiles_lib.on_step(self, dtime)
                 newroll = tilt_effect * -1
                 self.front_suspension:set_rotation({x=0,y=0,z=tilt_effect})
                 self.rear_suspension:set_rotation({x=0,y=0,z=tilt_effect})
+                newroll = newroll + (self._roll or 0)
 
 
                 if (noded and noded.drawtype ~= 'airlike') then
