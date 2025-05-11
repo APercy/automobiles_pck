@@ -167,8 +167,8 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
     local wheels = {
         {x = -front_wheel_x, y = 0, z = axis_distance},  -- Roda frontal esquerda
         {x =  front_wheel_x, y = 0, z = axis_distance},  -- Roda frontal direita
-        {x = -rear_wheel_x, y = 0, z = 0},  -- Roda traseira esquerda
-        {x =  rear_wheel_x, y = 0, z = 0}   -- Roda traseira direita
+        {x = -rear_wheel_x, y = 0, z = -axis_distance},  -- Roda traseira esquerda
+        {x =  rear_wheel_x, y = 0, z = -axis_distance}   -- Roda traseira direita
     }
 
     --retornando pitch e roll

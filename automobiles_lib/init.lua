@@ -17,6 +17,10 @@ end
 local S = automobiles_lib.S
 local storage = automobiles_lib.storage
 
+automobiles_lib.is_minetest = core.get_modpath("player_api")
+automobiles_lib.is_mcl = core.get_modpath("mcl_player")
+automobiles_lib.is_repixture = core.get_modpath("rp_player")
+
 automobiles_lib.fuel = {['biofuel:biofuel'] = 1,['biofuel:bottle_fuel'] = 1,
                 ['biofuel:phial_fuel'] = 0.25, ['biofuel:fuel_can'] = 10,
                 ['airutils:biofuel'] = 1,}
@@ -44,7 +48,7 @@ end
 
 local motorcycle_anim_mode = minetest.settings:get_bool("motorcycle_anim_mode", true)
 automobiles_lib.mot_anim_mode = true
-if motorcycle_anim_mode == false then
+if motorcycle_anim_mode == false or automobiles_lib.is_mcl then --disable for mcl too -- TODO
     automobiles_lib.mot_anim_mode = false
 end
 
@@ -67,6 +71,12 @@ automobiles_lib.colors ={
     white='#FFFFFF',
     yellow='#ffe400',
 }
+
+local eye_height_plus_value = 6.5
+local base_eie_height = -4
+if automobiles_lib.is_mcl then
+    base_eie_height = -5.5
+end
 
 --
 -- helpers and co.
@@ -133,17 +143,26 @@ end
 --returns 0 for old, 1 for new
 function automobiles_lib.detect_player_api(player)
     local player_proterties = player:get_properties()
-    local models = player_api.registered_models
-    local character = models[player_proterties.mesh]
-    if character then
-        if character.animations.sit.eye_height then
-            if character.animations.sit.eye_height == 0.8 then
-                --minetest.chat_send_all("new model");
-                return 1
+    --local mesh = "character.b3d"
+    --if player_proterties.mesh == mesh then
+    if core.get_modpath("player_api") then
+        local models = player_api.registered_models
+        local character = models[player_proterties.mesh]
+        --core.chat_send_all(dump(character));
+        if character then
+            if character.animations.sit.eye_height then
+                --core.chat_send_all(dump(character.animations.sit.eye_height));
+                if character.animations.sit.eye_height == 0.8 then
+                    --core.chat_send_all("new model");
+                    return 1
+                else
+                    --core.chat_send_all("new height");
+                    return 2 --strange bug with armor ands skins returning 1.47
+                end
+            else
+                --core.chat_send_all("old model");
+                return 0
             end
-        else
-            --minetest.chat_send_all("old model");
-            return 0
         end
     end
 
@@ -172,6 +191,12 @@ function automobiles_lib.seats_create(self)
     end
 end
 
+function automobiles_lib.sit(player)
+    --set_animation(frame_range, frame_speed, frame_blend, frame_loop)
+    player:set_animation({x =  81, y = 160},30, 0, true)
+    if core.get_modpath("emote") then emote.start(player:get_player_name(), "sit") end
+end
+
 -- attach player
 function automobiles_lib.attach_driver(self, player)
     local name = player:get_player_name()
@@ -179,35 +204,29 @@ function automobiles_lib.attach_driver(self, player)
 
     -- attach the driver
     player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-    local eye_y = -4
+    local eye_y = base_eie_height
     if automobiles_lib.detect_player_api(player) == 1 then
-        eye_y = 2.5
+        eye_y = eye_y + eye_height_plus_value
     end
     eye_y = eye_y*self._vehicle_scale
 
     player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
-    player_api.player_attached[name] = true
 
-    -- Make the driver sit
-    -- Minetest bug: Animation is not always applied on the client.
-    -- So we try sending it twice.
-    -- We call set_animation with a speed on the second call
-    -- so set_animation will not do nothing.
-    player_api.set_animation(player, "sit")
+    if automobiles_lib.is_minetest then
+        player_api.player_attached[name] = true
+        player_api.set_animation(player, "sit")
+    elseif airutils.is_mcl then
+		mcl_player.player_attached[name] = true
+        mcl_player.player_set_animation(player, "sit" , 30)
+        automobiles_lib.sit(player)
+    end
 
-    minetest.after(0.2, function()
-        player = minetest.get_player_by_name(name)
+    -- make the driver sit
+    minetest.after(1, function()
         if player then
-            local speed = 30.01
-            local mesh = player:get_properties().mesh
-            if mesh then
-                local character = player_api.registered_models[mesh]
-                if character and character.animation_speed then
-                    speed = character.animation_speed + 0.01
-                end
-            end
-            player_api.set_animation(player, "sit", speed)
-            if emote then emote.start(player:get_player_name(), "sit") end
+            --minetest.chat_send_all("okay")
+            automobiles_lib.sit(player)
+            --apply_physics_override(player, {speed=0,gravity=0,jump=0})
         end
     end)
 end
@@ -235,9 +254,20 @@ function automobiles_lib.dettach_driver(self, player)
 
         --player:set_properties({physical=true})
         player:set_detach()
-        player_api.player_attached[name] = nil
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-        player_api.set_animation(player, "stand")
+
+        if automobiles_lib.is_minetest then
+            if player_api.player_attached[name] then
+                player_api.player_attached[name] = nil
+            end
+            player_api.set_animation(player, "stand")
+        elseif automobiles_lib.is_mcl then
+            if mcl_player.player_attached[name] then
+                mcl_player.player_attached[name] = nil
+            end
+            mcl_player.player_set_animation(player, "stand")
+        end
+
     end
     self.driver = nil
 end
@@ -247,34 +277,33 @@ function automobiles_lib.attach_pax(self, player, onside)
     local onside = onside or false
     local name = player:get_player_name()
 
-    local eye_y = -4
+    local eye_y = base_eie_height
     if automobiles_lib.detect_player_api(player) == 1 then
-        eye_y = 2.5
+        eye_y = eye_y + eye_height_plus_value
     end
     eye_y = eye_y*self._vehicle_scale
 
     if self._passenger == nil then
         self._passenger = name
 
-        -- attach the driver
+        -- attach the pax
         player:set_attach(self.passenger_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
         player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = eye_y, z = -30})
-        player_api.player_attached[name] = true
-        -- make the pax sit
+        if automobiles_lib.is_minetest then
+            player_api.player_attached[name] = true
+            player_api.set_animation(player, "sit")
+        elseif airutils.is_mcl then
+		    mcl_player.player_attached[name] = true
+            mcl_player.player_set_animation(player, "sit" , 30)
+            automobiles_lib.sit(player)
+        end
 
+        -- make the pax sit
         minetest.after(0.2, function()
-            player = minetest.get_player_by_name(name)
             if player then
-                local speed = 30.01
-                local mesh = player:get_properties().mesh
-                if mesh then
-                    local character = player_api.registered_models[mesh]
-                    if character and character.animation_speed then
-                        speed = character.animation_speed + 0.01
-                    end
-                end
-                player_api.set_animation(player, "sit", speed)
-                if emote then emote.start(player:get_player_name(), "sit") end
+                --minetest.chat_send_all("okay")
+                automobiles_lib.sit(player)
+                --apply_physics_override(player, {speed=0,gravity=0,jump=0})
             end
         end)
     else
@@ -295,29 +324,27 @@ function automobiles_lib.attach_pax(self, player, onside)
         for k,v in ipairs(t) do
             i = t[k]
             if self._passengers[i] == nil and i > 2 then
-                --minetest.chat_send_all(self.driver_name)
+                --core.chat_send_all(self.driver_name)
                 self._passengers[i] = name
                 player:set_attach(self._passengers_base[i], "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
                 player:set_eye_offset({x = 0, y = eye_y, z = 0}, {x = 0, y = 3, z = -30})
-                player_api.player_attached[name] = true
-                -- make the pax sit
+                if automobiles_lib.is_minetest then
+                    player_api.player_attached[name] = true
+                    player_api.set_animation(player, "sit")
+                elseif airutils.is_mcl then
+		            mcl_player.player_attached[name] = true
+                    mcl_player.player_set_animation(player, "sit" , 30)
+                    automobiles_lib.sit(player)
+                end
 
+                -- make the pax sit
                 minetest.after(0.2, function()
-                    player = minetest.get_player_by_name(name)
                     if player then
-                        local speed = 30.01
-                        local mesh = player:get_properties().mesh
-                        if mesh then
-                            local character = player_api.registered_models[mesh]
-                            if character and character.animation_speed then
-                                speed = character.animation_speed + 0.01
-                            end
-                        end
-                        player_api.set_animation(player, "sit", speed)
-                        if emote then emote.start(player:get_player_name(), "sit") end
+                        --minetest.chat_send_all("okay")
+                        automobiles_lib.sit(player)
+                        --apply_physics_override(player, {speed=0,gravity=0,jump=0})
                     end
                 end)
-
                 break
             end
         end
@@ -349,8 +376,17 @@ function automobiles_lib.dettach_pax(self, player)
         local pos = player:get_pos()
         player:set_detach()
 
-        player_api.player_attached[name] = nil
-        player_api.set_animation(player, "stand")
+        if automobiles_lib.is_minetest then
+            if player_api.player_attached[name] then
+                player_api.player_attached[name] = nil
+            end
+            player_api.set_animation(player, "stand")
+        elseif automobiles_lib.is_mcl then
+            if mcl_player.player_attached[name] then
+                mcl_player.player_attached[name] = nil
+            end
+            mcl_player.player_set_animation(player, "stand")
+        end
 
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
         --remove_physics_override(player, {speed=1,gravity=1,jump=1})
@@ -489,10 +525,17 @@ function automobiles_lib.destroy(self, puncher)
         if puncher then
             puncher:set_detach()
             puncher:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-            if minetest.global_exists("player_api") then
-                player_api.player_attached[self.driver_name] = nil
-                -- player should stand again
-                player_api.set_animation(puncher, "stand")
+
+            if automobiles_lib.is_minetest then
+                if player_api.player_attached[self.driver_name] then
+                    player_api.player_attached[self.driver_name] = nil
+                end
+                player_api.set_animation(player, "stand")
+            elseif automobiles_lib.is_mcl then
+                if mcl_player.player_attached[self.driver_name] then
+                    mcl_player.player_attached[self.driver_name] = nil
+                end
+                mcl_player.player_set_animation(player, "stand")
             end
         end
         self.driver_name = nil

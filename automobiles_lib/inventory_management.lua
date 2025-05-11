@@ -1,10 +1,12 @@
 local storage = automobiles_lib.storage
-automobiles_lib.modname = minetest.get_current_modname()
+automobiles_lib.modname = core.get_current_modname()
 
 --function to format formspec for mineclone. In case of minetest, just returns an empty string
 local function get_itemslot_bg(a, b, c, d)
-    if mcl_formspec then
-        return mcl_formspec.get_itemslot_bg(a,b,c,d)
+    if automobiles_lib.is_mcl then
+        if mcl_formspec then
+            return mcl_formspec.get_itemslot_bg(a,b,c,d)
+        end
     end
     return ""
 end
@@ -12,7 +14,7 @@ end
 local function get_formspec_by_size(self, size)
     local background = ""
     local hotbar = ""
-    local is_minetest_game = false
+    local is_minetest_game = automobiles_lib.is_minetest or false
     if is_minetest_game then
         background = background .. default.gui_bg .. default.gui_bg_img .. default.gui_slots
         hotbar = default.get_hotbar_bg(0,4.85)

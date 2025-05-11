@@ -39,7 +39,11 @@ function motorcycle.attach_driver_stand(self, player)
     player:set_attach(self.object, "", self._seat_pos[1], {x = 0, y = 0, z = 0})
     --player:set_eye_offset({x = 0, y = 0, z = 1.5}, {x = 0, y = 3, z = -30})
     player:set_eye_offset({x = self._seat_pos[1].x, y = 0, z = self._seat_pos[1].z}, {x = 0, y = 3, z = -30})
-    player_api.player_attached[name] = true
+    if automobiles_lib.is_minetest then
+        player_api.player_attached[name] = true
+    elseif airutils.is_mcl then
+        mcl_player.player_attached[name] = true
+    end
 
     -- makes it "invisible"
     player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
@@ -93,11 +97,20 @@ function motorcycle.dettach_driver_stand(self, player)
         --automobiles_lib.remove_hud(player)
 
         player:set_detach()
-        if player_api.player_attached[name] then
-            player_api.player_attached[name] = nil
-        end
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-        player_api.set_animation(player, "stand")
+
+        if automobiles_lib.is_minetest then
+            if player_api.player_attached[name] then
+                player_api.player_attached[name] = nil
+            end
+            player_api.set_animation(player, "stand")
+        elseif automobiles_lib.is_mcl then
+            if mcl_player.player_attached[name] then
+                mcl_player.player_attached[name] = nil
+            end
+            mcl_player.player_set_animation(player, "stand")
+        end
+
 
         if self.driver_properties then
             player:set_properties({mesh = self.driver_properties.mesh})
@@ -134,7 +147,11 @@ function motorcycle.attach_pax_stand(self, player)
         player:set_attach(self.object, "", self._seat_pos[2], {x = 0, y = 0, z = 0})
         --player:set_eye_offset({x = 0, y = 3, z = 0}, {x = 0, y = 3, z = -30})
         player:set_eye_offset({x = self._seat_pos[2].x, y = 3, z = self._seat_pos[2].z}, {x = 0, y = 3, z = -30})
-        player_api.player_attached[name] = true
+        if automobiles_lib.is_minetest then
+            player_api.player_attached[name] = true
+        elseif airutils.is_mcl then
+            mcl_player.player_attached[name] = true
+        end
 
         -- makes it "invisible"
         player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
@@ -175,10 +192,19 @@ function motorcycle.dettach_pax_stand(self, player)
     if player then
         --player:set_properties({physical=true})
         player:set_detach()
-        player_api.player_attached[name] = nil
-        player_api.set_animation(player, "stand")
         player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-        --remove_physics_override(player, {speed=1,gravity=1,jump=1})
+
+        if automobiles_lib.is_minetest then
+            if player_api.player_attached[name] then
+                player_api.player_attached[name] = nil
+            end
+            player_api.set_animation(player, "stand")
+        elseif automobiles_lib.is_mcl then
+            if mcl_player.player_attached[name] then
+                mcl_player.player_attached[name] = nil
+            end
+            mcl_player.player_set_animation(player, "stand")
+        end
 
         if self.pax_properties then
             player:set_properties({mesh = self.pax_properties.mesh})
