@@ -80,7 +80,7 @@ function automobiles_lib.on_rightclick (self, clicker)
             --a passenger
 
             if (automobiles_lib.is_minetest and not player_api.player_attached[name]) or
-			     (airutils.is_mcl and mcl_player.player_attached[name]) then
+                (airutils.is_mcl and not mcl_player.player_attached[name]) then
                 --there is no passenger, so lets attach
                 if self.driver_name then
                     local attach_pax_f = automobiles_lib.attach_pax
