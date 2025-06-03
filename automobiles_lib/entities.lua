@@ -115,7 +115,8 @@ function automobiles_lib.on_punch (self, puncher, ttime, toolcaps, dir, damage)
 	end
     
     local is_attached = false
-    if puncher:get_attach() == self.driver_seat then is_attached = true end
+    local obj_attach = puncher:get_attach()
+    if obj_attach == self.driver_seat or obj_attach == self.object then is_attached = true end
 
     local itmstck=puncher:get_wielded_item()
     local item_name = ""
