@@ -224,15 +224,17 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 end
 
 function automobiles_lib.get_obstacle(ref_pos, ammount)
-    ammount = ammount or -4
+    ammount = ammount or -3
     --lets clone the table
     local retval = {x=ref_pos.x, y=ref_pos.y, z=ref_pos.z}
     --minetest.chat_send_all("aa y: " .. dump(retval.y))
     local i_pos = {x=ref_pos.x, y=ref_pos.y + 1, z=ref_pos.z}
     --minetest.chat_send_all("bb y: " .. dump(i_pos.y))
 
-    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=i_pos.y + ammount, z=i_pos.z})
-    retval.y = y
+    local y = automobiles_lib.eval_interception(i_pos, {x=i_pos.x, y=ref_pos.y + ammount, z=i_pos.z})
+    if y then
+        retval.y = y
+    end
 
     --minetest.chat_send_all("y: " .. dump(ref_pos.y) .. " ye: ".. dump(retval.y))
     return retval    
@@ -249,7 +251,7 @@ function automobiles_lib.eval_interception(initial_pos, end_pos)
                 local nodename = minetest.get_node(thing.under).name
                 local drawtype = get_nodedef_field(nodename, "drawtype")
 
-                if drawtype ~= "plantlike" then
+                if drawtype ~= "plantlike" and drawtype ~= nil then
                     if initial_pos.y >= pos.y then 
                         ret_y = pos.y
                         --minetest.chat_send_all("ray intercection: " .. dump(pos.y) .. " -- " .. nodename)
