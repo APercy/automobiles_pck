@@ -11,6 +11,7 @@ initial_properties = {
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
+        self.object:set_armor_groups({immortal=1})
     end,
 
     get_staticdata=function(self)
@@ -34,6 +35,7 @@ initial_properties = {
     on_activate = function(self,std)
 	    self.sdata = minetest.deserialize(std) or {}
 	    if self.sdata.remove then self.object:remove() end
+        self.object:set_armor_groups({immortal=1})
     end,
 	    
     get_staticdata=function(self)
