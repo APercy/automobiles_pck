@@ -187,7 +187,9 @@ function automobiles_lib.ground_get_distances(self, radius, axis_distance)
 
 
     if 1 then
-        local pos_elevation = 1
+        local pos_y_elevation = 1.6
+        local pos_elevation = (math.tan(pitch)*axis_distance) + pos_y_elevation
+        --core.chat_send_all(dump(pos_elevation))
         local f_x, f_z = automobiles_lib.get_xz_from_hipotenuse(pos.x, pos.z, yaw, axis_distance)
         local f_y = pos.y + pos_elevation
         local end_pos = {x=f_x, y=f_y, z=f_z}
