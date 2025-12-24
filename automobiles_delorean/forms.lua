@@ -84,7 +84,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                         ent._one_hand = false
                     else
                         ent._one_hand = true
-                        core.chat_send_player(name,core.colorize('#00ff00', S(" >>> Use AUX our key \"E\" to open the menu")))
+                        core.chat_send_player(name,core.colorize('#00ff00', S(" >>> Use AUX or key \"E\" to open the menu")))
                     end
                 end
             end
