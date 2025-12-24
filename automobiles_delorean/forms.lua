@@ -21,7 +21,9 @@ function delorean.driver_formspec(name)
     local ent = vehicle_obj:get_luaentity()
 
     local yaw = "false"
+    local one_hand = "false"
     if ent._yaw_by_mouse then yaw = "true" end
+    if ent._one_hand then one_hand = "true" end
 
     local flight = "false"
     if ent._is_flying == 1 then flight = "true" end
@@ -35,6 +37,7 @@ function delorean.driver_formspec(name)
     basic_form = basic_form.."button[1,2.5;4,1;lights;" .. S("Lights") .. "]"
     if ent._car_type == 1 then basic_form = basic_form.."checkbox[1,4.0;flight;" .. S("Flight Mode") .. ";"..flight.."]" end
     basic_form = basic_form.."checkbox[1,5.5;yaw;" .. S("Direction by mouse") .. ";"..yaw.."]"
+    --if ent._car_type ~= 1 then basic_form = basic_form.."checkbox[1,6.2;one_hand;" .. S("One Hand Driving\n(open menu using AUX)") .. ";"..one_hand.."]" end
 
     minetest.show_formspec(name, "delorean:driver_main", basic_form)
 end
@@ -75,6 +78,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                         ent._is_flying = 1
                     end
                     delorean.turn_flight_mode(ent)
+                end
+                if fields.one_hand then
+                    if ent._one_hand == true then
+                        ent._one_hand = false
+                    else
+                        ent._one_hand = true
+                        core.chat_send_player(name,core.colorize('#00ff00', S(" >>> Use AUX our key \"E\" to open the menu")))
+                    end
                 end
             end
         end

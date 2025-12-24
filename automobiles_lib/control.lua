@@ -68,54 +68,110 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
 	-- player control
 	if player then
 		local ctrl = player:get_player_control()
+        local rot_x = player:get_look_vertical()
+        local pi = math.pi
+        local ang_min = -pi / 32
+        local ang_max = pi / 64
+        local gap = pi / 128
+
+        if self._one_hand == true then
+            if rot_x < (ang_min - gap)then 
+                player:set_look_vertical(ang_min - gap)
+            end
+            if rot_x > (ang_max + gap) then
+                player:set_look_vertical(ang_max + gap)
+            end
+        end
 		
         local acc = 0
         if self._energy > 0 then
-            if longit_speed < max_speed and ctrl.up then
-                --get acceleration factor
-                acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
-                --core.chat_send_all('engineacc: '.. engineacc)
-                if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
-                    --improper road will reduce speed
-                    acc = -1
+            if self._one_hand == true then
+                if rot_x <= ang_min then
+                    if longit_speed < max_speed then
+                        --get acceleration factor
+                        acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
+                        --core.chat_send_all('engineacc: '.. engineacc)
+                        if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
+                            --improper road will reduce speed
+                            acc = -1
+                        end
+                    end
+                end
+            else
+                if longit_speed < max_speed and ctrl.up then
+                    --get acceleration factor
+                    acc = automobiles_lib.check_road_is_ok(self.object, max_acc_factor)
+                    --core.chat_send_all('engineacc: '.. engineacc)
+                    if acc > 1 and acc < max_acc_factor and longit_speed > 0 then
+                        --improper road will reduce speed
+                        acc = -1
+                    end
                 end
             end
 
 
             --reversing
-	        if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
-                acc = -2
-	        end
+            if self._one_hand == true then
+                if rot_x >= ang_max then
+                    acc = -2
+                end
+            else
+	            if ctrl.sneak and longit_speed <= 1.0 and longit_speed > -1.0 then
+                    acc = -2
+	            end
+            end
         end
 
         --break
-        if ctrl.down or ctrl.jump then
-            --[[if math.abs(longit_speed) > 0 then
-                acc = -5 / (longit_speed / 2) -- lets set a brake efficience based on speed
-            end]]--
-        
-            --total stop
-            --wheel break
-            if longit_speed > 0 then
-                acc = -5
-                --[[if (longit_speed + acc) < 0 then
-                    acc = longit_speed * -1
-                end]]--
-            end
-            if longit_speed < 0 then
-                acc = 5
-                if (longit_speed + acc) > 0 then
-                    acc = longit_speed * -1
+        if self._one_hand == true then
+            if rot_x >= ang_max and not ctrl.LMB then
+                if longit_speed > 0 then
+                    acc = -5
+                end
+                if longit_speed < 0 then
+                    acc = 5
+                    if (longit_speed + acc) > 0 then
+                        acc = longit_speed * -1
+                    end
+                end
+                if math.abs(longit_speed) < 1 then
+                    stop = true
                 end
             end
-            if math.abs(longit_speed) < 1 then
-                stop = true
+        else
+            if ctrl.down or ctrl.jump then
+                --[[if math.abs(longit_speed) > 0 then
+                    acc = -5 / (longit_speed / 2) -- lets set a brake efficience based on speed
+                end]]--
+            
+                --total stop
+                --wheel break
+                if longit_speed > 0 then
+                    acc = -5
+                    --[[if (longit_speed + acc) < 0 then
+                        acc = longit_speed * -1
+                    end]]--
+                end
+                if longit_speed < 0 then
+                    acc = 5
+                    if (longit_speed + acc) > 0 then
+                        acc = longit_speed * -1
+                    end
+                end
+                if math.abs(longit_speed) < 1 then
+                    stop = true
+                end
             end
         end
 
         if acc then retval_accel=vector.add(accel,vector.multiply(hull_direction,acc)) end
 
 		if ctrl.aux1 then
+            if self._one_hand == true then
+                local formspec_f = automobiles_lib.driver_formspec
+                if self._formspec_function then formspec_f = self._formspec_function end
+                formspec_f(self.driver_name)
+            end
             --[[
             --sets the engine running - but sets a delay also, cause keypress
             if self._last_time_command > 0.3 then
@@ -139,17 +195,17 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
             end]]--
 		end
 
-		-- yaw
+	    -- yaw
         local yaw_cmd = 0
-        if self._yaw_by_mouse == true then
-		    local rot_y = math.deg(player:get_look_horizontal())
+        if self._yaw_by_mouse == true or self._one_hand == true then
+            local rot_y = math.deg(player:get_look_horizontal())
             self._steering_angle = automobiles_lib.set_yaw_by_mouse(self, rot_y, steering_limit)
         else
-		    -- steering
-		    if ctrl.right then
-			    self._steering_angle = math.max(self._steering_angle-steering_speed*dtime,-steering_limit)
-		    elseif ctrl.left then
-			    self._steering_angle = math.min(self._steering_angle+steering_speed*dtime,steering_limit)
+	        -- steering
+	        if ctrl.right then
+		        self._steering_angle = math.max(self._steering_angle-steering_speed*dtime,-steering_limit)
+	        elseif ctrl.left then
+		        self._steering_angle = math.min(self._steering_angle+steering_speed*dtime,steering_limit)
             else
                 --center steering
                 if longit_speed > 0 then
@@ -160,7 +216,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
                     self._steering_angle = self._steering_angle + correction
                     if math.sign(before_correction) ~= math.sign(self._steering_angle) then self._steering_angle = 0 end
                 end
-		    end
+	        end
         end
 
         local angle_factor = self._steering_angle / 60
