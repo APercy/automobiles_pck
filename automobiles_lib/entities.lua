@@ -278,16 +278,20 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 
     if self._front_wheel_ent then
         local lf_wheel=minetest.add_entity(pos,self._front_wheel_ent)
-        lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-	    -- set the animation once and later only change the speed
-        lf_wheel:set_animation(self._front_wheel_frames, 0, 0, true)
-        self.lf_wheel = lf_wheel
+        if lf_wheel then
+            lf_wheel:set_attach(self.front_suspension,'',{x=-self._front_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+	        -- set the animation once and later only change the speed
+            lf_wheel:set_animation(self._front_wheel_frames, 0, 0, true)
+            self.lf_wheel = lf_wheel
+        end
 
         local rf_wheel=minetest.add_entity(pos,self._front_wheel_ent)
-        rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
-	    -- set the animation once and later only change the speed
-        rf_wheel:set_animation(self._front_wheel_frames, 0, 0, true)
-        self.rf_wheel = rf_wheel
+        if rf_wheel then
+            rf_wheel:set_attach(self.front_suspension,'',{x=self._front_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+	        -- set the animation once and later only change the speed
+            rf_wheel:set_animation(self._front_wheel_frames, 0, 0, true)
+            self.rf_wheel = rf_wheel
+        end
     end
 
     local rear_suspension=minetest.add_entity(self.object:get_pos(),self._rear_suspension_ent)
@@ -296,40 +300,52 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 
     if self._rear_wheel_ent then
         local lr_wheel=minetest.add_entity(pos,self._rear_wheel_ent)
-        lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
-	    -- set the animation once and later only change the speed
-        lr_wheel:set_animation(self._rear_wheel_frames, 0, 0, true)
-        self.lr_wheel = lr_wheel
+        if lr_wheel then
+            lr_wheel:set_attach(self.rear_suspension,'',{x=-self._rear_wheel_xpos,y=0,z=0},{x=0,y=0,z=0})
+	        -- set the animation once and later only change the speed
+            lr_wheel:set_animation(self._rear_wheel_frames, 0, 0, true)
+            self.lr_wheel = lr_wheel
+        end
 
         local rr_wheel=minetest.add_entity(pos,self._rear_wheel_ent)
-        rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
-	    -- set the animation once and later only change the speed
-        rr_wheel:set_animation(self._rear_wheel_frames, 0, 0, true)
-        self.rr_wheel = rr_wheel
+        if rr_wheel then
+            rr_wheel:set_attach(self.rear_suspension,'',{x=self._rear_wheel_xpos,y=0,z=0},{x=0,y=180,z=0})
+	        -- set the animation once and later only change the speed
+            rr_wheel:set_animation(self._rear_wheel_frames, 0, 0, true)
+            self.rr_wheel = rr_wheel
+        end
     end
 
 
     if self._steering_ent then
 	    local steering_axis=minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
-        steering_axis:set_attach(self.object,'',self._drive_wheel_pos,{x=self._drive_wheel_angle,y=0,z=0})
-	    self.steering_axis = steering_axis
+        if steering_axis then
+            steering_axis:set_attach(self.object,'',self._drive_wheel_pos,{x=self._drive_wheel_angle,y=0,z=0})
+            if steering_axis then
+	            self.steering_axis = steering_axis
 
-	    local steering=minetest.add_entity(self.steering_axis:get_pos(), self._steering_ent)
-        steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.steering = steering
+	            local steering=minetest.add_entity(self.steering_axis:get_pos(), self._steering_ent)
+                steering:set_attach(self.steering_axis,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	            self.steering = steering
+            end
+        end
     end
 
     if self._rag_retracted_ent then
         local rag_rect=minetest.add_entity(self.object:get_pos(),self._rag_retracted_ent)
-	    rag_rect:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.rag_rect = rag_rect
-        self.rag_rect:set_properties({is_visible=false})
+        if rag_rect then
+	        rag_rect:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	        self.rag_rect = rag_rect
+            self.rag_rect:set_properties({is_visible=false})
+        end
     end
 
     if self._rag_extended_ent then
         local rag=minetest.add_entity(self.object:get_pos(),self._rag_extended_ent)
-	    rag:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-	    self.rag = rag
+        if rag then
+	        rag:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+	        self.rag = rag
+        end
     end
 
     automobiles_lib.seats_create(self)
@@ -338,43 +354,55 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
     if self._gauge_pointer_ent then pointer_entity = self._gauge_pointer_ent end
     if self._fuel_gauge_pos then
         local fuel_gauge=minetest.add_entity(pos, pointer_entity)
-        fuel_gauge:set_attach(self.object,'',self._fuel_gauge_pos,{x=0,y=0,z=0})
-        self.fuel_gauge = fuel_gauge
+        if fuel_gauge then
+            fuel_gauge:set_attach(self.object,'',self._fuel_gauge_pos,{x=0,y=0,z=0})
+            self.fuel_gauge = fuel_gauge
+        end
     end
 
     if self._front_lights then
         local lights = minetest.add_entity(pos,self._front_lights)
-        lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.lights = lights
-        self.lights:set_properties({is_visible=true})
+        if lights then
+            lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+            self.lights = lights
+            self.lights:set_properties({is_visible=true})
+        end
     end
 
     if self._rear_lights then
         local r_lights = minetest.add_entity(pos,self._rear_lights)
-        r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.r_lights = r_lights
-        self.r_lights:set_properties({is_visible=true})
+        if r_lights then
+            r_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+            self.r_lights = r_lights
+            self.r_lights:set_properties({is_visible=true})
+        end
     end
 
     if self._reverse_lights then
         local reverse_lights = minetest.add_entity(pos,self._reverse_lights)
-        reverse_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.reverse_lights = reverse_lights
-        self.reverse_lights:set_properties({is_visible=true})
+        if reverse_lights then
+            reverse_lights:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+            self.reverse_lights = reverse_lights
+            self.reverse_lights:set_properties({is_visible=true})
+        end
     end
 
     if self._turn_left_lights then
         local turn_l_light = minetest.add_entity(pos,self._turn_left_lights)
-        turn_l_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.turn_l_light = turn_l_light
-        self.turn_l_light:set_properties({is_visible=true})
+        if turn_l_light then
+            turn_l_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+            self.turn_l_light = turn_l_light
+            self.turn_l_light:set_properties({is_visible=true})
+        end
     end
 
     if self._turn_right_lights then
         local turn_r_light = minetest.add_entity(pos,self._turn_right_lights)
-        turn_r_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
-        self.turn_r_light = turn_r_light
-        self.turn_r_light:set_properties({is_visible=true})
+        if turn_r_light then
+            turn_r_light:set_attach(self.object,'',{x=0,y=0,z=0},{x=0,y=0,z=0})
+            self.turn_r_light = turn_r_light
+            self.turn_r_light:set_properties({is_visible=true})
+        end
     end
 
     if self._extra_items_function then
