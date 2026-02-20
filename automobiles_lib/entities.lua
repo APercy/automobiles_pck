@@ -273,8 +273,10 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
     local pos = self.object:get_pos()
 
     local front_suspension=minetest.add_entity(self.object:get_pos(),self._front_suspension_ent)
-    front_suspension:set_attach(self.object,'',self._front_suspension_pos,{x=0,y=0,z=0})
-    self.front_suspension = front_suspension
+    if front_suspension then
+        front_suspension:set_attach(self.object,'',self._front_suspension_pos,{x=0,y=0,z=0})
+        self.front_suspension = front_suspension
+    end
 
     if self._front_wheel_ent then
         local lf_wheel=minetest.add_entity(pos,self._front_wheel_ent)
@@ -295,8 +297,10 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
     end
 
     local rear_suspension=minetest.add_entity(self.object:get_pos(),self._rear_suspension_ent)
-    rear_suspension:set_attach(self.object,'',self._rear_suspension_pos,{x=0,y=0,z=0})
-    self.rear_suspension = rear_suspension
+    if rear_suspension then
+        rear_suspension:set_attach(self.object,'',self._rear_suspension_pos,{x=0,y=0,z=0})
+        self.rear_suspension = rear_suspension
+    end
 
     if self._rear_wheel_ent then
         local lr_wheel=minetest.add_entity(pos,self._rear_wheel_ent)
@@ -837,8 +841,8 @@ function automobiles_lib.on_step(self, dtime)
 
 
             else
-                self.front_suspension:set_rotation({x=0,y=0,z=0})
-                self.rear_suspension:set_rotation({x=0,y=0,z=0})
+                if self.front_suspension then self.front_suspension:set_rotation({x=0,y=0,z=0}) end
+                if self.rear_suspension then self.rear_suspension:set_rotation({x=0,y=0,z=0}) end
             end
         end
     end

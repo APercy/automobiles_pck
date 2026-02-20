@@ -178,10 +178,12 @@ function automobiles_lib.seats_create(self)
             local max_seats = table.getn(self._seat_pos)
             for i=1, max_seats do
                 self._passengers_base[i] = minetest.add_entity(pos,'automobiles_lib:pivot_mesh')
-                if not self._seats_rot then
-                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=0,z=0})
-                else
-                    self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=self._seats_rot[i],z=0})
+                if self._passengers_base[i] then
+                    if not self._seats_rot then
+                        self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=0,z=0})
+                    else
+                        self._passengers_base[i]:set_attach(self.object,'',self._seat_pos[i],{x=0,y=self._seats_rot[i],z=0})
+                    end
                 end
             end
 
@@ -201,6 +203,7 @@ end
 function automobiles_lib.attach_driver(self, player)
     local name = player:get_player_name()
     self.driver_name = name
+    if not self.driver_seat then return end
 
     -- attach the driver
     player:set_attach(self.driver_seat, "", {x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
