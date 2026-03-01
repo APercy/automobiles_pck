@@ -881,19 +881,21 @@ if automobiles_lib.is_drift_game == true then
     minetest.register_on_joinplayer(function(player)
 	    local inv = player:get_inventory()
         local car = "automobiles_beetle:beetle"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_beetle") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_buggy:buggy"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_buggy") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_catrelle:catrelle_4f"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_catrelle") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_coupe:coupe"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_coupe") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_delorean:delorean"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_delorean") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_delorean:time_machine"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_delorean") and not inv:contains_item("main", car) then inv:add_item("main", car) end
         car = "automobiles_trans_am:trans_am"
-        if not inv:contains_item("main", car) then inv:add_item("main", car) end
+        if core.get_modpath("automobiles_trans_am") and not inv:contains_item("main", car) then inv:add_item("main", car) end
+        car = "automobiles_beetle:beetle_conv"
+        if core.get_modpath("automobiles_beetle") and not inv:contains_item("main", car) then inv:add_item("main", car) end
     end)
 end
 
