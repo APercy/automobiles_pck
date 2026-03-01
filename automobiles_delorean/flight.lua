@@ -65,7 +65,7 @@ end
 function delorean.turn_flight_mode(self)
     if self._is_flying == 1 then
         --initial lift
-        self._car_gravity = 5
+        self._car_gravity = 10
         local curr_pos = self.object:get_pos()
         curr_pos.y = curr_pos.y + 1.5
         self.object:move_to(curr_pos)
