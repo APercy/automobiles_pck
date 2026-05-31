@@ -70,6 +70,11 @@ automobiles_lib.colors ={
     violet='#a437ff',
     white='#FFFFFF',
     yellow='#ffe400',
+    -- NEW: Mineclonia colors that were missing (thanks PsyMops)
+    light_blue = "#258ec9",    -- Light blue dye
+    lime = "#60ac19",          -- Lime dye (bright green)
+    purple = "#6821a0",        -- Purple dye (similar to violet)
+    silver = "#818177",        -- Silver/light grey dye
 }
 
 local eye_height_plus_value = 6.5
@@ -664,7 +669,7 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
     local is_admin = false
     is_admin = minetest.check_player_privs(puncher, {server=true})
     if not (self.owner == puncher:get_player_name() or is_admin == true) then
-        return
+        return false
     end
 
     local item_name = ""
@@ -681,13 +686,14 @@ function automobiles_lib.set_paint(self, puncher, itmstck)
         local split = string.split(item_name, ":")
         local color, indx, _
         if split[1] then _,indx = split[1]:find('dye') end
+        --minetest.chat_send_all("item " .. dump(item_name))
         if indx then
             --[[for clr,_ in pairs(automobiles_lib.colors) do
                 local _,x = split[2]:find(clr)
                 if x then color = clr end
             end]]--
             --lets paint!!!!
-	        local color = (item_name:sub(indx+1)):gsub(":", "")
+	        local color = split[2] --(item_name:sub(indx+1)):gsub(":", "")
 	        local colstr = automobiles_lib.colors[color]
             --minetest.chat_send_all(color ..' '.. dump(colstr))
 	        if colstr then
