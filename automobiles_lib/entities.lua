@@ -761,7 +761,7 @@ function automobiles_lib.on_step(self, dtime)
         self.object:set_velocity({x=0,y=0,z=0})
     else
         self.object:move_to(curr_pos)
-        --airutils.set_acceleration(self.object, new_accel)
+        --automobiles_lib.set_acceleration(self.object, new_accel)
         local limit = (self._max_speed/self.dtime)
         if accel.y > limit then accel.y = limit end --it isn't a rocket :/
         self._last_accel = accel

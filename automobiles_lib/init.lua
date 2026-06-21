@@ -223,7 +223,7 @@ function automobiles_lib.attach_driver(self, player)
     if automobiles_lib.is_minetest then
         player_api.player_attached[name] = true
         player_api.set_animation(player, "sit")
-    elseif airutils.is_mcl then
+    elseif automobiles_lib.is_mcl then
 		mcl_player.player_attached[name] = true
         mcl_player.player_set_animation(player, "sit" , 30)
         automobiles_lib.sit(player)
@@ -300,7 +300,7 @@ function automobiles_lib.attach_pax(self, player, onside)
         if automobiles_lib.is_minetest then
             player_api.player_attached[name] = true
             player_api.set_animation(player, "sit")
-        elseif airutils.is_mcl then
+        elseif automobiles_lib.is_mcl then
 		    mcl_player.player_attached[name] = true
             mcl_player.player_set_animation(player, "sit" , 30)
             automobiles_lib.sit(player)
@@ -339,7 +339,7 @@ function automobiles_lib.attach_pax(self, player, onside)
                 if automobiles_lib.is_minetest then
                     player_api.player_attached[name] = true
                     player_api.set_animation(player, "sit")
-                elseif airutils.is_mcl then
+                elseif automobiles_lib.is_mcl then
 		            mcl_player.player_attached[name] = true
                     mcl_player.player_set_animation(player, "sit" , 30)
                     automobiles_lib.sit(player)

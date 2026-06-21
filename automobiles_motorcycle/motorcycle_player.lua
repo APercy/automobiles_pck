@@ -41,7 +41,7 @@ function motorcycle.attach_driver_stand(self, player)
     player:set_eye_offset({x = self._seat_pos[1].x, y = 0, z = self._seat_pos[1].z}, {x = 0, y = 3, z = -30})
     if automobiles_lib.is_minetest then
         player_api.player_attached[name] = true
-    elseif airutils.is_mcl then
+    elseif automobiles_lib.is_mcl then
         mcl_player.player_attached[name] = true
     end
 
@@ -149,7 +149,7 @@ function motorcycle.attach_pax_stand(self, player)
         player:set_eye_offset({x = self._seat_pos[2].x, y = 3, z = self._seat_pos[2].z}, {x = 0, y = 3, z = -30})
         if automobiles_lib.is_minetest then
             player_api.player_attached[name] = true
-        elseif airutils.is_mcl then
+        elseif automobiles_lib.is_mcl then
             mcl_player.player_attached[name] = true
         end
 
