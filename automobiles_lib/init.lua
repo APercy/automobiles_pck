@@ -154,7 +154,7 @@ function automobiles_lib.detect_player_api(player)
         local models = player_api.registered_models
         local character = models[player_proterties.mesh]
         --core.chat_send_all(dump(character));
-        if character then
+        if character and character.animations and character.animations.sit then
             if character.animations.sit.eye_height then
                 --core.chat_send_all(dump(character.animations.sit.eye_height));
                 if character.animations.sit.eye_height == 0.8 then
