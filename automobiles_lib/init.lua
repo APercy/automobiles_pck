@@ -169,6 +169,8 @@ function automobiles_lib.detect_player_api(player)
                 return 0
             end
         end
+    elseif core.get_modpath("mcl_player") then
+        return 1
     end
 
     return 0
