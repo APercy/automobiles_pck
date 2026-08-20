@@ -25,12 +25,12 @@ initial_properties = {
 function vespa.attach_driver_stand(self, player)
     local name = player:get_player_name()
     self.driver_name = name
-    self.driver_properties = player:get_properties()
+    --[[self.driver_properties = player:get_properties()
     self.driver_properties.selectionbox = nil
     self.driver_properties.pointable = false
     self.driver_properties.show_on_minimap = false
     self.driver_properties.static_save = nil
-    self.driver_properties.makes_footstep_sound = nil
+    self.driver_properties.makes_footstep_sound = nil]]--
     --minetest.chat_send_all(dump(self.driver_properties))
    
     -- attach the driver
@@ -46,25 +46,35 @@ function vespa.attach_driver_stand(self, player)
     end
 
     -- makes it "invisible"
-    player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
+    --player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
     
 
     --create the dummy mesh
-    local pos = player:get_pos()
+    --[[local pos = player:get_pos()
     local driver_mesh=minetest.add_entity(pos,'automobiles_vespa:player_mesh')
     driver_mesh:set_attach(player,'',{x=x_pos*-1,y=-0.0,z=0.0},{x=0,y=0,z=0})
     self.driver_mesh = driver_mesh
-    self.driver_mesh:set_properties({is_visible=false})
+    self.driver_mesh:set_properties({is_visible=false})]]--
 
     --position the dummy arms and legs
-    self.driver_mesh:set_properties(self.driver_properties)
+    --self.driver_mesh:set_properties(self.driver_properties)
     if automobiles_lib.mot_anim_mode then
-        self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=1, z=0}, {x=180+12, y=0, z=7})
-        self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=1, z=0}, {x=180+12, y=0, z=-7})
+        --self.driver_mesh:set_bone_position("Leg_Left", {x=1.1, y=1, z=0}, {x=180+12, y=0, z=7})
+        --self.driver_mesh:set_bone_position("Leg_Right", {x=-1.1, y=1, z=0}, {x=180+12, y=0, z=-7})
+        local left_leg_override = {
+                position = { vec={x=1.1, y=1, z=0}, absolute = true},
+                rotation = { vec={x=math.rad(12),y=0,z=math.rad(-7)}, interpolation = 1, absolute = false }
+                }
+        local right_leg_override = {
+                position = { vec={x=-1.1, y=1, z=0}, absolute = true},
+                rotation = { vec={x=math.rad(12),y=0,z=math.rad(7)}, interpolation = 1, absolute = false }
+                }
+        player:set_bone_override("Leg_Left", left_leg_override)
+        player:set_bone_override("Leg_Right", right_leg_override)
     end
-	self.driver_mesh:set_properties({
+	--[[self.driver_mesh:set_properties({
         is_visible=true,
-	})
+	})]]--
 end
 
 function vespa.dettach_driver_stand(self, player)
@@ -103,10 +113,14 @@ function vespa.dettach_driver_stand(self, player)
         end
 
 
-        if self.driver_properties then
+        --[[if self.driver_properties then
             player:set_properties({mesh = self.driver_properties.mesh})
             self.driver_properties = nil
-        end
+        end]]--
+        player:set_bone_override("Leg_Left", {})
+        player:set_bone_override("Leg_Right", {})
+        player:set_bone_override("Arm_Left", {})
+        player:set_bone_override("Arm_Right", {})
     end
 
     --player:set_properties({visual_size = {x=1, y=1}})
@@ -122,12 +136,12 @@ function vespa.attach_pax_stand(self, player)
     local onside = onside or false
     local name = player:get_player_name()
 
-    self.pax_properties = player:get_properties()
+    --[[self.pax_properties = player:get_properties()
     self.pax_properties.selectionbox = nil
     self.pax_properties.pointable = false
     self.pax_properties.show_on_minimap = false
     self.pax_properties.static_save = nil
-    self.pax_properties.makes_footstep_sound = nil
+    self.pax_properties.makes_footstep_sound = nil]]--
 
     if self._passenger == nil then
         self._passenger = name
@@ -145,27 +159,50 @@ function vespa.attach_pax_stand(self, player)
         end
 
         -- makes it "invisible"
-        player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
+        --player:set_properties({mesh = "automobiles_pivot_mesh.b3d"})
 
         --create the dummy mesh
-        local pos = player:get_pos()
+        --[[local pos = player:get_pos()
         local pax_mesh=minetest.add_entity(pos,'automobiles_vespa:player_mesh')        
         pax_mesh:set_attach(player,'',{x=x_pos*-1,y=-0.0,z=0.0},{x=0,y=0,z=0})
         self.pax_mesh = pax_mesh
-        self.pax_mesh:set_properties({is_visible=false})
+        self.pax_mesh:set_properties({is_visible=false})]]--
 
         --position the dummy arms and legs
-        self.pax_mesh:set_properties(self.pax_properties)
+        --self.pax_mesh:set_properties(self.pax_properties)
         if automobiles_lib.mot_anim_mode then
-            self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=15})
+            --[[self.pax_mesh:set_bone_position("Leg_Left", {x=1.1, y=0, z=0}, {x=180+12, y=0, z=15})
             self.pax_mesh:set_bone_position("Leg_Right", {x=-1.1, y=0, z=0}, {x=180+12, y=0, z=-15})
 
             self.pax_mesh:set_bone_position("Arm_Left", {x=3.0, y=5, z=0}, {x=180+45, y=0, z=0})
-            self.pax_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=0}, {x=180+45, y=0, z=0})
+            self.pax_mesh:set_bone_position("Arm_Right", {x=-3.0, y=5, z=0}, {x=180+45, y=0, z=0})]]--
+
+            local left_leg_override = {
+                    position = { vec={x=1.1, y=0, z=0}, absolute = true},
+                    rotation = { vec={x=math.rad(12),y=0,z=math.rad(-15)}, interpolation = 1, absolute = false }
+                    }
+            local right_leg_override = {
+                    position = { vec={x=-1.1, y=0, z=0}, absolute = true},
+                    rotation = { vec={x=math.rad(12),y=0,z=math.rad(15)}, interpolation = 1, absolute = false }
+                    }
+            player:set_bone_override("Leg_Left", left_leg_override)
+            player:set_bone_override("Leg_Right", right_leg_override)
+
+            local left_arm_override = {
+                    position = { vec={x=3.0, y=5, z=0}, absolute = true},
+                    rotation = { vec={x=math.rad(45),y=0,z=0}, interpolation = 1, absolute = false }
+                    }
+            local right_arm_override = {
+                    position = { vec={x=-3.0, y=5, z=0}, absolute = true},
+                    rotation = { vec={x=math.rad(45),y=0,z=0}, interpolation = 1, absolute = false }
+                    }
+            player:set_bone_override("Arm_Left", left_arm_override)
+            player:set_bone_override("Arm_Right", right_arm_override)
+
         end
-	    self.pax_mesh:set_properties({
+	    --[[self.pax_mesh:set_properties({
             is_visible=true,
-	    })
+	    })]]--
     end
 
 end
@@ -197,10 +234,14 @@ function vespa.dettach_pax_stand(self, player)
             mcl_player.player_set_animation(player, "stand")
         end
 
-        if self.pax_properties then
+        --[[if self.pax_properties then
             player:set_properties({mesh = self.pax_properties.mesh})
             self.pax_properties = nil
-        end
+        end]]--
+        player:set_bone_override("Leg_Left", {})
+        player:set_bone_override("Leg_Right", {})
+        player:set_bone_override("Arm_Left", {})
+        player:set_bone_override("Arm_Right", {})
     end
     --player:set_properties({visual_size = {x=1, y=1}})
     if self.pax_mesh then
