@@ -253,8 +253,10 @@ minetest.register_entity("automobiles_motorcycle:motorcycle", {
                         position = { vec={x=-3.0, y=5, z=armZ}, absolute = true},
                         rotation = { vec={x=math.rad(60+(self._steering_angle/2)), y=0, z=0}, interpolation = 1, absolute = false }
                         }
-                player:set_bone_override("Arm_Left", left_arm_override)
-                player:set_bone_override("Arm_Right", right_arm_override)
+                if automobiles_lib.mot_anim_mode then
+                    player:set_bone_override("Arm_Left", left_arm_override)
+                    player:set_bone_override("Arm_Right", right_arm_override)
+                end
                 
                 --player:set_bone_position("Arm_Left", {x=3.0, y=5, z=-arm_range-armZ}, {x=240-(self._steering_angle/2), y=0, z=0})
                 --player:set_bone_position("Arm_Right", {x=-3.0, y=5, z=armZ}, {x=240+(self._steering_angle/2), y=0, z=0})
