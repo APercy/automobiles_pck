@@ -54,7 +54,7 @@ function automobiles_lib.control(self, dtime, hull_direction, longit_speed, long
     max_acc_factor = max_acc_factor
 
     max_speed = max_speed or 0
-    max_speed = max_speed
+    max_speed = math.min(max_speed,automobiles_lib.speed_limit)
 
     steering_limit = steering_limit or 0
     steering_speed = steering_speed or 0

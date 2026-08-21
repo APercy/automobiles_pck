@@ -5,3 +5,4 @@
 collect_automobiles (Collect vehicles to inventory) bool true
 noob_mode (make automobiles climb entire blocks) bool false
 motorcycle_anim_mode (enable motorcycle pilot animations) bool true
+speed_limit (limit all vehicles to a speed - useful for lag servers) int 500

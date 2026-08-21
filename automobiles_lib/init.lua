@@ -37,7 +37,7 @@ if minetest.registered_nodes["dg_mapgen:stone"] then
     automobiles_lib.extra_drift = true
 end
 
-local load_noob_mode = minetest.settings:get_bool("noob_mode", false) -- or storage:get_int("noob_mode")
+local load_noob_mode = core.settings:get_bool("noob_mode", false) -- or storage:get_int("noob_mode")
 automobiles_lib.noob_mode = false
 automobiles_lib.extra_stepheight = 0
 -- 1 == true ---- 2 == false
@@ -45,6 +45,10 @@ if load_noob_mode == true then
     automobiles_lib.load_noob_mode = true
     automobiles_lib.extra_stepheight = 1
 end
+
+local new_speed_limit = core.settings:get("speed_limit")
+automobiles_lib.speed_limit = tonumber(new_speed_limit) or 500
+automobiles_lib.speed_limit = math.floor(automobiles_lib.speed_limit)
 
 local motorcycle_anim_mode = minetest.settings:get_bool("motorcycle_anim_mode", true)
 automobiles_lib.mot_anim_mode = true
