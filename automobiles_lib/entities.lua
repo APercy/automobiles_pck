@@ -427,7 +427,7 @@ function automobiles_lib.on_activate(self, staticdata, dtime_s)
 end
 
 function checkIsFinite(mynumber)
-    if math.isfinite(mynumber) then
+    if math.huge > mynumber then
         return mynumber
     end
     return 0
@@ -471,15 +471,17 @@ function automobiles_lib.on_step(self, dtime)
     if automobiles_lib.extra_drift and longit_speed > (4*self._vehicle_power_scale) then
         dynamic_later_drag = dynamic_later_drag/(longit_speed*2)
     end
+    dynamic_later_drag = math.abs(dynamic_later_drag)
+    if dynamic_later_drag < 0.1 then dynamic_later_drag = 0.1 end
 
-    local later_drag = vector.new()
+    local drag_component = 0
     if self._is_motorcycle == true then
-        later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*self._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed))
+        drag_component = later_speed*later_speed*self._LATER_DRAG_FACTOR*-1*automobiles_lib.sign(later_speed)
     else
-        later_drag = vector.multiply(nhdir,later_speed*
-            later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed))
+        drag_component = later_speed*later_speed*dynamic_later_drag*-1*automobiles_lib.sign(later_speed)
     end
+    local later_drag = vector.new()
+    later_drag = vector.multiply(nhdir,drag_component)
 
     local accel = vector.add(longit_drag,later_drag)
     local stop = nil
@@ -767,6 +769,7 @@ function automobiles_lib.on_step(self, dtime)
         accel.y = y_accel --sets the anti gravity
     end
 
+    if math.abs(drag_component) > 100 then stop = true end
     if stop == true then
         self._last_accel = vector.new() --self.object:get_acceleration()
         self.object:set_acceleration({x=0,y=0,z=0})
